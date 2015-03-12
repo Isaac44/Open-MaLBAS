@@ -16,32 +16,39 @@
  */
 package br.edu.unifei.gpesc.base.statistic;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  *
- * @author isaac
- * @param <T> The statistical data type.
+ * @author Isaac Caldas Ferreira
+ * @param <T>
  */
 public class Census<T> {
 
     /**
-     * The statistics used to calculate the {@link Census}.
+     * The statistics that will be used to calculate the {@link Census}
      */
-    private Statistics<T> mStatistics;
+    private final Statistics<T> mStatistics;
 
     /**
-     * Initializes and calculate the census.
-     * @param statistics The statistics to calculate the census.
+     * This list stores the {@link Data} of the {@link Statistics}. This is
+     * used to be easier to sort the {@link StatisticalData}.
      */
-    public Census(Statistics<T> statistics) {
-        setStatistics(statistics);
-    }
+    private final ArrayList<StatisticalData<T>> mDataList;
 
     /**
      * Sets the statistics for this {@link Census}.
      * @param statistics
      */
-    public final void setStatistics(Statistics<T> statistics) {
+    public Census(Statistics<T> statistics) {
         mStatistics = statistics;
+        mDataList = new ArrayList<StatisticalData<T>>(statistics.getSize());
+
+        for (StatisticalData<T> data : statistics) {
+            mDataList.add(data);
+        }
     }
 
     /**
@@ -49,12 +56,62 @@ public class Census<T> {
      * of the {@link Statistics} setted.
      * @param distribution The statistics distribution model to be used.
      */
-    public void computeDistribuition(StatisticalDistribution distribution) {
-        double value;
-        int[] setSizeArray = mStatistics.getSetSizeArray();
-        for (StatisticalData data : mStatistics.getStatisticalDataArray()) {
-            value = distribution.compute(data, setSizeArray);
-            data.setStatisticalDistribution(value);
+    public void computeDistribution(StatisticalDistribution distribution) {
+        if (mStatistics != null) {
+            computeDistribution(mStatistics, distribution);
+        }
+    }
+
+    /**
+     * Sort the {@link StatisticalData}. If wanted the {@link DataComparator}
+     * interface can be implemented for a custom sort.
+     * @param comparable The comparable method.
+     */
+    public void sortData(DataComparator comparable) {
+        Collections.sort(mDataList, comparable);
+    }
+
+    public ArrayList<StatisticalData<T>> getStatisticalDataList() {
+        return mDataList;
+    }
+
+    public interface DataComparator<E> extends Comparator<StatisticalData<E>> {}
+
+    public static class DistributionSort implements DataComparator<Object> {
+        @Override
+        public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
+            return Double.compare(o1.getStatisticalDistribution(), o2.getStatisticalDistribution());
+        }
+    }
+
+    public static class StatisticSetSort implements DataComparator<Object> {
+
+        private final int mmSet;
+
+        public StatisticSetSort(int set) {
+            mmSet = set;
+        }
+
+        @Override
+        public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
+            return Integer.compare(o1.getStatistic(mmSet), o2.getStatistic(mmSet));
+        }
+
+    }
+
+    /**
+     * Computes the {@link StatisticalDistribution} for all {@link StatisticalData}
+     * of the {@link Statistics}. The result values can be getted using
+     * {@link StatisticalData#getStatisticalDistribution()}.
+     * @param statistics The statiscs.
+     * @param distribution The statistics distribution model to be used.
+     */
+    public static void computeDistribution(Statistics<?> statistics, StatisticalDistribution distribution) {
+        double result;
+        int[] setSizeArray = statistics.getSetSizeArray();
+        for (StatisticalData data : statistics) {
+            result = distribution.compute(data, setSizeArray);
+            data.setStatisticalDistribution(result);
         }
     }
 }

@@ -18,13 +18,16 @@ package br.edu.unifei.gpesc.base.statistic;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  * @param <T> The data (element) type.
  */
-public class Statistics<T> {
+public class Statistics<T> implements Iterable<StatisticalData>{
 
     /**
      * The statistic hash map used to map the key data-element to statistic data.
@@ -54,7 +57,7 @@ public class Statistics<T> {
         StatisticalData dataStatistic = mStatisticHashMap.get(data);
 
         if (dataStatistic == null) {
-            dataStatistic = new StatisticalData(mSetSizeArray.length);
+            dataStatistic = new StatisticalData(data, mSetSizeArray.length);
             mStatisticHashMap.put(data, dataStatistic);
         }
 
@@ -90,7 +93,7 @@ public class Statistics<T> {
      * Gets the quantity of statistical data stored.
      * @return The quantity of statistical data.
      */
-    public int getDataSize() {
+    public int getSize() {
         return mStatisticHashMap.size();
     }
 
@@ -99,10 +102,24 @@ public class Statistics<T> {
     }
 
     /**
+     * Gets the {@link Set} of all entries. An entry is represented by a pair
+     * (element, statistical data).
+     * @return The {@link Set} of all entries.
+     */
+    public Set<Map.Entry<T, StatisticalData>> getEntrySet() {
+        return mStatisticHashMap.entrySet();
+    }
+
+    /**
      * Gets the array with the size of all sets.
      * @return The array with the size of all sets.
      */
     public int[] getSetSizeArray() {
         return mSetSizeArray;
+    }
+
+    @Override
+    public Iterator<StatisticalData> iterator() {
+        return mStatisticHashMap.values().iterator();
     }
 }

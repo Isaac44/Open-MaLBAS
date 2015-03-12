@@ -37,7 +37,7 @@ package br.edu.unifei.gpesc.base.statistic;
  * calcular a divisao.
  *
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class FrequencyDistribution implements StatisticalDistribution {
 

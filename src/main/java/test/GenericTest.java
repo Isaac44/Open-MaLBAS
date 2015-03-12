@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.base.statistic;
+package test;
+
+import java.util.Collection;
 
 /**
  *
- * @author Isaac Caldas Ferreira
+ * @author isaac
  */
-public interface StatisticalDistribution {
+public class GenericTest {
 
-    /**
-     * Computes the statistical distribuition.
-     * @param data The statistical data.
-     * @param setSizeArray The array with the size of all sets.
-     * @return The statistical distribuition for the statistical data.
-     */
-    public double compute(StatisticalData data, int... setSizeArray);
+    public static void main(String[] args) {
+        Collection<String> c;
+        
+    }
+
 }

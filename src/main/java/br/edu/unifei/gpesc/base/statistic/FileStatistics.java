@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class FileStatistics extends Statistics<String> {
 

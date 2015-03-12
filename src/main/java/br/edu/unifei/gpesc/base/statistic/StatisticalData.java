@@ -18,9 +18,15 @@ package br.edu.unifei.gpesc.base.statistic;
 
 /**
  * This class stores the statistics of an element in one or more sets.
- * @author isaac
+ * @author Isaac Caldas Ferreira
+ * @param <T>
  */
-public class StatisticalData {
+public class StatisticalData<T> {
+
+    /**
+     * The element.
+     */
+    private final T mElement;
 
     /**
      * The statistic array. This array contains the statistic information about
@@ -35,9 +41,11 @@ public class StatisticalData {
 
     /**
      * Creates a data statistic, setting up the number of existent sets.
+     * @param element The element. Use {@link
      * @param numberOfSets The number of sets where statistics are calculated.
      */
-    public StatisticalData(int numberOfSets) {
+    public StatisticalData(T element, int numberOfSets) {
+        mElement = element;
         mStatisticDataArray = new int[numberOfSets];
     }
 
@@ -67,10 +75,19 @@ public class StatisticalData {
     }
 
     /**
+     * Gets the data element of this statistical data.
+     * @return The element.
+     */
+    public T getElement() {
+        return mElement;
+    }
+
+    /**
      * Sets the statistical distribution for this data. Use
      * {@link StatisticalData#getStatisticalDistribution()}
      * to retrieve this value.
      * @param value The statistical data.
+     * @see Census
      */
     public void setStatisticalDistribution(double value) {
         mStatisticalDistribution = value;
@@ -80,6 +97,7 @@ public class StatisticalData {
      * Gets the statistical distribution previous setted.
      * @return The statistical distribution.
      * @see StatisticalData#setStatisticalDistribution(double)
+     * @see Census
      */
     public double getStatisticalDistribution() {
         return mStatisticalDistribution;

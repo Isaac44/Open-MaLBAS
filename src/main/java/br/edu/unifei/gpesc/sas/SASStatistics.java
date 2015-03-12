@@ -22,7 +22,7 @@ import java.io.File;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class SASStatistics {
 
@@ -63,5 +63,9 @@ public class SASStatistics {
     public void processSpamAndHam(File hamFolder, File spamFolder) {
         processFolder(hamFolder, HAM_SET);
         processFolder(spamFolder, SPAM_SET);
+    }
+
+    public FileStatistics getStatistics() {
+        return mFileStatistic;
     }
 }

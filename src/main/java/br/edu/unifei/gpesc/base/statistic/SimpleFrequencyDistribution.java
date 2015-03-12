@@ -18,7 +18,7 @@ package br.edu.unifei.gpesc.base.statistic;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class SimpleFrequencyDistribution implements StatisticalDistribution {
 
