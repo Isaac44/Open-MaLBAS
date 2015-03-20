@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package test.app;
 
-import java.util.Collection;
+import br.edu.unifei.gpesc.util.FileUtils;
+import java.io.File;
 
 /**
  *
@@ -25,8 +26,11 @@ import java.util.Collection;
 public class GenericTest {
 
     public static void main(String[] args) {
-        Collection<String> c;
-        
+
+        for (File f : new File("/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/spam/").listFiles(FileUtils.getFileFilter())) {
+            System.out.println("s = " + f.getAbsolutePath());
+        }
+
     }
 
 }

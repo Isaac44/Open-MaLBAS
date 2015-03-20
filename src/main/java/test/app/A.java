@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package test.app;
 
 import br.edu.unifei.gpesc.base.statistic.Census;
 import br.edu.unifei.gpesc.base.statistic.SimpleFrequencyDistribution;
@@ -29,11 +29,10 @@ import java.io.IOException;
  *
  * @author isaac
  */
-public class StatisticsTest {
-
+public class A {
     public static void main(String[] args) throws IOException {
         SASStatistics antispamStatistics = new SASStatistics();
-        String path = "/home/isaac/Unifei/CodeStation/SistemaAntiSPAM_SAS/SistemaAntiSPAM/testes/2015/CorrigirSelecao/limpos/";
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/";
         antispamStatistics.processSpamAndHam(new File(path, "ham"), new File(path, "spam"));
 
         Statistics<String> statistics = antispamStatistics.getStatistics();
@@ -42,12 +41,11 @@ public class StatisticsTest {
         census.computeDistribution(new SimpleFrequencyDistribution());
         census.sortData(new Census.DistributionSort());
 
-        FileWriter fileWriter = new FileWriter("/home/isaac/Unifei/CodeStation/SistemaAntiSPAM_SAS/SistemaAntiSPAM/testes/2015/CorrigirSelecao/temp/statistics.txt");
+        FileWriter fileWriter = new FileWriter(path+"statistics.txt");
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
             fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
         }
         fileWriter.flush();
         fileWriter.close();
     }
-
 }

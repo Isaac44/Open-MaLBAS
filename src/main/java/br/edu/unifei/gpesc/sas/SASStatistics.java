@@ -49,8 +49,14 @@ public class SASStatistics {
      * @param set The set. Use {@link SASStatistics#HAM_SET} or {@link SASStatistics#SPAM_SET}
      */
     public void processFolder(File folder, int set) {
-        for (File file : folder.listFiles(FileUtils.getFileFilter())) {
-            mFileStatistic.processFile(file, set);
+        File[] fileArray = folder.listFiles();
+        System.out.println("process: " + folder.getAbsolutePath());
+        if (fileArray != null) {
+            for (File file : fileArray) {
+                mFileStatistic.processFile(file, set);
+            }
+        } else {
+            System.err.println("error= null: " + folder.getAbsolutePath());
         }
     }
 
