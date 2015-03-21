@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.edu.unifei.gpesc.base.statistic;
+package br.edu.unifei.gpesc.statistic;
 
 import java.util.HashMap;
 

@@ -14,21 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.base.statistic;
+package br.edu.unifei.gpesc.sas.filter;
+
+import org.jsoup.nodes.Element;
 
 /**
  *
- * @author Isaac Caldas Ferreira
+ * @author isaac
  */
-public class SimpleFrequencyDistribution implements StatisticalDistribution {
-
-    @Override
-    public double compute(StatisticalData data, int... setSizeArray) {
-        double result = 0.0;
-        for (int i=0; i<setSizeArray.length; i++) {
-            result += data.getStatistic(i);
-        }
-        return result;
-    }
-
+public interface TagFilter {
+    public void filter(Element element);
 }

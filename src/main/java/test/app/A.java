@@ -16,11 +16,11 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.base.statistic.Census;
-import br.edu.unifei.gpesc.base.statistic.SimpleFrequencyDistribution;
-import br.edu.unifei.gpesc.base.statistic.StatisticalData;
-import br.edu.unifei.gpesc.base.statistic.Statistics;
-import br.edu.unifei.gpesc.sas.SASStatistics;
+import br.edu.unifei.gpesc.statistic.Census;
+import br.edu.unifei.gpesc.statistic.SimpleFrequencyDistribution;
+import br.edu.unifei.gpesc.statistic.StatisticalData;
+import br.edu.unifei.gpesc.statistic.Statistics;
+import br.edu.unifei.gpesc.sas.module.SASStatistics;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

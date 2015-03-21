@@ -14,15 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package test.auxiliar;
+package br.edu.unifei.gpesc.sas.filter;
 
 /**
  *
- * @author Isaac Caldas Ferreira
+ * @author isaac
  */
-public class StatisticsMailSampleMaker {
-
-
-
+public interface TextFilter {
+    public String filter(String text);
 }

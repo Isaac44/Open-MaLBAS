@@ -14,38 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.base.statistic;
+package br.edu.unifei.gpesc.statistic;
 
 /**
- * Notas para o Otavio.
- *
- * Esta classe calcula a distribuicao de frequencia
- * dividindo a ocorrencia de cada palavra pelo total de arquivos ham e spam.
- * Exemplificando:
- *
- * Temos 5 emails ham e 4 emails spam.
- *
- * a palavra "amor" aparece 10 vezes nos 5 emails ham e 2 vezes nos 4 emails spam,
- * logo o resultado sera': 10/5 + 2/4 = 2,5
- *
- * Na implementacao original do SAS, o resultado seria 10 + 2 = 12
- *
- * Em outro dia, eu falei que estava certo. Mas eu estava considerando
- * que os dois conjuntos possuem a mesma quantidade de arquivos.
- * Dessa forma eu calculava: (10 + 2) / (5 + 4). Mas como todos os demais
- * elementos tambem seriam calculados assim, nao haveria a necessidade de
- * calcular a divisao.
- *
  *
  * @author Isaac Caldas Ferreira
  */
-public class FrequencyDistribution implements StatisticalDistribution {
+public class SimpleFrequencyDistribution implements StatisticalDistribution {
 
     @Override
     public double compute(StatisticalData data, int... setSizeArray) {
         double result = 0.0;
         for (int i=0; i<setSizeArray.length; i++) {
-            result += (data.getStatistic(i) / (double) setSizeArray[i]);
+            result += data.getStatistic(i);
         }
         return result;
     }

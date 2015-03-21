@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas;
+package br.edu.unifei.gpesc.sas.module;
 
-import br.edu.unifei.gpesc.base.statistic.FileStatistics;
+import br.edu.unifei.gpesc.statistic.FileStatistics;
 import br.edu.unifei.gpesc.util.FileUtils;
 import java.io.File;
 
@@ -49,14 +49,11 @@ public class SASStatistics {
      * @param set The set. Use {@link SASStatistics#HAM_SET} or {@link SASStatistics#SPAM_SET}
      */
     public void processFolder(File folder, int set) {
-        File[] fileArray = folder.listFiles();
-        System.out.println("process: " + folder.getAbsolutePath());
+        File[] fileArray = folder.listFiles(FileUtils.getFileFilter());
         if (fileArray != null) {
             for (File file : fileArray) {
                 mFileStatistic.processFile(file, set);
             }
-        } else {
-            System.err.println("error= null: " + folder.getAbsolutePath());
         }
     }
 

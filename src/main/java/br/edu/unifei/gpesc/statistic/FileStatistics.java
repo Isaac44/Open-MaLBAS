@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.base.statistic;
+package br.edu.unifei.gpesc.statistic;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,6 +49,7 @@ public class FileStatistics extends Statistics<String> {
             while (scanner.hasNext()) {
                 insertData(scanner.next(), set);
             }
+            scanner.close();
         }
         catch (FileNotFoundException e) {}
     }

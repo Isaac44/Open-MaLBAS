@@ -16,13 +16,13 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.base.statistic.Census;
-import br.edu.unifei.gpesc.base.statistic.SimpleFrequencyDistribution;
-import br.edu.unifei.gpesc.base.statistic.StatisticalData;
-import br.edu.unifei.gpesc.base.statistic.Statistics;
-import br.edu.unifei.gpesc.sas.SASStatistics;
-import java.io.File;
+import br.edu.unifei.gpesc.statistic.Census;
+import br.edu.unifei.gpesc.statistic.SimpleFrequencyDistribution;
 import java.io.FileWriter;
+import br.edu.unifei.gpesc.statistic.StatisticalData;
+import br.edu.unifei.gpesc.statistic.Statistics;
+import br.edu.unifei.gpesc.sas.module.SASStatistics;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -34,7 +34,7 @@ public class StatisticsTest {
     public static void main(String[] args) throws IOException {
         SASStatistics antispamStatistics = new SASStatistics();
         String path = "/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/";
-        antispamStatistics.processSpamAndHam(new File(path, "ham"), new File(path, "spam"));
+        antispamStatistics.processSpamAndHam(new File(path, "spam"), new File(path, "ham"));
 
         Statistics<String> statistics = antispamStatistics.getStatistics();
 
@@ -46,7 +46,6 @@ public class StatisticsTest {
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
             fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
         }
-        fileWriter.flush();
         fileWriter.close();
     }
 

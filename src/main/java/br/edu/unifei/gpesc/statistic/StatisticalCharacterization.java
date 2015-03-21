@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.edu.unifei.gpesc.base.statistic;
+package br.edu.unifei.gpesc.statistic;
 
 /**
  * This is used to find  what elements are used to create the caracterization

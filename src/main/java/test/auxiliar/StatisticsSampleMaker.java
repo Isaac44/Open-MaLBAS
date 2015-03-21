@@ -28,38 +28,56 @@ import java.io.IOException;
  */
 public class StatisticsSampleMaker {
 
-    public static void createStatisticsFile(File file, String[] dataArray, int maxObjectData) throws FileNotFoundException, IOException {
+    public static void createStatisticsFile(File file, String[] dataArray, int[] maxObjectArray) throws FileNotFoundException, IOException {
         FileWriter fileWriter = new FileWriter(file);
 
         int quantity;
-        for (String data : dataArray) {
-            quantity = (int) (Math.random() * maxObjectData);
+        for (int i=0; i<dataArray.length; i++) {
+            quantity = (int) (Math.random() * maxObjectArray[i]);
             if (quantity > 0) {
                 fileWriter.append("\n");
-                for (int i=0; i<quantity; i++) {
-                    fileWriter.append(data).append(" ");
+                for (int k=0; k<quantity; k++) {
+                    fileWriter.append(dataArray[i]).append(" ");
                 }
             }
         }
-//        fileWriter.flush();
         fileWriter.close();
     }
 
-    public static void createStatisticsFileInFolder(File folder, int quantity, String[] dataArray, int maxObjectData) throws IOException {
-        String baseName = "test_statistic_%x.eml";//+(quantity/10)+"d.eml";
+    public static void createStatisticsFileInFolder(File folder, int quantity, String[] dataArray, int[] maxObjectArray) throws IOException {
+        int maxDigits = (int) (Math.log(quantity) / Math.log(16)) + 1;
+        String baseName = "test_statistic_%0" + maxDigits + "x.eml";
+
+        if (!folder.exists()) folder.mkdir();
 
         for (int i=0; i<quantity; i++) {
-            createStatisticsFile(new File(folder, String.format(baseName, i)), dataArray, maxObjectData);
+            createStatisticsFile(new File(folder, String.format(baseName, i)), dataArray, maxObjectArray);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        final String[] daraArray = { "macaco", "bando", "capela", "grupo", "atlas", "maquina", "marinheiro", "medico", "ferragem", "conselho", "cordilheira", "serra", "serrania", "aparelho", "trem", "banda", "charanga", "filarmonica", "orquestra", "lista", "onda", "esqueleto", "ovelha"};
+        final String[] dataArray = { "macaco", "bando", "capela", "grupo", "atlas", "maquina", "marinheiro", "medico", "ferragem", "conselho", "cordilheira", "serra", "serrania", "aparelho", "trem", "banda", "charanga", "filarmonica", "orquestra", "lista", "onda", "esqueleto", "ovelha"};
 
         String rootFolderPath = "/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/";
 
-        createStatisticsFileInFolder(new File(rootFolderPath, "ham"), 20000, daraArray, 20);
-        createStatisticsFileInFolder(new File(rootFolderPath, "spam"), 20000, daraArray, 20);
+        // distribution
+        int len = dataArray.length;
+        int max = 100;
+        int decai = (int) ((max / (float) len) + 0.5f);
+
+        int[] hamDistribution = new int[len];
+        int[] spamDistribution = new int[len];
+
+        int value = max;
+
+        for (int i=0; i<dataArray.length; i++) {
+            hamDistribution[i] = value;
+            spamDistribution[len-i-1] = value;
+            value -= decai;
+        }
+
+        createStatisticsFileInFolder(new File(rootFolderPath, "ham") , 2000000, dataArray, hamDistribution);
+        createStatisticsFileInFolder(new File(rootFolderPath, "spam"), 2000000, dataArray, spamDistribution);
 
     }
 
