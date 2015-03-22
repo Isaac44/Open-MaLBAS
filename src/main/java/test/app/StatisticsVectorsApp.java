@@ -14,12 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
+package test.app;
+
+import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
 
 /**
  *
  * @author isaac
  */
-public class StringHolder {
-    public String value;
+public class StatisticsVectorsApp {
+
+    public static void main(String[] args) {
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
+
+        final int quantity = 1000;
+
+        // vectors
+        StatisticalCharacteristic<String> characteristic = new StatisticalCharacteristic<String>();
+
+
+
+
+
+
+    }
+
 }

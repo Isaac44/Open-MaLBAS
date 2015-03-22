@@ -69,6 +69,12 @@ public class SASFilter {
     public void saveTo(String text, File file) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            // TESTES APENAS!!!
+            writer.append("\n");
+            // FIM
+
+
             writer.append(text);
             writer.close();
         } catch (IOException ex) {

@@ -38,9 +38,14 @@ public enum TextMark {
     MONETARY("!_MONETARY"),
 
     /**
-     * URL constant.
+     * Url constant.
      */
-    URL("!_URL");
+    URL("!_URL"),
+
+    /**
+     * Number constant.
+     */
+    NUMBER("!_HAS_NUMBER");
 
     /**
      * The constant mark. This is used by the filters class.

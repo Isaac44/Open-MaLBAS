@@ -21,5 +21,5 @@ package br.edu.unifei.gpesc.sas.filter;
  * @author isaac
  */
 public enum Result {
-    CONTINUE, SKIP_TAG;
+    CONTINUE, BREAK, SKIP_TAG;
 }

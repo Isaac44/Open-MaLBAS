@@ -86,7 +86,7 @@ public class Census<T> {
      * element ({@link StatisticalData#getElement()}).
      * <p> Important note: The generic type (E) must be the same of the
      * {@link Census}, errors can occur if not.
-     * 
+     *
      * @param <E> The type of this comparator.
      */
     public interface DataComparator<E> extends Comparator<StatisticalData<E>> {}
@@ -110,7 +110,7 @@ public class Census<T> {
      * <br> Also sorts by decrescent order: The first element is the biggest
      * @see StatisticalData#getStatisticalDistribution();
      */
-    public static class DescrescentDistributionSort implements DataComparator<Object> {
+    public static class DecrescentDistributionSort implements DataComparator<Object> {
         @Override
         public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
             return Double.compare(o2.getStatisticalDistribution(), o1.getStatisticalDistribution());
@@ -180,7 +180,7 @@ public class Census<T> {
      */
     public static void computeDistribution(Statistics<?> statistics, StatisticalDistribution distribution) {
         double result;
-        int[] setSizeArray = statistics.getSetSizeArray();
+        int[] setSizeArray = statistics.getAmostralSizeArray();
         for (StatisticalData data : statistics) {
             result = distribution.compute(data, setSizeArray);
             data.setStatisticalDistribution(result);

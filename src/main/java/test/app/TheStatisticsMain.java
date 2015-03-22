@@ -17,31 +17,38 @@
 package test.app;
 
 import br.edu.unifei.gpesc.statistic.Census;
-import br.edu.unifei.gpesc.statistic.SimpleFrequencyDistribution;
-import java.io.FileWriter;
 import br.edu.unifei.gpesc.statistic.StatisticalData;
 import br.edu.unifei.gpesc.statistic.Statistics;
 import br.edu.unifei.gpesc.sas.modules.SASStatistics;
+import br.edu.unifei.gpesc.statistic.MutualInformationDistribution;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
  *
  * @author isaac
  */
-public class StatisticsTest {
+public class TheStatisticsMain {
 
     public static void main(String[] args) throws IOException {
         SASStatistics antispamStatistics = new SASStatistics();
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/";
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
         antispamStatistics.processSpamAndHam(new File(path, "spam"), new File(path, "ham"));
 
         Statistics<String> statistics = antispamStatistics.getStatistics();
 
+        // TESTE
+        StatisticalData<String> dataElement = statistics.getStatisticalData("URL");
+        System.out.println("set 0="+dataElement.getStatistic(0));
+        System.out.println("set 1="+dataElement.getStatistic(1));
         Census<String> census = new Census<String>(statistics);
-        census.computeDistribution(new SimpleFrequencyDistribution());
-        census.sortData(new Census.CrescentDistributionSort());
+        census.computeDistribution(new MutualInformationDistribution());
+        System.out.println("mi="+dataElement.getStatisticalDistribution());
+        // FIM
+
+        census.sortData(new Census.DecrescentDistributionSort());
 
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics.txt"));
         for (StatisticalData<String> data : census.getStatisticalDataList()) {

@@ -30,21 +30,28 @@ import java.util.Set;
 public class Statistics<T> implements Iterable<StatisticalData>{
 
     /**
-     * The statistic hash map used to map the key data-element to statistic data.
+     * The statistic hash map used to map the key data-element to statistic
+     * data for each set.
      */
-    private final HashMap<T, StatisticalData> mStatisticHashMap = new HashMap<T, StatisticalData>();
+    private final HashMap<T, StatisticalData>[] mStatisticHashMapArray;// = new HashMap<T, StatisticalData>();
 
     /**
-     * The size of all sets.
+     * The size of all amostral spaces.
      */
-    private final int[] mSetSizeArray;
+    private final int[] mAmostralSizeArray;
+
+    /**
+     * The quantity of data elements in each set.
+     */
+    private final int[] mDataCountArray;
 
     /**
      * Creates a Statistic object to manage all data objects.
      * @param numberOfSets
      */
     public Statistics(int numberOfSets) {
-        mSetSizeArray = new int[numberOfSets];
+        mAmostralSizeArray = new int[numberOfSets];
+        mDataCountArray = new int[numberOfSets];
     }
 
     /**
@@ -57,7 +64,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
         StatisticalData dataStatistic = mStatisticHashMap.get(data);
 
         if (dataStatistic == null) {
-            dataStatistic = new StatisticalData(data, mSetSizeArray.length);
+            dataStatistic = new StatisticalData(data, mAmostralSizeArray.length);
             mStatisticHashMap.put(data, dataStatistic);
         }
 
@@ -69,7 +76,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
      * @param set The set.
      */
     public void incrementSetSize(int set) {
-        mSetSizeArray[set]++;
+        mAmostralSizeArray[set]++;
     }
 
     /**
@@ -77,7 +84,16 @@ public class Statistics<T> implements Iterable<StatisticalData>{
      * @param set The set.
      */
     public void decrementSetSize(int set) {
-        mSetSizeArray[set]--;
+        mAmostralSizeArray[set]--;
+    }
+
+    /**
+     * Computs the quantity of data elements of each set.
+     * <br> The quantity of data
+     * @param set
+     */
+    public void computeDataCount(int set) {
+
     }
 
     /**
@@ -86,7 +102,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
      * @return The set size.
      */
     public int getSetSize(int set) {
-        return mSetSizeArray[set];
+        return mAmostralSizeArray[set];
     }
 
     /**
@@ -97,6 +113,10 @@ public class Statistics<T> implements Iterable<StatisticalData>{
         return mStatisticHashMap.size();
     }
 
+    /**
+     * Gets all {@link StatisticalData} mapped.
+     * @return A {@link Collection} with all {@link StatisticalData}.
+     */
     public Collection<StatisticalData> getStatisticalDataArray() {
         return mStatisticHashMap.values();
     }
@@ -114,8 +134,17 @@ public class Statistics<T> implements Iterable<StatisticalData>{
      * Gets the array with the size of all sets.
      * @return The array with the size of all sets.
      */
-    public int[] getSetSizeArray() {
-        return mSetSizeArray;
+    public int[] getAmostralSizeArray() {
+        return mAmostralSizeArray;
+    }
+
+    /**
+     * Gets the statistical data associated with the key.
+     * @param key The key.
+     * @return The statistical data.
+     */
+    public StatisticalData<T> getStatisticalData(T key) {
+        return mStatisticHashMap.get(key);
     }
 
     @Override

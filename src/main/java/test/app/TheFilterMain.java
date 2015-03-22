@@ -34,7 +34,6 @@ public class TheFilterMain {
     public static void main(String[] args) {
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/";
 
-
         filter(path);
     }
 

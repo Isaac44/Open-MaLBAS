@@ -26,8 +26,17 @@ import org.jsoup.select.Elements;
  */
 public class FilterExecutor {
 
-    private final TagFilter[] mTagFilterArray = {new IgnoreTagFilter(), new UrlTagFilter()};
-    private final TextFilterExecutor mTextFilterExecutor = new TextFilterExecutor();
+    private final TagFilter[] mTagFilterArray = {
+        new IgnoreTagFilter(),
+        new UrlTagFilter()};
+
+    private final TextFilter[] mWordTextFilterArray = {
+        new MonetaryTextFilter(),
+        new UrlFilter(),
+        new NumberFilter(),
+        new PunctuationTextFilter(),
+        new SmallBigWordTextFilter(),
+        new NormalizerTextFilter()};
 
     public String filterHtml(Elements elements) {
         // variables
@@ -88,10 +97,23 @@ public class FilterExecutor {
         String resultText;
 
         while (scanner.hasNext()) {
-            resultText = mTextFilterExecutor.filter(scanner.next());
+            resultText = filterText(scanner.next());
             strBuilder.append(resultText).append(" ");
         }
         strBuilder.append("\n");
+    }
+
+    /**
+     * Filters the input text by all the setted {@link TextFilter}.
+     * @param text The input text.
+     * @return The filtered text.
+     */
+    public String filterText(String text) {
+        for (TextFilter textFilter : mWordTextFilterArray) {
+            text = textFilter.filter(text);
+            if (textFilter.getFilterResult() == Result.BREAK) break;
+        }
+        return text;
     }
 
     /**

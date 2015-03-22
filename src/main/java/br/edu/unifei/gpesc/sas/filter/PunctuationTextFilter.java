@@ -16,41 +16,41 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
-import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 /**
  *
  * @author isaac
  */
-public class NormalizerTextFilter extends TextFilter {
+public class PunctuationTextFilter extends TextFilter {
 
     /**
-     * The ascii pattern. This is used to remove all non-ascii characters for
-     * the text.
+     * The punctuation pattern. This is used to remove all punctuation for the
+     * text. The punctuation symbols: [,.;!?(){}\\[\\]<>%]
      */
-    private static final Pattern NON_ASCII_PATTERN = Pattern.compile("[^\\p{ASCII}]");
+    private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("[\\p{Punct}]");
 
     /**
      * Constructs this class setting the {@link TextFilter#mFilterResult} to
      * {@link Result#CONTINUE}. This mean that all filter classes, in the executor,
      * can be processed after this one.
      */
-    public NormalizerTextFilter() {
+    public PunctuationTextFilter() {
         setResult(Result.CONTINUE);
     }
 
     /**
-     * Normalizes the input text. <br>
-     * This method converts all characters non-ASCII  (accents, for example)
-     * to ASCII and than puts all to lower case.
+     * This method filters the input text by removing all punctuation symbols.
+     * <br> The punctuation symbols that will be removed are:
+     * <b>! " # $ % & ' * + , - . / : ; < = > ? @ [ ] ^ _ ` { | } ~</b>
+     * <p> Note: be careful on use this filter. It removes all
+     * punctuation and, because of that, others filter may not work properly.
      * @param text The input text.
-     * @return The normalized and lower case text.
+     * @return The text without all punctuation symbols.
      */
     @Override
     public String filter(String text) {
-        text = Normalizer.normalize(text, Normalizer.Form.NFD);
-        return NON_ASCII_PATTERN.matcher(text).replaceAll("").toLowerCase();
+        return PUNCTUATION_PATTERN.matcher(text).replaceAll("");
     }
 
 }

@@ -20,12 +20,35 @@ package br.edu.unifei.gpesc.sas.filter;
  *
  * @author isaac
  */
-public interface TextFilter {
+public abstract class TextFilter {
+
+    /**
+     * Informs what the executor should do after filter the text.
+     */
+    private Result mFilterResult;
 
     /**
      * Filters the input text.
      * @param text The input text.
      * @return The filtered text.
      */
-    public String filter(String text);
+    public abstract String filter(String text);
+
+    /**
+     * Gets result of the filter.
+     * @return The result of the filter.
+     */
+    public Result getFilterResult() {
+        return mFilterResult;
+    }
+
+    /**
+     * Implementations of this class shoud use this method to set the result
+     * of the filter.
+     * @param result The result.
+     * @see TextFilter#getFilterResult()
+     */
+    protected void setResult(Result result) {
+        mFilterResult = result;
+    }
 }

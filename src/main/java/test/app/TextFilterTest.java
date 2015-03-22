@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.filter.TextFilterExecutor;
+import br.edu.unifei.gpesc.sas.filter.FilterExecutor;
 import java.util.Scanner;
 
 /**
@@ -26,7 +26,7 @@ import java.util.Scanner;
 public class TextFilterTest {
 
     public static void main(String[] args) {
-        TextFilterExecutor textFilter = new TextFilterExecutor();
+        FilterExecutor textFilter = new FilterExecutor();
 
         String str = "money$ ultrabigstringarraytobecatchonthefilterhasitis sm ml                ajksfçslfkasmc áá eŕsfgcźxcvrŕŕŕŕãs dasẽẽ©ŋæßðđŋħ®ħ®đđß";
 
@@ -37,7 +37,7 @@ public class TextFilterTest {
 
         for (int i=0; i<100000; i++) {
             while (scan.hasNext()) {
-                result = textFilter.filter(scan.next());
+                result = textFilter.filterText(scan.next());
                 strBuilder.append(result).append(" ");
             }
             scan = new Scanner(str);

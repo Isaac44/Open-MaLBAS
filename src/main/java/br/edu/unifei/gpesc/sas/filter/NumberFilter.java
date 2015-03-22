@@ -16,37 +16,37 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
+import java.util.regex.Pattern;
+
 /**
  *
  * @author isaac
  */
-public class MonetaryTextFilter extends TextFilter {
+public class NumberFilter extends TextFilter {
 
     /**
-     * The symbols usually founded in monetary values.
+     * The "have at least one number" pattern.
      */
-    private static final String[] MONETARY_SYMBOLS = {"$", "%"}; // note: this way is best than use regex
+    private static final Pattern NUMBER_PATTERN = Pattern.compile(".*\\d.*");
+
 
     /**
-     * Checks if the input text contains any monetary symbols. See
-     * {@link MonetaryWordTextFilter#MONETARY_SYMBOLS}.
-     * @param word The word to analysed.
-     * @return The value of {@link TextMark#MONETARY}, if the word contains any
-     * monetary symbol.<br>
-     * The input param without modification, else.
+     * Checks if the input text contains at least one number.
+     * @param text The input text to analysed.
+     * @return The value of {@link TextMark#NUMBER}, if the word contains at
+     * least one number.<br>
+     * The input param without modification, otherwise.
      */
     @Override
-    public String filter(String word) {
-
-        for (String symbol : MONETARY_SYMBOLS) {
-            if (word.contains(symbol)) {
-                setResult(Result.BREAK);
-                return TextMark.MONETARY.value();
-            }
+    public String filter(String text) {
+        if (NUMBER_PATTERN.matcher(text).find()) {
+            setResult(Result.BREAK);
+            return TextMark.NUMBER.value();
         }
-
-        setResult(Result.CONTINUE);
-        return word;
+        else {
+            setResult(Result.CONTINUE);
+            return text;
+        }
     }
 
 }

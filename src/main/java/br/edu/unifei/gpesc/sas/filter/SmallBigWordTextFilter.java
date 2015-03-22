@@ -20,7 +20,7 @@ package br.edu.unifei.gpesc.sas.filter;
  *
  * @author isaac
  */
-public class SmallBigWordTextFilter implements TextFilter {
+public class SmallBigWordTextFilter extends TextFilter {
 
     /**
      * The default size that determines a big word.
@@ -79,13 +79,16 @@ public class SmallBigWordTextFilter implements TextFilter {
         int wordSize = word.length();
 
         if (wordSize <= mSmallWordSize) {
+            setResult(Result.BREAK);
             return TextMark.SMALL_WORD.value();
         }
 
         if (mBigWordSize <= wordSize) {
+            setResult(Result.BREAK);
             return TextMark.BIG_WORD.value();
         }
 
+        setResult(Result.CONTINUE);
         return word;
     }
 }

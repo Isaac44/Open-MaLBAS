@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @author isaac
  */
-public class UrlFilter implements TextFilter {
+public class UrlFilter extends TextFilter {
 
     /**
      * URL pattern.
@@ -45,9 +45,11 @@ public class UrlFilter implements TextFilter {
     public String filter(String text) {
 
         if (text.contains(HTTP_SYMBOL) || URL_PATTERN.matcher(text).find()) {
+            setResult(Result.BREAK);
             return TextMark.URL.value();
         }
 
+        setResult(Result.CONTINUE);
         return text;
     }
 

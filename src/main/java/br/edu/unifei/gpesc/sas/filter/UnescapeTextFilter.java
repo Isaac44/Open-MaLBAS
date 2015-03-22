@@ -16,27 +16,23 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
+import org.unbescape.html.HtmlEscape;
+
 /**
  *
  * @author isaac
  */
-@SuppressWarnings("StringEquality")
-public class TextFilterExecutor {
+public class UnescapeTextFilter extends TextFilter {
 
-    private TextFilter[] mWordTextFilterArray = {new SmallBigWordTextFilter(), new MonetaryTextFilter(), new UrlFilter(), new NormalizerTextFilter()};
-
+    @Override
     public String filter(String text) {
+        String result = HtmlEscape.unescapeHtml(text);
 
-        String result;
-        for (TextFilter textFilter : mWordTextFilterArray) {
-            result = textFilter.filter(text);
-            if (result != text) return result;
+        if (text.contains("acute") && result.contains("acute")) {
+            System.out.println("text="+text + " | result="+result);
         }
 
-        return text;
+        return result;
     }
 
-    public void setWordFilterArray(TextFilter... wordFilterArray) {
-        mWordTextFilterArray = wordFilterArray;
-    }
 }
