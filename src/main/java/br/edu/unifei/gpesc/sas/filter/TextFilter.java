@@ -21,5 +21,11 @@ package br.edu.unifei.gpesc.sas.filter;
  * @author isaac
  */
 public interface TextFilter {
+
+    /**
+     * Filters the input text.
+     * @param text The input text.
+     * @return The filtered text.
+     */
     public String filter(String text);
 }

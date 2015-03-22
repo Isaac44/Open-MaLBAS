@@ -17,12 +17,15 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author isaac
  */
 public class NormalizerTextFilter implements TextFilter {
+
+    private static final Pattern ASCII_PATTERN = Pattern.compile("[^\\p{ASCII}]");
 
     /**
      * Normalizes the input text. <br>
@@ -33,7 +36,8 @@ public class NormalizerTextFilter implements TextFilter {
      */
     @Override
     public String filter(String text) {
-        return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+        text = Normalizer.normalize(text, Normalizer.Form.NFD);
+        return ASCII_PATTERN.matcher(text).replaceAll("").toLowerCase();
     }
 
 

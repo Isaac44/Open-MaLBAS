@@ -21,7 +21,8 @@ import br.edu.unifei.gpesc.statistic.SimpleFrequencyDistribution;
 import java.io.FileWriter;
 import br.edu.unifei.gpesc.statistic.StatisticalData;
 import br.edu.unifei.gpesc.statistic.Statistics;
-import br.edu.unifei.gpesc.sas.module.SASStatistics;
+import br.edu.unifei.gpesc.sas.modules.SASStatistics;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,9 +41,9 @@ public class StatisticsTest {
 
         Census<String> census = new Census<String>(statistics);
         census.computeDistribution(new SimpleFrequencyDistribution());
-        census.sortData(new Census.DistributionSort());
+        census.sortData(new Census.CrescentDistributionSort());
 
-        FileWriter fileWriter = new FileWriter(path+"statistics.txt");
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics.txt"));
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
             fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
         }

@@ -68,9 +68,9 @@ public class SmallBigWordTextFilter implements TextFilter {
      * Checks if the word size fits in the determined sizes.
      * @param word The word to be analyzed.
      * @return
-     * The value of {@link Mark#SMALL_WORD}, if the word size is
+     * The value of {@link TextMark#SMALL_WORD}, if the word size is
      * less or equals {@link SmallBigWordTextFilter#mSmallWordSize}.<br>
-     * The value of {@link Mark#BIG_WORD}, if the word size is
+     * The value of {@link TextMark#BIG_WORD}, if the word size is
      * higher or equals {@link SmallBigWordTextFilter#mSmallWordSize}.<br>
      * The input param without modification, else.
      */
@@ -79,11 +79,11 @@ public class SmallBigWordTextFilter implements TextFilter {
         int wordSize = word.length();
 
         if (wordSize <= mSmallWordSize) {
-            return Mark.SMALL_WORD.value();
+            return TextMark.SMALL_WORD.value();
         }
 
         if (mBigWordSize <= wordSize) {
-            return Mark.BIG_WORD.value();
+            return TextMark.BIG_WORD.value();
         }
 
         return word;

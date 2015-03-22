@@ -23,5 +23,5 @@ import org.jsoup.nodes.Element;
  * @author isaac
  */
 public interface TagFilter {
-    public void filter(Element element);
+    public Result filter(Element element, StringBuilder strBuilder);
 }

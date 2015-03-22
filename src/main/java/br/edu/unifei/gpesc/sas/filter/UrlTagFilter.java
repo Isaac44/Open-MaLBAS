@@ -16,33 +16,20 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
+import org.jsoup.nodes.Element;
+
 /**
  *
  * @author isaac
  */
-public class MonetaryWordTextFilter implements TextFilter {
+public class UrlTagFilter implements TagFilter {
 
-    /**
-     * The symbols usually founded in monetary values.
-     */
-    private static final String[] MONETARY_SYMBOLS = {"$", "%"};
-
-    /**
-     * Checks if the input text contains any monetary symbols. See
-     * {@link MonetaryWordTextFilter#MONETARY_SYMBOLS}.
-     * @param word The word to analysed.
-     * @return The value of {@link Mark#MONETARY}, if the word contains any
-     * monetary symbol.<br>
-     * The input param without modification, else.
-     */
     @Override
-    public String filter(String word) {
-
-        for (String symbol : MONETARY_SYMBOLS) {
-            if (word.contains(symbol)) return Mark.MONETARY.value();
+    public Result filter(Element element, StringBuilder strBuilder) {
+        if (!element.attr("href").isEmpty()) {
+            strBuilder.append(TextMark.URL).append(" ");
         }
-
-        return word;
+        return Result.CONTINUE;
     }
 
 }

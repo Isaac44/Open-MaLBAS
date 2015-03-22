@@ -16,19 +16,29 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.filter.UrlFilter;
+import br.edu.unifei.gpesc.sas.modules.SASFilter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
  * @author isaac
  */
-public class A {
-    public static void main(String[] args)  {
-        UrlFilter urlFilter = new UrlFilter();
-        System.out.println(urlFilter.filter("a.com"));
-        System.out.println(urlFilter.filter("a.c"));
-        System.out.println(urlFilter.filter("a."));
-        System.out.println(urlFilter.filter("aadsf.om"));
+public class SASFilterTest {
 
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        SASFilter filter = new SASFilter();
+
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail/test/";
+        String file = "smtp_1377305710_0x7fd6dc02b830_835.eml";
+
+        String out = filter.filterFile(path + "raw/" + file);
+
+        FileOutputStream fileStream = new FileOutputStream(path + "cleanned/" + file);
+        fileStream.write(out.getBytes("ASCII"));
+        fileStream.close();
     }
+
 }

@@ -20,50 +20,29 @@ package br.edu.unifei.gpesc.sas.filter;
  *
  * @author isaac
  */
-public enum Mark {
+public class MonetaryTextFilter implements TextFilter {
 
     /**
-     * Small word constant.
+     * The symbols usually founded in monetary values.
      */
-    SMALL_WORD("!_SMALL_WORD"),
+    private static final String[] MONETARY_SYMBOLS = {"$", "%"}; // note: this way is best than use regex
 
     /**
-     * Big word constant.
+     * Checks if the input text contains any monetary symbols. See
+     * {@link MonetaryWordTextFilter#MONETARY_SYMBOLS}.
+     * @param word The word to analysed.
+     * @return The value of {@link TextMark#MONETARY}, if the word contains any
+     * monetary symbol.<br>
+     * The input param without modification, else.
      */
-    BIG_WORD("!_BIG_WORD"),
+    @Override
+    public String filter(String word) {
 
-    /**
-     * Monetary constant.
-     */
-    MONETARY("!_MONETARY");
+        for (String symbol : MONETARY_SYMBOLS) {
+            if (word.contains(symbol)) return TextMark.MONETARY.value();
+        }
 
-    /**
-     * The constant mark. This is used by the filters class.
-     */
-    private final String mMark;
-
-    /**
-     * Constructs an enumerator with a mark.
-     * @param mark
-     */
-    private Mark(String mark) {
-        mMark = mark;
-    }
-
-    /**
-     * Constructs an enumerator with a null mark.
-     */
-    private Mark() {
-        mMark = null;
-    }
-
-
-    /**
-     * Gets the mark value associated with this enumerator.
-     * @return The associated mark value.
-     */
-    public String value() {
-        return mMark;
+        return word;
     }
 
 }

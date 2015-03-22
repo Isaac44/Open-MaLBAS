@@ -20,23 +20,6 @@ package br.edu.unifei.gpesc.sas.filter;
  *
  * @author isaac
  */
-@SuppressWarnings("StringEquality")
-public class TextFilterExecutor {
-
-    private TextFilter[] mWordTextFilterArray = {new SmallBigWordTextFilter(), new MonetaryTextFilter(), new UrlFilter(), new NormalizerTextFilter()};
-
-    public String filter(String text) {
-
-        String result;
-        for (TextFilter textFilter : mWordTextFilterArray) {
-            result = textFilter.filter(text);
-            if (result != text) return result;
-        }
-
-        return text;
-    }
-
-    public void setWordFilterArray(TextFilter... wordFilterArray) {
-        mWordTextFilterArray = wordFilterArray;
-    }
+public class StringHolder {
+    public String value;
 }

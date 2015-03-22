@@ -20,23 +20,48 @@ package br.edu.unifei.gpesc.sas.filter;
  *
  * @author isaac
  */
-@SuppressWarnings("StringEquality")
-public class TextFilterExecutor {
+public enum TextMark {
 
-    private TextFilter[] mWordTextFilterArray = {new SmallBigWordTextFilter(), new MonetaryTextFilter(), new UrlFilter(), new NormalizerTextFilter()};
+    /**
+     * Small word constant.
+     */
+    SMALL_WORD("!_SMALL_WORD"),
 
-    public String filter(String text) {
+    /**
+     * Big word constant.
+     */
+    BIG_WORD("!_BIG_WORD"),
 
-        String result;
-        for (TextFilter textFilter : mWordTextFilterArray) {
-            result = textFilter.filter(text);
-            if (result != text) return result;
-        }
+    /**
+     * Monetary constant.
+     */
+    MONETARY("!_MONETARY"),
 
-        return text;
+    /**
+     * URL constant.
+     */
+    URL("!_URL");
+
+    /**
+     * The constant mark. This is used by the filters class.
+     */
+    private final String mMark;
+
+    /**
+     * Constructs an enumerator with a mark.
+     *
+     * @param mark
+     */
+    private TextMark(String mark) {
+        mMark = mark;
     }
 
-    public void setWordFilterArray(TextFilter... wordFilterArray) {
-        mWordTextFilterArray = wordFilterArray;
+    /**
+     * Gets the mark value associated with this enumerator.
+     *
+     * @return The associated mark value.
+     */
+    public String value() {
+        return mMark;
     }
 }

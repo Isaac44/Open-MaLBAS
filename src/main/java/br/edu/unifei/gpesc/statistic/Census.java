@@ -71,24 +71,70 @@ public class Census<T> {
         Collections.sort(mDataList, comparable);
     }
 
+    /**
+     * Gets the {@link ArrayList} with all statistical data.
+     * @return The statistical data list.
+     */
     public ArrayList<StatisticalData<T>> getStatisticalDataList() {
         return mDataList;
     }
 
+    /**
+     * This interface is used to sort the data of this census. It is used
+     * with {@link Census#sortData(DataComparator)}.
+     * <br> This interface is convenient if is wanted to sort the data by its
+     * element ({@link StatisticalData#getElement()}).
+     * <p> Important note: The generic type (E) must be the same of the
+     * {@link Census}, errors can occur if not.
+     * 
+     * @param <E> The type of this comparator.
+     */
     public interface DataComparator<E> extends Comparator<StatisticalData<E>> {}
 
-    public static class DistributionSort implements DataComparator<Object> {
+    /**
+     * This class implementation of {@link DataComparator} sorts the data by its
+     * {@link StatisticalDistribution}.
+     * <br> Also sorts by crescent order: The first element is the lowest
+     * @see StatisticalData#getStatisticalDistribution();
+     */
+    public static class CrescentDistributionSort implements DataComparator<Object> {
         @Override
         public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
             return Double.compare(o1.getStatisticalDistribution(), o2.getStatisticalDistribution());
         }
     }
 
-    public static class StatisticSetSort implements DataComparator<Object> {
+    /**
+     * This class implementation of {@link DataComparator} sorts the data by its
+     * {@link StatisticalDistribution}.
+     * <br> Also sorts by decrescent order: The first element is the biggest
+     * @see StatisticalData#getStatisticalDistribution();
+     */
+    public static class DescrescentDistributionSort implements DataComparator<Object> {
+        @Override
+        public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
+            return Double.compare(o2.getStatisticalDistribution(), o1.getStatisticalDistribution());
+        }
+    }
 
+    /**
+     * This class implementation of {@link DataComparator} sorts the data by a
+     * set.
+     * <br> Also sorts by crescent order: The first element is the lowest
+     * @see StatisticalData#getStatisticalDistribution();
+     */
+    public static class CrescentStatisticSetSort implements DataComparator<Object> {
+
+        /**
+         * The set used in the sort.
+         */
         private final int mmSet;
 
-        public StatisticSetSort(int set) {
+        /**
+         * Initializes this class with the set to used in the sort.
+         * @param set The set.
+         */
+        public CrescentStatisticSetSort(int set) {
             mmSet = set;
         }
 
@@ -96,7 +142,33 @@ public class Census<T> {
         public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
             return Integer.compare(o1.getStatistic(mmSet), o2.getStatistic(mmSet));
         }
+    }
 
+    /**
+     * This class implementation of {@link DataComparator} sorts the data by a
+     * set.
+     * <br> Also sorts by crescent order: The first element is the lowest
+     * @see StatisticalData#getStatisticalDistribution();
+     */
+    public static class DecrescentStatisticSetSort implements DataComparator<Object> {
+
+        /**
+         * The set used in the sort.
+         */
+        private final int mmSet;
+
+        /**
+         * Initializes this class with the set to used in the sort.
+         * @param set The set.
+         */
+        public DecrescentStatisticSetSort(int set) {
+            mmSet = set;
+        }
+
+        @Override
+        public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
+            return Integer.compare(o2.getStatistic(mmSet), o1.getStatistic(mmSet));
+        }
     }
 
     /**

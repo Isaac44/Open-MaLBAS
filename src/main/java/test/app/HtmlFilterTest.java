@@ -14,29 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
+package test.app;
+
+import br.edu.unifei.gpesc.sas.filter.FilterExecutor;
+import java.io.File;
+import java.io.IOException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 /**
  *
  * @author isaac
  */
-@SuppressWarnings("StringEquality")
-public class TextFilterExecutor {
+public class HtmlFilterTest {
 
-    private TextFilter[] mWordTextFilterArray = {new SmallBigWordTextFilter(), new MonetaryTextFilter(), new UrlFilter(), new NormalizerTextFilter()};
+    public static void main(String[] args) throws IOException {
+        Document document = Jsoup.parse(new File("/home/isaac/Unifei/Mestrado/SAS/Jsoup/soup_test.html"), "ASCII");
+        Elements elements = document.body().getAllElements();
 
-    public String filter(String text) {
+        FilterExecutor hfe = new FilterExecutor();
+        String htmlFiltered = hfe.filterHtml(elements);
 
-        String result;
-        for (TextFilter textFilter : mWordTextFilterArray) {
-            result = textFilter.filter(text);
-            if (result != text) return result;
-        }
-
-        return text;
+        System.out.println(htmlFiltered);
     }
 
-    public void setWordFilterArray(TextFilter... wordFilterArray) {
-        mWordTextFilterArray = wordFilterArray;
-    }
 }

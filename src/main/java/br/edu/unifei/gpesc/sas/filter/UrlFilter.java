@@ -16,27 +16,39 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
+import java.util.regex.Pattern;
+
 /**
  *
  * @author isaac
  */
-@SuppressWarnings("StringEquality")
-public class TextFilterExecutor {
+public class UrlFilter implements TextFilter {
 
-    private TextFilter[] mWordTextFilterArray = {new SmallBigWordTextFilter(), new MonetaryTextFilter(), new UrlFilter(), new NormalizerTextFilter()};
+    /**
+     * URL pattern.
+     */
+    private static final Pattern URL_PATTERN = Pattern.compile("\\.\\w{2}");
 
+    /**
+     * HTTP symbol.
+     */
+    private static final String HTTP_SYMBOL = "http";
+
+    /**
+     * Checks if the input text contain "http" or "." followed by 2 words
+     * (example: ".com" and ".aa" are valids).
+     * @param text The input text.
+     * @return If the input appears to be url, {@link TextMark#URL} is returned.
+     * <br>Else the input is returned.
+     */
+    @Override
     public String filter(String text) {
 
-        String result;
-        for (TextFilter textFilter : mWordTextFilterArray) {
-            result = textFilter.filter(text);
-            if (result != text) return result;
+        if (text.contains(HTTP_SYMBOL) || URL_PATTERN.matcher(text).find()) {
+            return TextMark.URL.value();
         }
 
         return text;
     }
 
-    public void setWordFilterArray(TextFilter... wordFilterArray) {
-        mWordTextFilterArray = wordFilterArray;
-    }
 }

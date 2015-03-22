@@ -16,10 +16,35 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
+
 /**
  *
  * @author isaac
  */
-public class IgnoreTagFilter {
+public class IgnoreTagFilter implements TagFilter {
+
+    private static final Tag[] IGNORE_TAG_ARRAY;
+
+    static {
+        String[] tagArray = {"script"};
+        IGNORE_TAG_ARRAY = new Tag[tagArray.length];
+
+        for (int i=0; i<tagArray.length; i++) {
+            IGNORE_TAG_ARRAY[i] = Tag.valueOf(tagArray[i]);
+        }
+    }
+
+    @Override
+    public Result filter(Element element, StringBuilder strBuilder) {
+        Tag tag = element.tag();
+
+        for (Tag ignoreTag : IGNORE_TAG_ARRAY) {
+            if (ignoreTag == tag) return Result.SKIP_TAG;
+        }
+
+        return Result.CONTINUE;
+    }
 
 }

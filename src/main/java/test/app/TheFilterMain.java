@@ -14,14 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
+package test.app;
+
+import br.edu.unifei.gpesc.sas.modules.SASFilter;
+import java.io.File;
 
 /**
  *
  * @author isaac
  */
-public class TagFilterExecutor {
+public class TheFilterMain {
+
+    public static void filter(String path) {
+        SASFilter filter = new SASFilter();
+        filter.filterFolder(new File(path, "base/ham"), new File(path, "clean/ham"));
+        filter.filterFolder(new File(path, "base/spam"), new File(path, "clean/spam"));
+    }
+
+    public static void main(String[] args) {
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/";
 
 
+        filter(path);
+    }
 
 }

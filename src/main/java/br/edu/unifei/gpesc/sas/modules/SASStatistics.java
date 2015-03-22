@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.module;
+package br.edu.unifei.gpesc.sas.modules;
 
 import br.edu.unifei.gpesc.statistic.FileStatistics;
 import br.edu.unifei.gpesc.util.FileUtils;
@@ -59,7 +59,7 @@ public class SASStatistics {
 
     /**
      * This method is a convenient way to use {@link SASStatistics#processFolder(java.io.File, int)}
-     *  for the both sets.
+     *  for both sets.
      * @param hamFolder The ham folder.
      * @param spamFolder The spam folder.
      */
@@ -68,6 +68,10 @@ public class SASStatistics {
         processFolder(spamFolder, SPAM_SET);
     }
 
+    /**
+     * Gets the statistiscs for spam and ham.
+     * @return The statistics.
+     */
     public FileStatistics getStatistics() {
         return mFileStatistic;
     }
