@@ -14,30 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.base.resources;
+package br.edu.unifei.gpesc.sas.filter;
 
-import java.util.ResourceBundle;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
 
 /**
- * This class manages all auxiliary resources that this program needs.
- * <p> It contains:
- * <br><b> String internationalization; </b>
- *
  *
  * @author isaac
  */
-public final class Resources {
+public class TagNameFilter implements TagFilter {
 
-    // =========================================================================
-    //                      Internationalization
-    // =========================================================================
+    private static final Tag IMAGE_TAG = Tag.valueOf("img");
 
-    private static ResourceBundle sResourceBundle;
-
-    public static String i18n(String key) {
-        if (sResourceBundle == null) sResourceBundle = ResourceBundle.getBundle("br.edu.unifei.gpesc.sas.context/messages");
-        return sResourceBundle.getString(key);
+    @Override
+    public Result filter(Element element, StringBuilder strBuilder) {
+        if (element.tag() == IMAGE_TAG) {
+            strBuilder.append(TextMark.IMAGE).append("\n");
+        }
+        return Result.CONTINUE;
     }
-
 
 }

@@ -39,7 +39,7 @@ public class StatisticalCharacteristic<T> {
 
     /**
      * Inserts the data giving it an index. This mean that the first element
-     * inserted is index 0, the second is index 1.
+     * inserted is index 0, the second is index 1, etc.
      * <br>Repeated data will be ignored.
      * @param data The data to be inserted.
      */

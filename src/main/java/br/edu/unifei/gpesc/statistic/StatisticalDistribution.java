@@ -25,8 +25,8 @@ public interface StatisticalDistribution {
     /**
      * Computes the statistical distribuition.
      * @param data The statistical data.
-     * @param setSizeArray The array with the size of all sets.
+     * @param statistics The statistics.
      * @return The statistical distribuition for the statistical data.
      */
-    public double compute(StatisticalData data, int... setSizeArray);
+    public double compute(StatisticalData data, Statistics statistics);
 }

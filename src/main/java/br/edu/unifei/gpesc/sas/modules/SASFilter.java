@@ -17,7 +17,9 @@
 package br.edu.unifei.gpesc.sas.modules;
 
 import br.edu.unifei.gpesc.sas.filter.FilterExecutor;
+import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
+import br.edu.unifei.gpesc.util.ProcessLog;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,6 +35,8 @@ public class SASFilter {
 
     private final MailProcessor mMailProcessor = new MailProcessor();
     private final FilterExecutor mFilterExecutor = new FilterExecutor();
+
+    private final ProcessLog mFolderProcessLog = new ProcessLog();
 
     public String filterFile(String inputPath) {
         boolean processed = mMailProcessor.processMail(inputPath);
@@ -56,25 +60,39 @@ public class SASFilter {
     }
 
     public void filterFolder(File folderIn, File folderOut) {
+        mFolderProcessLog.resetCounters();
+
         File[] files = folderIn.listFiles(FileUtils.getFileFilter());
         if (files != null) {
+            ConsoleProgress progress = new ConsoleProgress(files.length);
+
             String result;
+            int k = 0;
+
             for (File file : files) {
+                progress.setValue(k++);
+
                 result = filterFile(file.getAbsolutePath());
-                saveTo(result, new File(folderOut, file.getName()));
+                if (result != null) {
+                    saveTo(result, new File(folderOut, file.getName()));
+                    mFolderProcessLog.incSucessCount();
+                }
+                else {
+                    mFolderProcessLog.incErrorCount();
+                }
             }
+
+            progress.end();
         }
+    }
+
+    public ProcessLog getFolderProcessLog() {
+        return mFolderProcessLog;
     }
 
     public void saveTo(String text, File file) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-
-            // TESTES APENAS!!!
-            writer.append("\n");
-            // FIM
-
-
             writer.append(text);
             writer.close();
         } catch (IOException ex) {

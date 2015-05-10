@@ -180,9 +180,8 @@ public class Census<T> {
      */
     public static void computeDistribution(Statistics<?> statistics, StatisticalDistribution distribution) {
         double result;
-        int[] setSizeArray = statistics.getAmostralSizeArray();
         for (StatisticalData data : statistics) {
-            result = distribution.compute(data, setSizeArray);
+            result = distribution.compute(data, statistics);
             data.setStatisticalDistribution(result);
         }
     }

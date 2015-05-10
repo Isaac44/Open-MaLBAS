@@ -23,7 +23,7 @@ package br.edu.unifei.gpesc.statistic;
 public class ChiSquaredDistribution implements StatisticalDistribution {
 
     @Override
-    public double compute(StatisticalData data, int... setSizeArray) {
+    public double compute(StatisticalData data, Statistics statistics) {
         return 0.0;
     }
 

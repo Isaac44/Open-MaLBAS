@@ -39,14 +39,8 @@ public class TheStatisticsMain {
 
         Statistics<String> statistics = antispamStatistics.getStatistics();
 
-        // TESTE
-        StatisticalData<String> dataElement = statistics.getStatisticalData("URL");
-        System.out.println("set 0="+dataElement.getStatistic(0));
-        System.out.println("set 1="+dataElement.getStatistic(1));
         Census<String> census = new Census<String>(statistics);
         census.computeDistribution(new MutualInformationDistribution());
-        System.out.println("mi="+dataElement.getStatisticalDistribution());
-        // FIM
 
         census.sortData(new Census.DecrescentDistributionSort());
 

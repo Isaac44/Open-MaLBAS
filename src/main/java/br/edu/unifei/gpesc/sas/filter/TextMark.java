@@ -45,7 +45,12 @@ public enum TextMark {
     /**
      * Number constant.
      */
-    NUMBER("!_HAS_NUMBER");
+    NUMBER("!_HAS_NUMBER"),
+
+    /**
+     * Image constant.
+     */
+    IMAGE("!_IMAGE");
 
     /**
      * The constant mark. This is used by the filters class.

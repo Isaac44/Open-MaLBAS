@@ -46,15 +46,15 @@ public class Normalization {
 
 
     /**
-     * This method computes the __ normalization.
+     * This method computes the feature scaling normalization.
+     * <br>This normalization is used to bring all values into the range [0, 1].
+     * This is also called unity-based normalization.
+     * <p> The main formula is: N = (V - Vmin) / (Vmax - Vmin)
      *
-     * Citando o Diego:
-        Novo calculo para normalizacao
-        Em 08/11/2006
-        Email Isaias: "Faca isso, pegue pra cada email, assim: (valor atual-menor)/(maior-menor)
-                         Ex.: 2 4 8 10 -> (2-2)/8=0; (4-2)/8= 0.25;(8-2)/8= 0.75;(10-2)/8= 1      "
+     * @param dataIn The array with each V value.
+     * @param dataOut The array with each N normalization result.
      */
-    public static void isaiasNormalization(int[] dataIn, double[] dataOut) {
+    public static void featureScaling(int[] dataIn, double[] dataOut) {
         int smaller = dataIn[0];
         int bigger  = dataIn[0];
 

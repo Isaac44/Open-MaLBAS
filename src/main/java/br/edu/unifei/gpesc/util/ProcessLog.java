@@ -14,33 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
-
-import org.unbescape.html.HtmlEscape;
+package br.edu.unifei.gpesc.util;
 
 /**
  *
  * @author isaac
  */
-public class UnescapeTextFilter extends TextFilter {
+public class ProcessLog {
 
-    private static final String AMPERSAND = "&";
-    private static final String AMPERSAND_ESCAPE = "&amp";
+    private int mErrorCount;
+    private int mSucessCount;
 
-    public UnescapeTextFilter() {
-        setResult(Result.CONTINUE);
+    public void resetCounters() {
+        mErrorCount = 0;
+        mSucessCount = 0;
     }
 
-    @Override
-    public String filter(String text) {
-        if (text.contains(AMPERSAND)) {
-            String result =  HtmlEscape.unescapeHtml(text.replaceAll(AMPERSAND_ESCAPE, AMPERSAND));
+    public void incSucessCount() {
+        mSucessCount++;
+    }
 
-            return result;
-        }
-        else {
-            return text;
-        }
+    public void incErrorCount() {
+        mErrorCount++;
+    }
+
+    public int sucess() {
+        return mSucessCount;
+    }
+
+    public int error() {
+        return mErrorCount;
+    }
+
+    public int total() {
+        return mSucessCount + mErrorCount;
     }
 
 }

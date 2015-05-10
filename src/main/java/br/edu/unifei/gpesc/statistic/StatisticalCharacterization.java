@@ -71,4 +71,12 @@ public class StatisticalCharacterization<T> {
     public int[] getStatisticalCharacterizationArray() {
         return mStatisticalCharacterizationArray;
     }
+
+    /**
+     * This method cleans the statistical characterization array. Use this for
+     * recycling process (and avoid unnecessary data allocation).
+     */
+    public void cleanStatisticalCharacterizationArray() {
+
+    }
 }

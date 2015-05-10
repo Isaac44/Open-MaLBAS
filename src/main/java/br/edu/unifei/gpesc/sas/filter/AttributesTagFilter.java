@@ -16,31 +16,28 @@
  */
 package br.edu.unifei.gpesc.sas.filter;
 
-import org.unbescape.html.HtmlEscape;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Element;
 
 /**
  *
  * @author isaac
  */
-public class UnescapeTextFilter extends TextFilter {
-
-    private static final String AMPERSAND = "&";
-    private static final String AMPERSAND_ESCAPE = "&amp";
-
-    public UnescapeTextFilter() {
-        setResult(Result.CONTINUE);
-    }
+public class AttributesTagFilter implements TagFilter {
 
     @Override
-    public String filter(String text) {
-        if (text.contains(AMPERSAND)) {
-            String result =  HtmlEscape.unescapeHtml(text.replaceAll(AMPERSAND_ESCAPE, AMPERSAND));
+    public Result filter(Element element, StringBuilder strBuilder) {
+        Attributes attributes = element.attributes();
 
-            return result;
+        if (attributes.size() > 0) {
+            strBuilder.append("!_in_").append(element.tagName()).append("\n");
+            for (Attribute attribute : attributes) {
+                strBuilder.append(attribute.getKey()).append("\n");
+            }
         }
-        else {
-            return text;
-        }
+
+        return Result.CONTINUE;
     }
 
 }

@@ -23,9 +23,9 @@ package br.edu.unifei.gpesc.statistic;
 public class SimpleFrequencyDistribution implements StatisticalDistribution {
 
     @Override
-    public double compute(StatisticalData data, int... setSizeArray) {
+    public double compute(StatisticalData data, Statistics statistics) {
         double result = 0.0;
-        for (int i=0; i<setSizeArray.length; i++) {
+        for (int i=0; i<statistics.getSetCount(); i++) {
             result += data.getStatistic(i);
         }
         return result;

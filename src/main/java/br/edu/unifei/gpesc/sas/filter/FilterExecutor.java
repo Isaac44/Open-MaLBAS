@@ -28,11 +28,16 @@ public class FilterExecutor {
 
     private final TagFilter[] mTagFilterArray = {
         new IgnoreTagFilter(),
-        new UrlTagFilter()};
+        new UrlTagFilter(),
+        new TagNameFilter(),
+        new AttributesTagFilter()};
 
     private final TextFilter[] mWordTextFilterArray = {
         new MonetaryTextFilter(),
         new UrlFilter(),
+
+        new UnescapeTextFilter(),
+
         new NumberFilter(),
         new PunctuationTextFilter(),
         new SmallBigWordTextFilter(),

@@ -17,6 +17,7 @@
 package br.edu.unifei.gpesc.sas.modules;
 
 import br.edu.unifei.gpesc.statistic.FileStatistics;
+import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
 import java.io.File;
 
@@ -36,7 +37,6 @@ public class SASStatistics {
      */
     public static final int SPAM_SET = 1;
 
-
     /**
      * The statistics for the 2 sets: ham and spam.
      */
@@ -51,9 +51,15 @@ public class SASStatistics {
     public void processFolder(File folder, int set) {
         File[] fileArray = folder.listFiles(FileUtils.getFileFilter());
         if (fileArray != null) {
+            ConsoleProgress progress = new ConsoleProgress(fileArray.length);
+            int k = 0;
+
             for (File file : fileArray) {
+                progress.setValue(k++);
                 mFileStatistic.processFile(file, set);
             }
+
+            progress.end();
         }
     }
 

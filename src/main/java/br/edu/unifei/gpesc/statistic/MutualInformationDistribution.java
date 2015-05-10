@@ -24,21 +24,21 @@ import static java.lang.Math.log10;
  */
 public class MutualInformationDistribution implements StatisticalDistribution {
 
-    @Override
-    public double compute(StatisticalData data, int... setSizeArray) {
+//    @Override
+    public double compute2(StatisticalData data, Statistics statistics) {
         double mi = 0.0;
 
         // pega a somat�ria do n�mero de vezes que certa palavra ocorreu em todos os emails
         // [0] spam e [1] ham
 
         double spams_palavra     = (double) data.getStatistic(0);
-        double spams_nao_palavra = (double) setSizeArray[0] - spams_palavra;
+        double spams_nao_palavra = (double) statistics.getElementSetTotalCount(0) - spams_palavra;
 
         double hams_palavra      = (double) data.getStatistic(1);
-        double hams_nao_palavra  = (double) setSizeArray[1] - hams_palavra;
+        double hams_nao_palavra  = (double) statistics.getElementSetTotalCount(1) - hams_palavra;
 
-        double numTotalSpams     = (double) setSizeArray[0];
-        double numTotalHams      = (double) setSizeArray[1];
+        double numTotalSpams     = (double) statistics.getElementSetTotalCount(0);
+        double numTotalHams      = (double) statistics.getElementSetTotalCount(1);
         double numTotal          = numTotalSpams + numTotalHams;
 
         double P_spam    = numTotalSpams / numTotal;
@@ -77,39 +77,41 @@ public class MutualInformationDistribution implements StatisticalDistribution {
         return mi;
     }
 
-//    @Override
-//    public double compute(StatisticalData data, int... setSizeArray) {
-//        double dataProbability = 0.0;
-//        double totalDataOccurrence = 0;
-//
-//        for (int i=0; i<setSizeArray.length; i++) {
-//            dataProbability += data.getStatistic(i);
-//            totalDataOccurrence += setSizeArray[i];
-//        }
-//        dataProbability /= totalDataOccurrence;
-//
-//        double mi = 0.0;
-//        double setProbability; // probability of the set(i)
-//        double dataSetProbability; // probability of the data be in the set(i)
-//
-//        for (int i=0; i<setSizeArray.length; i++) {
-//            setProbability = setSizeArray[i] / totalDataOccurrence;
-//
-//            // probability of the data belong to set
-//            dataSetProbability = setProbability * (data.getStatistic(0) / (double) setSizeArray[0]);
-//            if (dataSetProbability != 0) {
-//                mi += (dataSetProbability * log10(dataSetProbability / (dataProbability * setProbability)));
-//            }
-//
-//            // probability of the data not belong to set
-//            dataSetProbability = 1 - dataSetProbability;
-//            if (dataSetProbability != 0) {
-//                mi += (dataSetProbability * log10(dataSetProbability / ((1-dataProbability) * setProbability)));
-//            }
-//        }
-//
-//        return mi;
-//    }
+    @Override
+    public double compute(StatisticalData data, Statistics statistics) {
+        double dataProbability = 0.0;
+        double totalDataOccurrence = 0;
+
+        for (int i=0; i<statistics.getSetCount(); i++) {
+            dataProbability += data.getStatistic(i);
+            totalDataOccurrence += statistics.getElementSetTotalCount(i);
+        }
+        dataProbability /= totalDataOccurrence;
+
+        double mi = 0.0;
+        double setProbability; // probability of the set(i)
+
+        double dataSetProbability; // probability of the data be in the set(i)
+        double notDataSetProbability; // probability of the data not be in the set(i)
+
+        for (int i=0; i<statistics.getSetCount(); i++) {
+            setProbability = statistics.getElementSetTotalCount(i) / totalDataOccurrence;
+
+            // probability of the data belong to set
+            dataSetProbability = setProbability * (data.getStatistic(i) / (double) statistics.getElementSetTotalCount(i));
+            if (dataSetProbability != 0) {
+                mi += (dataSetProbability * log10(dataSetProbability / (dataProbability * setProbability)));
+            }
+
+            // probability of the data not belong to set
+            notDataSetProbability = setProbability * ( 1 - (data.getStatistic(i) / (double) statistics.getElementSetTotalCount(i)) );
+            if (dataSetProbability != 0) {
+                mi += (notDataSetProbability * log10(notDataSetProbability / ((1-dataProbability) * setProbability)));
+            }
+        }
+
+        return mi;
+    }
 
 //        @Override
 //    public double compute(StatisticalData data, int... setSizeArray) {
