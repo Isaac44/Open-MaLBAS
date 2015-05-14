@@ -19,38 +19,71 @@ package br.edu.unifei.gpesc.app;
 import java.util.ResourceBundle;
 
 /**
- * This class manages all auxiliary resources that this program needs.
- * <p> It contains:
- * <br><b> String internationalization; </b>
- *
- *
- * @author isaac
+ * This class manages all internationalization string resources and provides
+ * convenient print methods.
+ * 
+ * @author Isaac Caldas Ferreira
  */
 public final class Messages {
 
+    /**
+     * The Resource Bundle for this application.
+     */
     private static ResourceBundle sResourceBundle;
 
+    /**
+     * This method is used to get an internationalization string. <br>
+     * All strings messages are in src/main/resources/messages.properties.
+     * @param key The key for the message string.
+     * @return The internationalization string message.
+     */
     public static String i18n(String key) {
         if (sResourceBundle == null) sResourceBundle = ResourceBundle.getBundle("messages");
         return sResourceBundle.getString(key);
     }
 
-    public static String log(String key, Object... args) {
-        return String.format(i18n(key), args);
+    /**
+     * Same of {@link Messages#i18n(String)} with extra arguments.
+     * @param key The key for the message string.
+     * @param args The extra arguments.
+     * @return The internationalization string message.
+     */
+    public static String i18n(String key, Object... args) {
+        return String.format(Messages.i18n(key), args);
     }
 
+    /**
+     * This method prints an internationalization string with line end
+     * on console using {@link System#out}.
+     * @param key The key for the message string.
+     * @param args The extra arguments.
+     */
     public static void printlnLog(String key, Object... args) {
-        System.out.println(log(key, args));
+        System.out.println(i18n(key, args));
     }
 
+    /**
+     * This method prints an internationalization string  on console using
+     * {@link System#out}.
+     * @param key The key for the message string.
+     * @param args The extra arguments.
+     */
     public static void printLog(String key, Object... args) {
-        System.out.print(log(key, args));
+        System.out.print(i18n(key, args));
     }
 
+    /**
+     * Has the same effect of calling System.out.print(String).
+     * @param text The string to be printed.
+     */
     public static void print(String text) {
         System.out.print(text);
     }
 
+    /**
+     * Has the same effect of calling System.out.println(String).
+     * @param text The string to be printed.
+     */
     public static void println(String text) {
         System.out.println(text);
     }

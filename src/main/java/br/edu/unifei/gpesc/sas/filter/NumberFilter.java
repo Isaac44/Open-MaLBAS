@@ -19,8 +19,9 @@ package br.edu.unifei.gpesc.sas.filter;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author isaac
+ * Find and substitute all numbers (decimal and real) for
+ * {@link TextMark#NUMBER}.
+ * @author Isaac Caldas Ferreira
  */
 public class NumberFilter extends TextFilter {
 

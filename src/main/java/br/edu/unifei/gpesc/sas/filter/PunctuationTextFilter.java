@@ -19,8 +19,8 @@ package br.edu.unifei.gpesc.sas.filter;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author isaac
+ * Find and removes all punctuation symbols.
+ * @author Isaac Caldas Ferreira
  */
 public class PunctuationTextFilter extends TextFilter {
 

@@ -17,8 +17,12 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 /**
+ * Checks the size of the input text. If is bigger or equals that the specified
+ * big length, {@link TextMark#BIG_WORD} is returned. Else, if the length is
+ * small or equals to the specified small length, {@link TextMark#SMALL_WORD} is
+ * returned. Otherwise, the input is returned.
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class SmallBigWordTextFilter extends TextFilter {
 
@@ -66,9 +70,12 @@ public class SmallBigWordTextFilter extends TextFilter {
 
     /**
      * Checks if the word size fits in the determined sizes.
+     * <br>
+     * If the string size is big or small, this filter informs that the current
+     * processing should be stopped.
+     *
      * @param word The word to be analyzed.
-     * @return
-     * The value of {@link TextMark#SMALL_WORD}, if the word size is
+     * @return The value of {@link TextMark#SMALL_WORD}, if the word size is
      * less or equals {@link SmallBigWordTextFilter#mSmallWordSize}.<br>
      * The value of {@link TextMark#BIG_WORD}, if the word size is
      * higher or equals {@link SmallBigWordTextFilter#mSmallWordSize}.<br>

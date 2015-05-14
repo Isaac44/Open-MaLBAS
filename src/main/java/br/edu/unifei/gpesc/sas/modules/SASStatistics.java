@@ -51,7 +51,7 @@ public class SASStatistics {
     public void processFolder(File folder, int set) {
         File[] fileArray = folder.listFiles(FileUtils.getFileFilter());
         if (fileArray != null) {
-            ConsoleProgress progress = new ConsoleProgress(fileArray.length);
+            ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
             int k = 0;
 
             for (File file : fileArray) {

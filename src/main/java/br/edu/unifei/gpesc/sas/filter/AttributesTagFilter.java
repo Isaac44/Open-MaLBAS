@@ -21,23 +21,36 @@ import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
 /**
- *
- * @author isaac
+ * This Tag Filter appends all internal attributes of the current Element.
+ * <br>
+ * It uses the suffix "!_in_attr", where attr is the attribute.
+ * 
+ * @author Isaac Caldas Ferreira
  */
 public class AttributesTagFilter implements TagFilter {
 
+    /**
+     * This filter goes to every attribute, of the element argument, and
+     * appends it (the token) to the strBuilder argument, using the
+     * syntax "!_in_attr", where attr is the attribute.
+     * <br>
+     * Every token appended will be separated by an space.
+     *
+     * @param element The Element with the current tag and attributes.
+     * @param strBuilder The output StringBuilder.
+     * @return The return will always be {@link Result#CONTINUE}.
+     */
     @Override
     public Result filter(Element element, StringBuilder strBuilder) {
         Attributes attributes = element.attributes();
 
         if (attributes.size() > 0) {
-            strBuilder.append("!_in_").append(element.tagName()).append("\n");
+            strBuilder.append("!_in_").append(element.tagName()).append(" ");
             for (Attribute attribute : attributes) {
-                strBuilder.append(attribute.getKey()).append("\n");
+                strBuilder.append(attribute.getKey()).append(" ");
             }
         }
 
         return Result.CONTINUE;
     }
-
 }

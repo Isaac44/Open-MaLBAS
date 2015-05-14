@@ -14,26 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
-
-import org.jsoup.nodes.Element;
+package br.edu.unifei.gpesc.neural.mlp2;
 
 /**
- * The interface for the Tag Filter.
- * <br>
- * It is used by the {@link FilterExecutor} to process tag elements of the HTML.
- * 
+ * Interface for the transfer function of the mlp neural network.
  * @author Isaac Caldas Ferreira
  */
-public interface TagFilter {
+public interface TransferFunction {
 
     /**
-     * Filters an Element.
-     * <br>
-     * Every output token should be placed on the strBuilder argument output.
-     * @param element The Element with the current tag and attributes.
-     * @param strBuilder The output StringBuilder.
-     * @return The Result information for the FilterExecutor.
+     * Computes the activation for the input value.
+     * @param value The input value.
+     * @return The activation result.
      */
-    public Result filter(Element element, StringBuilder strBuilder);
+    public float compute(float value);
 }

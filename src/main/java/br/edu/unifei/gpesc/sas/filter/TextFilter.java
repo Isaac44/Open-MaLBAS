@@ -17,8 +17,8 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 /**
- *
- * @author isaac
+ * The abstract class used by the {@link FilterExecutor} to process text.
+ * @author Isaac Caldas Ferreira
  */
 public abstract class TextFilter {
 

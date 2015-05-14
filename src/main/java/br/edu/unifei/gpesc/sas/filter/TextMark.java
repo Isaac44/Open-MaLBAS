@@ -17,8 +17,11 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 /**
+ * Constants for the filters ({@link TextFilter} and {@link TagFilter}).
+ * <br>
+ * This enumerator is to be easy to rename the tokens if needed.
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public enum TextMark {
 
@@ -60,7 +63,7 @@ public enum TextMark {
     /**
      * Constructs an enumerator with a mark.
      *
-     * @param mark
+     * @param mark The text mark.
      */
     private TextMark(String mark) {
         mMark = mark;

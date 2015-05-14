@@ -35,7 +35,7 @@ public class ConsoleProgress {
     }
 
     private void updateProgress(double progressPercentage) {
-        System.out.printf("\r%d%% [", (int) (progressPercentage * 100));
+        System.out.printf("\r%03d%% [", (int) (progressPercentage * 100));
         int i = 0;
         for (; i <= (int) (progressPercentage * WIDTH); i++) {
             System.out.print(".");
@@ -58,5 +58,13 @@ public class ConsoleProgress {
     public void end() {
         setValue(mMaximum);
         System.out.println();
+    }
+
+    private static ConsoleProgress sProgressInstance;
+
+    public static ConsoleProgress getGlobalInstance(int maximum) {
+        if (sProgressInstance == null) sProgressInstance = new ConsoleProgress();
+        sProgressInstance.setMaximum(maximum);
+        return sProgressInstance;
     }
 }

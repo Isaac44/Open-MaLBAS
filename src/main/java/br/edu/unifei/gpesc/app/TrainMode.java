@@ -16,8 +16,7 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import static br.edu.unifei.gpesc.app.Messages.log;
-import static br.edu.unifei.gpesc.app.Messages.printlnLog;
+import static br.edu.unifei.gpesc.app.Messages.*;
 import br.edu.unifei.gpesc.sas.modules.SASFilter;
 import br.edu.unifei.gpesc.sas.modules.SASStatistics;
 import static br.edu.unifei.gpesc.sas.modules.SASVectorization.doVectorization;
@@ -34,14 +33,73 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
+ * The train mode module. This is a main class type. <br>
+ * It contains all "do" methods for the execution of this Anti-Spam System.
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class TrainMode {
 
+    /**
+     * The AntiSpam filter. <b>TODO: add filter selection. With this, the user
+     * can select which filter will be used by the application. </b>
+     */
     private SASFilter mFilter;
+
+    /**
+     * The AntiSpam Statistics.
+     */
     private SASStatistics mStatistics;
 
+    /**
+     * Asserts if an file or folder exists.
+     * @param file The file or folder to be tested.
+     * @throws IllegalArgumentException if the file or folder does not exists.
+     */
+    private void assertExists(File file) {
+        if (!file.exists()) {
+            throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.FileNotExists", file.getAbsolutePath()));
+        }
+    }
+
+    /**
+     * Asserts if this file argument exists and is a folder.
+     * @param file The folder to be tested.
+     * @throws IllegalArgumentException if the folder does not exists or its
+     * not a folder.
+     */
+    private void assertDirectory(File folder) {
+        assertExists(folder);
+        if (!folder.isDirectory()) {
+            throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.FileIsNotDirectory", folder.getAbsolutePath()));
+        }
+    }
+
+    /**
+     * Creats all folders. This mean that the folder denoted by the argument
+     * folder is created and all its parents.
+     * @param folder The folder to be created (and all its parents if they don't
+     * exists).
+     * @throws IllegalArgumentException if an error occurs during the creation
+     * of the folders. Important note, some folders can be created. See
+     * {@link File#mkdirs()}.
+     */
+    private void createDirs(File folder) {
+        if (!folder.exists()) {
+            if (!folder.mkdirs()) throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.CannotCreateDirectory", folder.getAbsolutePath()));
+        }
+    }
+
+    /**
+     * This do-method process a folder denoted by inPath argument and
+     * stores on the folder denoted by outPath the filtered files.
+     * <p> All files processed must contain the extension ".eml".
+     * @param inPath The input folder path.
+     * @param outPath The output folder path.
+     * @throws IllegalArgumentException if the input folder does not exists
+     * or if the output path cannot be created or this application doesn't
+     * have permission to write in.
+     */
     public void doFilter(String inPath, String outPath) {
         if (mFilter == null) mFilter = new SASFilter();
 
@@ -62,30 +120,37 @@ public class TrainMode {
 
     }
 
-    private void assertExists(File file) {
-        if (!file.exists()) {
-            throw new IllegalArgumentException(log("TrainMode.IllegalArgument.FileNotExists", file.getAbsolutePath()));
-        }
-    }
-
-    private void assertDirectory(File folder) {
-        assertExists(folder);
-        if (!folder.isDirectory()) {
-            throw new IllegalArgumentException(log("TrainMode.IllegalArgument.FileIsNotDirectory", folder.getAbsolutePath()));
-        }
-    }
-
-    private void createDirs(File folder) {
-        if (!folder.exists()) {
-            if (!folder.mkdirs()) throw new IllegalArgumentException(log("TrainMode.IllegalArgument.CannotCreateDirectory", folder.getAbsolutePath()));
-        }
-    }
-
+    /**
+     * Gets the {@link StatisticalDistribution} for the input string.
+     * <li>MI: {@link MutualInformationDistribution}. </li>
+     * @param method The method name, as shown above.
+     * @return The Statistical Distribution selected.
+     * @throws IllegalArgumentException if the method argument is invalid.
+     */
     private StatisticalDistribution getStatisticalDistribution(String method) {
         if (method.equals("MI")) return new MutualInformationDistribution();
-        throw new IllegalArgumentException(log("TrainMode.Statistics.IllegalArgument.InvalidMethod", method));
+        throw new IllegalArgumentException(i18n("TrainMode.Statistics.IllegalArgument.InvalidMethod", method));
     }
 
+    /**
+     * This do-method process all filtered email files in the not spam folder
+     * (denoted by hamPath) and the spam folder (denoted by spamPath) and
+     * creates the statistcs for all text words finded.
+     * <br>
+     * After the statistics is generated is calculated the statistical
+     * distribution (denoted by the method argument), then this last is save
+     * at the statistics folder (denoted by statisticsPath).
+     *
+     * @param hamPath The not spam input folder path.
+     * @param spamPath The spam input folder path.
+     * @param statisticsPath The statistics output folder path.
+     * @param method The statistical distribution method.
+     * See {@link TrainMode#getStatisticalDistribution(String)}.
+     * @throws IOException if any input/output error occurs.
+     * @throws IllegalArgumentException if any input folder does not exists
+     * or the statistics file cannot be created or the selected method is
+     * invalid.
+     */
     public void doStatistics(String hamPath, String spamPath, String statisticsPath, String method) throws IOException {
         if (mStatistics == null) mStatistics = new SASStatistics();
 
@@ -123,6 +188,26 @@ public class TrainMode {
         fileWriter.close();
     }
 
+    /**
+     * This do-method generated de MLP vectors. Its processes the filtered
+     * emails in the not spam folder (denoted by hamPath) and in the spam folder
+     * (denoted by spamPath), using the statistics file (denoted by
+     * statisticsPath).
+     * <br>
+     * The MLP vectors will have the length denoted by inputLayerLength argument
+     * and will be stored inside the output path (denoted by outPath).
+     * <br>
+     * The file "ham" will be created for the not spam vectors and the file
+     * "spam" for the spam vectors.
+     * @param hamPath The not spam input folder path.
+     * @param spamPath the spam input folder path.
+     * @param statisticsPath The statistics file path.
+     * @param inputLayerLength The length of the MLP input layer.
+     * @param outPath The output path.
+     * @throws IOException if any input/output error occurs.
+     * @throws IllegalArgumentException if any input folder/file does not exists
+     * or if the "ham" or "spam" files cannot be created.
+     */
     public void doMlpVector(String hamPath, String spamPath, String statisticsPath, int inputLayerLength, String outPath) throws IOException {
         File hamFolder = new File(hamPath);
         assertDirectory(hamFolder);
@@ -149,14 +234,25 @@ public class TrainMode {
                 characteristic.insertData(scanner.next());
                 scanner.nextLine();
             } else {
-                throw new IllegalArgumentException(log("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inputLayerLength));
+                throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inputLayerLength));
             }
         }
 
-        ProcessLog log;
-        log = doVectorization(characteristic, hamFolder, outHamFile);
-        System.out.println("error="+log.error() + " sucess="+log.sucess());
-        log = doVectorization(characteristic, spamFolder, outSpamFile);
-        System.out.println("error="+log.error() + " sucess="+log.sucess());
+        printlnLog("TrainMode.ProcessStart", hamPath);
+        ProcessLog hamLog = doVectorization(characteristic, hamFolder, outHamFile);
+
+        printlnLog("TrainMode.ProcessStart", spamPath);
+        ProcessLog spamLog = doVectorization(characteristic, spamFolder, outSpamFile);
+
+        // logs
+
+        println("");
+        printLog("Application.NotSpam"); println(": ");
+        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", hamLog.sucess());
+        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", hamLog.error());
+
+        printLog("Application.Spam"); println(": ");
+        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", spamLog.sucess());
+        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", spamLog.error());
     }
 }

@@ -64,7 +64,7 @@ public class SASFilter {
 
         File[] files = folderIn.listFiles(FileUtils.getFileFilter());
         if (files != null) {
-            ConsoleProgress progress = new ConsoleProgress(files.length);
+            ConsoleProgress progress = ConsoleProgress.getGlobalInstance(files.length);
 
             String result;
             int k = 0;

@@ -14,26 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
-
-import org.jsoup.nodes.Element;
+package br.edu.unifei.gpesc.neural.mlp2;
 
 /**
- * The interface for the Tag Filter.
+ * The linear transfer function of the mlp.
  * <br>
- * It is used by the {@link FilterExecutor} to process tag elements of the HTML.
- * 
+ * It only returns the input value, without any modification.
+ *
  * @author Isaac Caldas Ferreira
  */
-public interface TagFilter {
+public class LinearTransferFunction implements TransferFunction {
 
     /**
-     * Filters an Element.
-     * <br>
-     * Every output token should be placed on the strBuilder argument output.
-     * @param element The Element with the current tag and attributes.
-     * @param strBuilder The output StringBuilder.
-     * @return The Result information for the FilterExecutor.
+     * Do nothing. Only returns the input value.
+     * @param value {@inheritDoc}
+     * @return The input value.
      */
-    public Result filter(Element element, StringBuilder strBuilder);
+    @Override
+    public float compute(float value) {
+        return value;
+    }
 }

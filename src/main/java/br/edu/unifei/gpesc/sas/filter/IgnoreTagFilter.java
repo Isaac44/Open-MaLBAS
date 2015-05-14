@@ -20,31 +20,49 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
 
 /**
- *
- * @author isaac
+ * This Tag Filter ignores the tags in the IGNORE_TAG_ARRAY. This mean that
+ * the process will skip all the content in this tag and append "!_ignore_tag",
+ * where tag is the tag ignored.
+ * 
+ * @author Isaac Caldas Ferreira
  */
 public class IgnoreTagFilter implements TagFilter {
 
-    private static final Tag[] IGNORE_TAG_ARRAY;
+    /**
+     * The ignore tag array.
+     */
+    private final Tag[] mIgnoreTagArray;
 
-    static {
-        String[] tagArray = {"script"};
-        IGNORE_TAG_ARRAY = new Tag[tagArray.length];
+    /**
+     * The constructor of the ignore tag array.
+     * @param tagNames The array with the name of the tags to be ignored.
+     */
+    public IgnoreTagFilter(String... tagNames) {
+        mIgnoreTagArray = new Tag[tagNames.length];
 
-        for (int i=0; i<tagArray.length; i++) {
-            IGNORE_TAG_ARRAY[i] = Tag.valueOf(tagArray[i]);
+        for (int i=0; i<tagNames.length; i++) {
+            mIgnoreTagArray[i] = Tag.valueOf(tagNames[i]);
         }
     }
 
+    /**
+     * Checks if the current tag is present in the ignore tag array.
+     * @param element The Element with the tag and attributes.
+     * @param strBuilder {@inheritDoc}
+     * @return {@link Result#SKIP_TAG} if the tag is in the ignore array or
+     * {@link Result#CONTINUE} otherwise.
+     */
     @Override
     public Result filter(Element element, StringBuilder strBuilder) {
         Tag tag = element.tag();
 
-        for (Tag ignoreTag : IGNORE_TAG_ARRAY) {
-            if (ignoreTag == tag) return Result.SKIP_TAG;
+        for (Tag ignoreTag : mIgnoreTagArray) {
+            if (ignoreTag == tag) {
+                strBuilder.append("!_ignore_").append(ignoreTag);
+                return Result.SKIP_TAG;
+            }
         }
 
         return Result.CONTINUE;
     }
-
 }

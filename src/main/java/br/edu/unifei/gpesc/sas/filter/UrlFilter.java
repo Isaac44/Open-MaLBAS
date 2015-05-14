@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class UrlFilter extends TextFilter {
 

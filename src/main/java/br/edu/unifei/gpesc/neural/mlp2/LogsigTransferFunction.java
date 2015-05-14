@@ -14,26 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.sas.filter;
-
-import org.jsoup.nodes.Element;
+package br.edu.unifei.gpesc.neural.mlp2;
 
 /**
- * The interface for the Tag Filter.
- * <br>
- * It is used by the {@link FilterExecutor} to process tag elements of the HTML.
- * 
+ * This class omputes the logsig transfer function: <br>
+ * <b>logsig(x) = 1 / (1 + exp(-x))</b>
+ *
  * @author Isaac Caldas Ferreira
  */
-public interface TagFilter {
+public class LogsigTransferFunction implements TransferFunction {
 
     /**
-     * Filters an Element.
-     * <br>
-     * Every output token should be placed on the strBuilder argument output.
-     * @param element The Element with the current tag and attributes.
-     * @param strBuilder The output StringBuilder.
-     * @return The Result information for the FilterExecutor.
+     * Computes the logsig transfer function, which is given by the equation:
+     * <b>logsig(x) = 1 / (1 + exp(-x))</b>
+     * @param value {@inheritDoc}
+     * @return The logsig result.
      */
-    public Result filter(Element element, StringBuilder strBuilder);
+    @Override
+    public float compute(float value) {
+        return 1f / (1f + (float) Math.exp(-value));
+    }
 }

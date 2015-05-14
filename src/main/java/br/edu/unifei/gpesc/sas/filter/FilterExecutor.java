@@ -21,28 +21,58 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
+ * This class process all filters ({@link TextFilter} and {@link TagFilter}).
+ * <br>
+ * The execution of the filters is determinated by the order of it in the array.
+ * After a filter is processed its returns a {@link Result} that informs how
+ * this executor should proceed.
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class FilterExecutor {
 
-    private final TagFilter[] mTagFilterArray = {
-        new IgnoreTagFilter(),
-        new UrlTagFilter(),
-        new TagNameFilter(),
-        new AttributesTagFilter()};
+    /**
+     * The Tag Filter array.
+     */
+    private final TagFilter[] mTagFilterArray;
 
-    private final TextFilter[] mWordTextFilterArray = {
-        new MonetaryTextFilter(),
-        new UrlFilter(),
+    /**
+     * The Text Filter array.
+     */
+    private final TextFilter[] mTextFilterArray;
 
-        new UnescapeTextFilter(),
+    /**
+     * The default executor.
+     */
+    public FilterExecutor() {
+        mTagFilterArray = new TagFilter[] {
+            new IgnoreTagFilter(), new UrlTagFilter(), new TagNameFilter(),
+            new AttributesTagFilter()};
 
-        new NumberFilter(),
-        new PunctuationTextFilter(),
-        new SmallBigWordTextFilter(),
-        new NormalizerTextFilter()};
+        mTextFilterArray = new TextFilter[] {
+            new MonetaryTextFilter(), new UrlFilter(),
+            new UnescapeTextFilter(),
+            new NumberFilter(), new PunctuationTextFilter(),
+            new SmallBigWordTextFilter(), new NormalizerTextFilter()};
+    }
 
+    /**
+     * Initializes this executor with filters arrays.
+     * <p><b> Important: be careful with the order of the filters!</b></p>
+     * @param tagFilterArray The tag filter array.
+     * @param textFilterArray The text filter array.
+     */
+    public FilterExecutor(TagFilter[] tagFilterArray, TextFilter[] textFilterArray) {
+        mTagFilterArray = tagFilterArray;
+        mTextFilterArray = textFilterArray;
+    }
+
+    /**
+     * Filters a HTML parsed by the JSoup.
+     *
+     * @param elements The root element array.
+     * @return A String with all elements after applied the filters.
+     */
     public String filterHtml(Elements elements) {
         // variables
         Result tagResult;
@@ -114,7 +144,7 @@ public class FilterExecutor {
      * @return The filtered text.
      */
     public String filterText(String text) {
-        for (TextFilter textFilter : mWordTextFilterArray) {
+        for (TextFilter textFilter : mTextFilterArray) {
             text = textFilter.filter(text);
             if (textFilter.getFilterResult() == Result.BREAK) break;
         }
@@ -122,7 +152,7 @@ public class FilterExecutor {
     }
 
     /**
-     * This method finds the index sibling's index of element.
+     * This method finds the index sibling element index of element.
      * @param elements The html tree.
      * @param element The element.
      * @return The sibling's index of element or -1 if there is none.

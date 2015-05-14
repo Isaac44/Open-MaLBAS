@@ -19,28 +19,51 @@ package br.edu.unifei.gpesc.sas.filter;
 import org.unbescape.html.HtmlEscape;
 
 /**
+ * This "broken html" text filter is used when a HTML, processed by JSoup,
+ * still contains any "text-coded charset" (escaped HTML).
+ * <br>
+ * Basically, if you have to use this filter is because has something wrong with
+ * the input HTML.
+ * <p> Well, I'm here to help with the mess of others! :) </p>
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class UnescapeTextFilter extends TextFilter {
 
+    /**
+     * The ampersand constant.
+     */
     private static final String AMPERSAND = "&";
+
+    /**
+     * The ampsersand text-coded pattern contant.
+     */
     private static final String AMPERSAND_ESCAPE = "&amp";
 
+    /**
+     * Default constructor. Sets the result of this class to be always
+     * {@link Result#CONTINUE}.
+     */
     public UnescapeTextFilter() {
         setResult(Result.CONTINUE);
     }
 
+    /**
+     * Process the input string and if its contains
+     * {@link UnescapeTextFilter#AMPERSAND_ESCAPE}, its returned an unescaped
+     * html processed by {@link HtmlEscape#unescapeHtml(String)}.
+     * @param text The input text.
+     * @return The string unescaped, if its contain the espace pattern, or
+     * the input without modifications.
+     */
     @Override
     public String filter(String text) {
         if (text.contains(AMPERSAND)) {
             String result =  HtmlEscape.unescapeHtml(text.replaceAll(AMPERSAND_ESCAPE, AMPERSAND));
-
             return result;
         }
         else {
             return text;
         }
     }
-
 }

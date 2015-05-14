@@ -20,8 +20,12 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author isaac
+ * This Text Filter converts all input string to the charset "ASCII". This mean
+ * that all special chars will be converted to its representation in ASCII.
+ * If there is none, the char will be removed from the string.
+ * <br>
+ * For example, "a acute" will become "a". And a greek letter will be removed.
+ * @author Isaac Caldas Ferreira
  */
 public class NormalizerTextFilter extends TextFilter {
 
@@ -33,15 +37,15 @@ public class NormalizerTextFilter extends TextFilter {
 
     /**
      * Constructs this class setting the {@link TextFilter#mFilterResult} to
-     * {@link Result#CONTINUE}. This mean that all filter classes, in the executor,
-     * can be processed after this one.
+     * {@link Result#CONTINUE}. This mean that all filter classes, in the
+     * {@link FilterExecutor}, may be processed after this one.
      */
     public NormalizerTextFilter() {
         setResult(Result.CONTINUE);
     }
 
     /**
-     * Normalizes the input text. <br>
+     * Normalizes the input text.<br>
      * This method converts all characters non-ASCII  (accents, for example)
      * to ASCII and than puts all to lower case.
      * @param text The input text.

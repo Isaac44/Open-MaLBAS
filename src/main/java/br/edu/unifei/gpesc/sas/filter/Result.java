@@ -17,9 +17,27 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 /**
- *
- * @author isaac
+ * Constants for the {@link FilterExecutor}.
+ * @author Isaac Caldas Ferreira
  */
 public enum Result {
-    CONTINUE, BREAK, SKIP_TAG;
+
+    /**
+     * Informs that the processing of the current
+     * {@link org.jsoup.nodes.Element} should continue.
+     */
+    CONTINUE,
+
+    /**
+     * Informs that the processing of the current (text or
+     * {@link org.jsoup.nodes.Element}) should be stopped.
+     */
+    BREAK,
+
+    /**
+     * Informs that the processing of the current
+     * {@link org.jsoup.nodes.Element} must skip all its childs and got to the
+     * next {@link org.jsoup.nodes.Element} simbling.
+     */
+    SKIP_TAG;
 }

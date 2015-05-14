@@ -5,7 +5,6 @@ package br.edu.unifei.gpesc.neural.mlp.core;
 
 
 
-import br.edu.unifei.gpesc.neural.mlp.core.Mlp;
 import br.edu.unifei.gpesc.neural.mlp.util.LinkTrain;
 import br.edu.unifei.gpesc.neural.mlp.util.NeuronTrain;
 import br.edu.unifei.gpesc.neural.mlp.util.Result;
@@ -26,6 +25,7 @@ import java.util.Scanner;
  *
  * @author Otavio Carpinteiro - GPESC
  */
+@SuppressWarnings({"UnusedAssignment", "null", "UseSpecificCatch", "override", "StringEquality"})
 public class MlpTrain extends Mlp {
 
    public int ntpatterns;   // numero de padroes de treinamento
@@ -88,7 +88,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Construtor
-   * @param - sem parametros.
+
    */
    public MlpTrain() {
    }
@@ -97,7 +97,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Atualiza os bias e os pesos.
-   * @param - sem parametros.
+
    */
    public void changeBiasWeights() {
 
@@ -140,7 +140,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Computa o "bed" para cada bias e o "wed" para cada peso.
-   * @param - sem parametros.
+
    */
    public void computeBedWed() {
 
@@ -165,7 +165,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Computa o "dbias" para cada bias e o "dweight" para cada peso.
-   * @param - sem parametros.
+
    */
    public void computeDbiasDweights() {
 
@@ -261,7 +261,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Computa o incremento de "bed" para cada bias e o de "wed" para cada peso.
-   * @param - sem parametros.
+
    */
    public void computeIncBedWed() {
 
@@ -286,7 +286,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Computa a ativacao dos neuronios da camada de saida da rede neural.
-   * @param - sem parametros.
+
    */
    public void computeOutput() {
 
@@ -381,7 +381,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Cria as conexoes da rede neural.
-   * @param - sem parametros.
+
    */
    public void createLink() {
 
@@ -396,7 +396,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Cria os neuronios da rede neural.
-   * @param - sem parametros.
+
    */
    public void createNeuron() {
 
@@ -409,7 +409,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Cria os padroes de teste ou de validacao da rede neural.
-   * @param - sem parametros.
+
    */
    public void createPattern() {
 
@@ -420,7 +420,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Cria os padroes de treinamento da rede neural.
-   * @param - sem parametros.
+
    */
    public void createTpattern() {
 
@@ -468,7 +468,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Gera aleatoriamente bias e pesos para a rede neural.
-   * @param - sem parametros.
+
    */
    public void genBiasWeights() {
 
@@ -514,7 +514,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Calcula o erro do padrao armazenado em "pattern".
-   * @param - sem parametros.
+
    * @return - o valor do erro.
    */
    public float getPatternError() {
@@ -554,7 +554,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Inicializa as conexoes da rede neural.
-   * @param - sem parametros.
+
    */
    public void initLink() {
 
@@ -615,7 +615,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Inicializa os neuronios da rede neural.
-   * @param - sem parametros.
+
    */
    public void initNeuron() {
 
@@ -633,7 +633,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Entra com um padrao de execucao (ou teste ou validacao) na rede neural.
-   * @param - sem parametros.
+
    */
    public void inputPattern() {
 
@@ -904,7 +904,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Inicializa com zeros os valores de bed e wed.
-   * @param - sem parametros.
+
    */
    public void resetBedWed() {
 
@@ -919,7 +919,7 @@ public class MlpTrain extends Mlp {
 
    /**
    * Inicializa com zeros os valores de netinput e activation.
-   * @param - sem parametros.
+
    */
    public void resetNetinputActivation() {
 

@@ -17,8 +17,8 @@
 package br.edu.unifei.gpesc.sas.filter;
 
 /**
- *
- * @author isaac
+ * This Tag Filter checks if the input text contains any monetary symbols.
+ * @author Isaac Caldas Ferreira
  */
 public class MonetaryTextFilter extends TextFilter {
 

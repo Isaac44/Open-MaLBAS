@@ -123,7 +123,7 @@ public class SASVectorization {
 
             fileOut.write(0 /* reserved: quantity of lines */, dataVector.length /* line size */);
 
-            ConsoleProgress progress = new ConsoleProgress(fileArray.length);
+            ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
             int k = 0;
 
             for (File file : fileArray) {

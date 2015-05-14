@@ -19,11 +19,23 @@ package br.edu.unifei.gpesc.sas.filter;
 import org.jsoup.nodes.Element;
 
 /**
+ * This tag filter verifies if the current {@link Element} contains the
+ * attribute "href". If so, the {@link TextMark#URL} will be appended to the
+ * output.
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class UrlTagFilter implements TagFilter {
 
+    /**
+     * Checks if the current element argument if a "url Element", which means
+     * that this Element contains the attribute "href".
+     * If this is true, {@link TextMark#URL} will be appended to strBuilder.
+     *
+     * @param element {@inheritDoc}
+     * @param strBuilder {@inheritDoc}
+     * @return Will always be {@link Result#CONTINUE}.
+     */
     @Override
     public Result filter(Element element, StringBuilder strBuilder) {
         if (!element.attr("href").isEmpty()) {
