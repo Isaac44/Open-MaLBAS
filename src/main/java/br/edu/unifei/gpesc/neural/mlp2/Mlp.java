@@ -28,55 +28,44 @@ public class Mlp {
     private boolean mTrace = false;
 
     /**
-     * Number of neurons on the input layer.
+     * The input layer.
      */
-    private final int mInputLayerLength;
+    protected final NeuralLayer mInputLayer;
 
     /**
-     * Number of neurons on the first hidden layer.
+     * The first hidden layer.
      */
-    private final int mFirstHiddenLayerLength;
+    protected final NeuralLayer mHiddenLayer1;
 
     /**
-     * Number of neurons on the second hidden layer.
+     * The second hidden layer.
      */
-    private final int mSecondHiddenLayerLength;
+    protected final NeuralLayer mHiddenLayer2;
 
     /**
-     * Number of neurons on the output layer.
+     * The output layer.
      */
-    private final int mOutputLayerLength;
+    protected final NeuralLayer mOutputLayer;
 
     /**
-     * First hidden layer transfer function.
+     * Constructs a MLP with layers length. And initializes the both of
+     * hidden layers transfer function with
+     * {@link TansigTransferFunction} and the output layer with
+     * {@link LogsigTransferFunction}.
+     *
+     * @param inLen The input layer length.
+     * @param h1Len The first hidden layer length.
+     * @param h2Len The second hidden layer length.
+     * @param outLen The output layer length.
      */
-    private TransferFunction mFirstLayerFunction;
+    public Mlp(int inLen, int h1Len, int h2Len, int outLen) {
+        TransferFunction tansig = new TansigTransferFunction();
+        TransferFunction logsig = new LogsigTransferFunction();
 
-    /**
-     * Second hidden layer transfer function.
-     */
-    private TransferFunction mSecondLayerFunction;
-
-    /**
-     * Ouput layer transfer function.
-     */
-    private TransferFunction mOutputLayerFunction;
-
-    /**
-     * The initial seed used to random generation of the bias and weights.
-     */
-    private int mRandomizerSeed = 0;
-
-    public Mlp(int input, int firstHidden, int secondHidden, int output) {
-        mInputLayerLength = input;
-        mFirstHiddenLayerLength = firstHidden;
-        mSecondHiddenLayerLength = secondHidden;
-        mOutputLayerLength = output;
-
-        mFirstLayerFunction = new TansigTransferFunction();
-        mSecondLayerFunction = mFirstLayerFunction;
-
-        mOutputLayerFunction = new LogsigTransferFunction();
+        mInputLayer = new NeuralLayer(0, inLen, null);
+        mHiddenLayer1 = new NeuralLayer(mInputLayer, h1Len, tansig);
+        mHiddenLayer2 = new NeuralLayer(mHiddenLayer1, h2Len, tansig);
+        mOutputLayer = new NeuralLayer(mHiddenLayer2, outLen, logsig);
     }
 
     /**
@@ -84,7 +73,7 @@ public class Mlp {
      * @param function The transfer function.
      */
     public void setFirstHiddenLayerFunction(TransferFunction function) {
-        mFirstLayerFunction = function;
+        mHiddenLayer1.function = function;
     }
 
     /**
@@ -92,7 +81,7 @@ public class Mlp {
      * @param function The transfer function.
      */
     public void setSecondHiddenLayerFunction(TransferFunction function) {
-        mSecondLayerFunction = function;
+        mHiddenLayer2.function = function;
     }
 
     /**
@@ -100,7 +89,7 @@ public class Mlp {
      * @param function The transfer function.
      */
     public void setOutputLayerFunction(TransferFunction function) {
-        mOutputLayerFunction = function;
+        mOutputLayer.function = function;
     }
 
     /**
@@ -110,9 +99,4 @@ public class Mlp {
     public void setTrace(boolean enabled) {
         mTrace = enabled;
     }
-
-    public void setRandomizerSeed(int seed) {
-        mRandomizerSeed = seed;
-    }
-
 }

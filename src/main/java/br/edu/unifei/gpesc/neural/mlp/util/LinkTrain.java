@@ -1,7 +1,4 @@
-
 package br.edu.unifei.gpesc.neural.mlp.util;
-
-
 
 /**
  *
@@ -9,25 +6,22 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class LinkTrain {
 
-   public float weight;   // peso
-   public float wed;   // derivada de erro do peso
-   public float dweight;   // delta do peso
+    public float weight;   // peso
+    public float wed;   // derivada de erro do peso
+    public float dweight;   // delta do peso
 
-   /**
-   * Construtor
-   * @param - sem parametros.
-   */
-   public LinkTrain() {
-   }
-
-
+    /**
+     * Construtor
+     *
+     * @param - sem parametros.
+     */
+    public LinkTrain() {
+    }
 
    //
-   // Por questoes de desempenho:
-   //    1- os atributos sao publicos;
-   //    2- nao ha' funcoes get e set;
-   //    3- nao foi criada uma classe LinkTrainMatrix (matriz de conexoes).
-   //
-
+    // Por questoes de desempenho:
+    //    1- os atributos sao publicos;
+    //    2- nao ha' funcoes get e set;
+    //    3- nao foi criada uma classe LinkTrainMatrix (matriz de conexoes).
+    //
 }
-

@@ -1,7 +1,4 @@
-
 package br.edu.unifei.gpesc.neural.mlp.util;
-
-
 
 /**
  *
@@ -9,23 +6,20 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class LinkRun {
 
-   public float weight;   // peso
+    public float weight;   // peso
 
-   /**
-   * Construtor
-   * @param - sem parametros.
-   */
-   public LinkRun() {
-   }
-
-
+    /**
+     * Construtor
+     *
+     * @param - sem parametros.
+     */
+    public LinkRun() {
+    }
 
    //
-   // Por questoes de desempenho:
-   //    1- os atributos sao publicos;
-   //    2- nao ha' funcoes get e set;
-   //    3- nao foi criada uma classe LinkRunMatrix (matriz de conexoes).
-   //
-
+    // Por questoes de desempenho:
+    //    1- os atributos sao publicos;
+    //    2- nao ha' funcoes get e set;
+    //    3- nao foi criada uma classe LinkRunMatrix (matriz de conexoes).
+    //
 }
-
