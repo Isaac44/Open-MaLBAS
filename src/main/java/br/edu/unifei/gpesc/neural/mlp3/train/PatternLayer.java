@@ -17,46 +17,28 @@
 package br.edu.unifei.gpesc.neural.mlp3.train;
 
 /**
- *
+ * This class represents a pattern.
  * @author Isaac Caldas Ferreira
  */
-public class Neuron {
+public class PatternLayer {
 
     /**
-     * The activation value.
+     * The input layer, with the input neurons.
      */
-    double activation;
+    public final NeuronLayer inputLayer;
 
     /**
-     * The net input.
+     * The output layer, with the output neurons.
      */
-    double netinput;
+    public final NeuronLayer outputLayer;
 
     /**
-     * The bias connection.
+     * Creates a Pattern Layer setting the layers.
+     * @param input The input layer.
+     * @param output The output layer.
      */
-    double bias;
-
-    /**
-     * The error derivative.
-     */
-    double delta;
-
-    /**
-     * The bias conection error derivative.
-     */
-    double bed;
-
-    /**
-     * The bias delta.
-     */
-    double dbias;
-
-    public Neuron() {
+    public PatternLayer(NeuronLayer input, NeuronLayer output) {
+        inputLayer = input;
+        outputLayer = output;
     }
-
-    public Neuron(double activation) {
-        this.activation = activation;
-    }
-
 }

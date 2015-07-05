@@ -20,50 +20,82 @@ import br.edu.unifei.gpesc.neural.mlp3.core.Function;
 import java.util.Random;
 
 /**
+ * This class connects the neurons of a Layer to this own neurons.
  *
  * @author Isaac Caldas Ferreira
  */
-public class NextLayer extends FirstLayer {
+public class ConnectionLayer extends NeuronLayer {
 
+    /**
+     * The layer that comes previously of this one.
+     */
+    private final NeuronLayer mPreviousLayer;
+
+    /**
+     * The transfer function of the previous layer to this layer.
+     */
     private Function mFunction;
-    private final FirstLayer mPreviousLayer;
+
+    /**
+     * The connections between this layer and the previous one. <br>
+     * Each line corresponds this layer and each column corresponds the previous
+     * layer.
+     */
     private final Connection[][] mConnectionMatrix;
 
-    public NextLayer(int length, FirstLayer prevLayer, Function function) {
+    /**
+     * Creates a Connection Layer.
+     *
+     * @param length The size of the neuron array.
+     * @param prevLayer The layer that comes before this one.
+     * @param function The transfer function.
+     * @see Function
+     */
+    public ConnectionLayer(int length, NeuronLayer prevLayer, Function function) {
         super(length);
         mFunction = function;
         mPreviousLayer = prevLayer;
-        mConnectionMatrix = new Connection[length][prevLayer.length()];
+        mConnectionMatrix = new Connection[length][prevLayer.getLength()];
 
-        // optimization
         int i, j;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<connections.length; i++) {
-            for (j=0; j<connections[i].length; j++) {
+        for (i = 0; i < connections.length; i++) {
+            for (j = 0; j < connections[i].length; j++) {
                 connections[i][j] = new Connection();
             }
         }
     }
 
+    /**
+     * Sets the transfer function.
+     *
+     * @param function The transfer function.
+     */
     public void setFunction(Function function) {
         mFunction = function;
     }
 
-    public void genBiasAndWeights(Random rand, double maxWeight) {
+    /**
+     * Inits the {@link NeuronLayer.Neuron#bias} and {@link Connection#weight}.
+     *
+     * @param rand The randomizer to be used to generate random values.
+     * @param maxWeight The maximum absolute weight for the values.
+     */
+    public void initBiasAndWeights(Random rand, double maxWeight) {
         int i, j;
 
         Neuron[] neurons = mNeuronArray;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<neurons.length; i++) {
+        for (i = 0; i < neurons.length; i++) {
             neurons[i].bias = rand.nextDouble() * maxWeight;
 
             if (!rand.nextBoolean()) {
                 neurons[i].bias *= -1;
             }
 
-            for (j=0; j<connections[i].length; j++) {
+            for (j = 0; j < connections[i].length; j++) {
                 connections[i][j].weight = rand.nextDouble() * maxWeight;
 
                 if (!rand.nextBoolean()) {
@@ -73,20 +105,28 @@ public class NextLayer extends FirstLayer {
         }
     }
 
-    public void changeBiasAndWeights() {
+    /**
+     * Computes the {@link NeuronLayer.Neuron#bias} and the
+     * {@link Connection#weight}.
+     */
+    public void computeBiasAndWeights() {
         int i, j;
 
         Neuron[] neurons = mNeuronArray;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<neurons.length; i++) {
-            for (j=0; j<connections[i].length; j++) {
+        for (i = 0; i < neurons.length; i++) {
+            for (j = 0; j < connections[i].length; j++) {
                 connections[i][j].weight += connections[i][j].dweight;
             }
             neurons[i].bias += neurons[i].dbias;
         }
     }
 
+    /**
+     * Computes the {@link NeuronLayer.Neuron#bed} and the
+     * {@link Connection#wed}.
+     */
     public void computeBedAndWedIncrement() {
         int i, j;
 
@@ -94,47 +134,60 @@ public class NextLayer extends FirstLayer {
         Neuron[] prevNeurons = mPreviousLayer.mNeuronArray;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<neurons.length; i++) {
-            for (j=0; j<prevNeurons.length; j++) {
+        for (i = 0; i < neurons.length; i++) {
+            for (j = 0; j < prevNeurons.length; j++) {
                 connections[i][j].wed += neurons[i].delta * prevNeurons[j].activation;
             }
             neurons[i].bed += neurons[i].delta;
         }
     }
 
-    public void computeBiasAndWeightsDeltas(double lrate, double momentum) {
+    /**
+     * Computes the {@link NeuronLayer.Neuron#dbias} and the
+     * {@link Connection#dweight}, based on the learn rate and the momentum.
+     *
+     * @param learnRate The learn rate.
+     * @param momentum The momentum.
+     */
+    public void computeBiasAndWeightsDeltas(double learnRate, double momentum) {
         int i, j;
 
         Neuron[] neurons = mNeuronArray;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<neurons.length; i++) {
-            for (j=0; j<connections[i].length; j++) {
-                connections[i][j].dweight = lrate * connections[i][j].wed + momentum * connections[i][j].dweight;
+        for (i = 0; i < neurons.length; i++) {
+            for (j = 0; j < connections[i].length; j++) {
+                connections[i][j].dweight = (learnRate * connections[i][j].wed) + (momentum * connections[i][j].dweight);
             }
-            neurons[i].dbias = lrate * neurons[i].bed + momentum * neurons[i].dbias;
+            neurons[i].dbias = (learnRate * neurons[i].bed) + (momentum * neurons[i].dbias);
         }
     }
 
+    /**
+     * Sets the values {@link NeuronLayer.Neuron#bed},
+     * {@link NeuronLayer.Neuron#activation} and {@link Connection#wed} to zero.
+     */
     public void reset() {
         int i, j;
 
         Neuron[] neurons = mNeuronArray;
         Connection[][] connections = mConnectionMatrix;
 
-        for (i=0; i<neurons.length; i++) {
+        for (i = 0; i < neurons.length; i++) {
 
-            for (j=0; j<connections[i].length; j++) {
+            for (j = 0; j < connections[i].length; j++) {
                 connections[i][j].wed = 0.0;
             }
 
             neurons[i].bed = 0.0;
-            neurons[i].netinput = 0.0;
             neurons[i].activation = 0.0;
         }
     }
 
-    public void computeActivation() {
+    /**
+     * Computes the {@link NeuronLayer.Neuron#activation}.
+     */
+    public void computeActivationOutput() {
         int i, j;
 
         Neuron[] neurons = mNeuronArray;
@@ -143,18 +196,22 @@ public class NextLayer extends FirstLayer {
 
         Function function = mFunction;
 
-        for (i=0; i<neurons.length; i++) {
-            neurons[i].netinput = neurons[i].bias;
+        double netinput;
 
-            for (j=0; j<prevNeurons.length; j++) {
-                neurons[i].netinput += connections[i][j].weight * prevNeurons[j].activation;
+        for (i = 0; i < neurons.length; i++) {
+            netinput = neurons[i].bias;
+
+            for (j = 0; j < prevNeurons.length; j++) {
+                netinput += connections[i][j].weight * prevNeurons[j].activation;
             }
 
-            neurons[i].activation = function.compute(neurons[i].netinput);
+            neurons[i].activation = function.compute(netinput);
         }
     }
 
-    // é invertido!
+    /**
+     * Computes the {@link NeuronLayer.Neuron#delta} error, via backpropagation.
+     */
     public void computeError() {
         int j, i;
         double x;
@@ -163,12 +220,12 @@ public class NextLayer extends FirstLayer {
         Connection[][] connections = mConnectionMatrix;
 
         Neuron[] prevNeurons = mPreviousLayer.mNeuronArray;
-        Function function = ((NextLayer) mPreviousLayer).mFunction;
+        Function function = ((ConnectionLayer) mPreviousLayer).mFunction;
 
-        for (j=0; j<prevNeurons.length; j++) {
+        for (j = 0; j < prevNeurons.length; j++) {
             x = 0.0;
 
-            for (i=0; i<neurons.length; i++) {
+            for (i = 0; i < neurons.length; i++) {
                 x += neurons[i].delta * connections[i][j].weight;
             }
 
@@ -176,7 +233,13 @@ public class NextLayer extends FirstLayer {
         }
     }
 
-    public static void computeOutputError(FirstLayer trainOutput, NextLayer outputLayer) {
+    /**
+     * Computes the {@link NeuronLayer.Neuron#delta} error for the Output Layer.
+     *
+     * @param trainOutput
+     * @param outputLayer
+     */
+    public static void computeOutputError(NeuronLayer trainOutput, ConnectionLayer outputLayer) {
         Neuron[] prevNeurons = outputLayer.mNeuronArray;
         Neuron[] neurons = trainOutput.mNeuronArray;
 
@@ -184,7 +247,7 @@ public class NextLayer extends FirstLayer {
 
         double x, y;
 
-        for (int j=0; j<prevNeurons.length; j++) {
+        for (int j = 0; j < prevNeurons.length; j++) {
             y = prevNeurons[j].activation;
             x = neurons[j].activation - y;
 
@@ -192,21 +255,11 @@ public class NextLayer extends FirstLayer {
         }
     }
 
-    public double getError(FirstLayer layer) {
-        double error = 0.0;
-
-        Neuron[] neurons = mNeuronArray;
-        Neuron[] otherNeurons = layer.mNeuronArray;
-
-        for (int i=0; i<neurons.length; i++) {
-            error += Math.abs( otherNeurons[i].activation - neurons[i].activation );
-        }
-
-        return error;
-    }
-
     /**
-     * The neural connections.
+     * This class represents the connections between all neurons of a
+     * {@link ConnectionLayer} and a {@link NeuronLayer}.
+     *
+     * @author Otávio Augusto Salgado Carpinteiro
      */
     private static class Connection {
 
@@ -225,38 +278,4 @@ public class NextLayer extends FirstLayer {
          */
         double dweight;
     }
-
-
-
-    // --------
-    // DEBUG
-    // --------
-
-    private static void print(double value) {
-        if (value >= 0) System.out.print("+");
-        System.out.print(String.format("%.18f ", value));
-    }
-
-    private void printC() {
-        System.out.println("\n\n\tConnections (dweight):");
-        for (Connection[] connectionArray : mConnectionMatrix) {
-            for (Connection connection : connectionArray) {
-                print(connection.dweight);
-            }
-            System.out.println();
-        }
-    }
-
-    private void printN() {
-        System.out.println("\n\tNeurons (dbias):");
-        for (Neuron neuron : mNeuronArray) {
-            print(neuron.dbias);
-        }
-    }
-
-    public void printDebug() {
-        printN();
-        printC();
-    }
-
 }

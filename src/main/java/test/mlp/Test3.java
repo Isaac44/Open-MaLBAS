@@ -16,8 +16,8 @@
  */
 package test.mlp;
 
-import br.edu.unifei.gpesc.neural.mlp3.train.DualLayer;
-import br.edu.unifei.gpesc.neural.mlp3.train.FirstLayer;
+import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
+import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
 import br.edu.unifei.gpesc.neural.mlp3.train.TrainMlp;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,11 +31,11 @@ import java.util.Scanner;
  */
 public class Test3 {
 
-    private static DualLayer[] load(File file, int inLen, int outLen) throws FileNotFoundException {
+    private static PatternLayer[] load(File file, int inLen, int outLen) throws FileNotFoundException {
         Scanner scan = new Scanner(file);
         scan.useLocale(Locale.US);
 
-        LinkedList<DualLayer> dualList = new LinkedList<DualLayer>();
+        LinkedList<PatternLayer> dualList = new LinkedList<PatternLayer>();
         double[] inArray = new double[inLen];
         double[] outArray = new double[outLen];
 
@@ -50,13 +50,13 @@ public class Test3 {
                 outArray[i] = scan.nextDouble();
             }
 
-            FirstLayer inputLayer = new FirstLayer(inArray);
-            FirstLayer outputLayer = new FirstLayer(outArray);
+            NeuronLayer inputLayer = new NeuronLayer(inArray);
+            NeuronLayer outputLayer = new NeuronLayer(outArray);
 
-            dualList.add(new DualLayer(inputLayer, outputLayer));
+            dualList.add(new PatternLayer(inputLayer, outputLayer));
         }
 
-        DualLayer[] array = new DualLayer[dualList.size()];
+        PatternLayer[] array = new PatternLayer[dualList.size()];
         return dualList.toArray(array);
     }
 
@@ -65,14 +65,16 @@ public class Test3 {
 
         String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/neural/dat/";
 
-        DualLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
-        DualLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
+        PatternLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
+        PatternLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
 
         mlp.setInputArray(trainInput);
         mlp.setValidationArray(validationInput);
-
-
         mlp.trainByEpoch();
+
+        // Test
+        PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);
+        mlp.runTestSup(testInput);
 
     }
 

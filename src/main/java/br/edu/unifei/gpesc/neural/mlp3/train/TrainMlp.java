@@ -19,6 +19,7 @@ package br.edu.unifei.gpesc.neural.mlp3.train;
 import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
 import br.edu.unifei.gpesc.neural.mlp3.core.LogSig;
 import br.edu.unifei.gpesc.neural.mlp3.core.TanSig;
+import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer.Neuron;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import test.mlp.Test3;
@@ -29,7 +30,7 @@ import test.mlp.Test3;
  */
 public class TrainMlp {
 
-    private static final int HIDDEN_1 = 0;
+        private static final int HIDDEN_1 = 0;
     private static final int HIDDEN_2 = 1;
     private static final int OUTPUT = 2;
 
@@ -48,47 +49,44 @@ public class TrainMlp {
      */
     private double mMomentum = 0.9;
 
-    private long mPrimeSeed = 7;//31 * System.currentTimeMillis();
+    /**
+     * The network seed. Preferred to be a prime number
+     */
+    private long mPrimeSeed = PrimeNumber.getRandomPrimeNumber();
 
     /**
      * The learn rate.
      */
     private double mLearnRate = 0.00001;
 
-    private final FirstLayer mInputLayer;
-    private final FirstLayer mOutputLayer;
+    private final NeuronLayer mInputLayer;
+    private final NeuronLayer mOutputLayer;
 
-    private final NextLayer[] mLayerArray;
+    private final ConnectionLayer[] mLayerArray;
 
-    private DualLayer[] mTrainInputArray;
-    private DualLayer[] mValidationArray;
+    private PatternLayer[] mTrainInputArray;
+    private PatternLayer[] mValidationArray;
 
     public TrainMlp(int inLen, int h1Len, int h2Len, int outLen) {
-        mInputLayer = new FirstLayer(inLen);
-        mOutputLayer = new FirstLayer(outLen);
+        mInputLayer = new NeuronLayer(inLen);
+        mOutputLayer = new NeuronLayer(outLen);
 
-        mLayerArray = new NextLayer[3];
-        mLayerArray[HIDDEN_1] = new NextLayer(h1Len, mInputLayer, new TanSig());
-        mLayerArray[HIDDEN_2] = new NextLayer(h2Len, mLayerArray[HIDDEN_1], new TanSig());
-        mLayerArray[OUTPUT] = new NextLayer(outLen, mLayerArray[HIDDEN_2], new LogSig());
+        mLayerArray = new ConnectionLayer[3];
+        mLayerArray[HIDDEN_1] = new ConnectionLayer(h1Len, mInputLayer, new TanSig());
+        mLayerArray[HIDDEN_2] = new ConnectionLayer(h2Len, mLayerArray[HIDDEN_1], new TanSig());
+        mLayerArray[OUTPUT] = new ConnectionLayer(outLen, mLayerArray[HIDDEN_2], new LogSig());
     }
 
     private void genBiasAndWeights() {
         Random random = new Random(mPrimeSeed);
-        for (NextLayer layer : mLayerArray) {
-            layer.genBiasAndWeights(random, mMaxAbsoluteWeight);
+        for (ConnectionLayer layer : mLayerArray) {
+            layer.initBiasAndWeights(random, mMaxAbsoluteWeight);
         }
     }
 
     private void computeOutput() {
-        for (NextLayer layer : mLayerArray) {
-            layer.computeActivation();
-        }
-    }
-
-    private void printDebug() {
-        for (NextLayer layer : mLayerArray) {
-            layer.printDebug();
+        for (ConnectionLayer layer : mLayerArray) {
+            layer.computeActivationOutput();
         }
     }
 
@@ -99,14 +97,14 @@ public class TrainMlp {
 
         // Execucao dos padroes de validacao na rede neural
         errtot = 0.0;
-        FirstLayer inputLayer = mInputLayer;
-        NextLayer outputLayer = mLayerArray[OUTPUT];
+        NeuronLayer inputLayer = mInputLayer;
+        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
 
-        for (DualLayer validationLayer : mValidationArray) {
-            inputLayer.setNeuron(validationLayer.firstLayer);
+        for (PatternLayer validationLayer : mValidationArray) {
+            inputLayer.setNeuron(validationLayer.inputLayer);
             computeOutput();
 
-            perr = outputLayer.getError(validationLayer.nextLayer);
+            perr = outputLayer.getDifferenceTotal(validationLayer.outputLayer);
             errtot += perr;
 
         }  // fim while
@@ -119,16 +117,16 @@ public class TrainMlp {
     }
 
     private void resetLayers() {
-        for (NextLayer layer : mLayerArray) {
+        for (ConnectionLayer layer : mLayerArray) {
             layer.reset();
         }
     }
 
-    private void computeError(FirstLayer trainOutput) {
-        NextLayer[] layers = mLayerArray;
+    private void computeError(NeuronLayer trainOutput) {
+        ConnectionLayer[] layers = mLayerArray;
 
         // Calculo do delta dos neuronios na camada de saida
-        NextLayer.computeOutputError(trainOutput, layers[OUTPUT]);
+        ConnectionLayer.computeOutputError(trainOutput, layers[OUTPUT]);
 
         // Calculo do delta dos neuronios nas camadas escondidas
         // Out->H2, H2->H1
@@ -138,16 +136,16 @@ public class TrainMlp {
     }
 
     private void computeBedAndWedIncrement() {
-        for (NextLayer layer : mLayerArray) {
+        for (ConnectionLayer layer : mLayerArray) {
             layer.computeBedAndWedIncrement();
         }
     }
 
-    public void setInputArray(DualLayer[] trainArray) {
+    public void setInputArray(PatternLayer[] trainArray) {
         mTrainInputArray = trainArray;
     }
 
-    public void setValidationArray(DualLayer[] validationArray) {
+    public void setValidationArray(PatternLayer[] validationArray) {
         mValidationArray = validationArray;
     }
 
@@ -156,14 +154,14 @@ public class TrainMlp {
     }
 
     private void computeDbiasDweights(double lrate, double momentum) {
-        for (NextLayer layer : mLayerArray) {
+        for (ConnectionLayer layer : mLayerArray) {
             layer.computeBiasAndWeightsDeltas(lrate, momentum);
         }
     }
 
     private void changeBiasWeights() {
-        for (NextLayer layer : mLayerArray) {
-            layer.changeBiasAndWeights();
+        for (ConnectionLayer layer : mLayerArray) {
+            layer.computeBiasAndWeights();
         }
     }
 
@@ -195,8 +193,8 @@ public class TrainMlp {
         String trainDir;   // nome do diretorio que contem resultados de cada treino
         String logFile;   // nome do arquivo de "log" do treinamento
 
-        FirstLayer inputLayer = mInputLayer;
-        NextLayer outputLayer = mLayerArray[OUTPUT];
+        NeuronLayer inputLayer = mInputLayer;
+        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
 
         // init bias and weights
         genBiasAndWeights();
@@ -226,14 +224,14 @@ public class TrainMlp {
                 errtot = 0.0f;
                 resetLayers();
 
-                for (DualLayer trainLayer : mTrainInputArray) {
-                    inputLayer.setNeuron(trainLayer.firstLayer);
+                for (PatternLayer trainLayer : mTrainInputArray) {
+                    inputLayer.setNeuron(trainLayer.inputLayer);
                     computeOutput();
-                    computeError(trainLayer.nextLayer);
+                    computeError(trainLayer.outputLayer);
 
                     computeBedAndWedIncrement();
 
-                    tperr = outputLayer.getError(trainLayer.nextLayer);
+                    tperr = outputLayer.getDifferenceTotal(trainLayer.outputLayer);
                     errtot += tperr;
                 }
 
@@ -267,5 +265,53 @@ public class TrainMlp {
 
     public static void main(String[] args) throws FileNotFoundException {
         Test3.main(args);
+    }
+
+
+    // TEST
+
+    public void runTestSup(PatternLayer[] patterns) {
+
+        int npat;   // numero de um padrao de teste
+        double perr;   // erro de um padrao de teste
+        double errtot;   // erro total dos padroes de teste
+
+        MlpTrain.Print output = new MlpTrain.Print();
+
+        // Execucao dos padroes de teste na rede neural
+        npat = 0;
+        errtot = 0.0f;
+
+        NeuronLayer inputLayer = mInputLayer;
+        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
+
+        for (PatternLayer pattern : patterns) {
+            npat++;
+
+            inputLayer.setNeuron(pattern.inputLayer);
+            computeOutput();
+
+            perr = outputLayer.getDifferenceTotal(pattern.outputLayer);
+            errtot += perr;
+
+            output.format("Padrao %d:\n", npat);
+            for (Neuron neuron : pattern.inputLayer.mNeuronArray) {
+                output.format("   %.4f", neuron.activation);
+            }
+            output.format("\n   ===> Saida Esperada:  ");
+            for (Neuron neuron : pattern.outputLayer.mNeuronArray) {
+                output.format("   %.4f", neuron.activation);
+            }
+
+
+            pattern.outputLayer.computeDifference(outputLayer);
+
+            output.format("\n   ===> Saida Obtida:  ");
+            for (Neuron neuron : pattern.outputLayer.mNeuronArray) {
+                output.format("   %.4f", neuron.activation);
+            }
+            output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
+
+        }
     }
 }
