@@ -13,6 +13,7 @@ import java.util.Scanner;
  *
  * @author Otavio Carpinteiro - GPESC
  */
+@SuppressWarnings({"UnusedAssignment", "null", "UseSpecificCatch", "override", "StringEquality"})
 public class MlpRun extends Mlp {
 
     public NeuronRun[] neuronio;   // neuronios da rede neural
@@ -42,23 +43,12 @@ public class MlpRun extends Mlp {
     /**
      * Construtor
      *
-     * @param - sem parametros.
+
      */
     public MlpRun() {
     }
 
-    /**
-     * Getters e Setters para executar diretamente a RN getNeuActiv(int
-     * neuronNumber) - retorna o valor da ativacao do neuronio "neuronNumber".
-     * getNumNeuFinInp() - retorna o numero do neuronio final na camada de
-     * entrada. getNumNeuFinOut() - retorna o numero do neuronio final na camada
-     * de saida. getNumNeuIniInp() - retorna o numero do neuronio inicial na
-     * camada de entrada. getNumNeuIniOut() - retorna o numero do neuronio
-     * inicial na camada de saida. getPattern(int neuronNumber) - retorna o
-     * valor de "pattern" relativo ao neuronio "neuronNumber". setPattern(int
-     * neuronNumber, double value) - armazena "value" em "pattern", relativo aa
-     * "neuronNumber".
-     */
+
     public double getNeuActiv(int neuronNumber) {
         return neuronio[neuronNumber].activation;
     }
@@ -102,7 +92,7 @@ public class MlpRun extends Mlp {
     /**
      * Computa a ativacao dos neuronios da camada de saida da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void computeOutput() {
 
@@ -184,7 +174,7 @@ public class MlpRun extends Mlp {
     /**
      * Cria as conexoes da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void createLink() {
 
@@ -199,7 +189,7 @@ public class MlpRun extends Mlp {
     /**
      * Cria os neuronios da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void createNeuron() {
 
@@ -212,7 +202,7 @@ public class MlpRun extends Mlp {
     /**
      * Cria os padroes de teste ou de validacao da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void createPattern() {
 
@@ -236,7 +226,7 @@ public class MlpRun extends Mlp {
     /**
      * Calcula o erro do padrao armazenado em "pattern".
      *
-     * @param - sem parametros.
+
      * @return - o valor do erro.
      */
     public double getPatternError() {
@@ -296,7 +286,7 @@ public class MlpRun extends Mlp {
     /**
      * Inicializa as conexoes da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void initLink() {
 
@@ -345,7 +335,7 @@ public class MlpRun extends Mlp {
     /**
      * Inicializa os neuronios da rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void initNeuron() {
 
@@ -359,7 +349,7 @@ public class MlpRun extends Mlp {
     /**
      * Entra com um padrao de execucao (ou teste ou validacao) na rede neural.
      *
-     * @param - sem parametros.
+
      */
     public void inputPattern() {
 
@@ -512,7 +502,7 @@ public class MlpRun extends Mlp {
      * A saida produzida pela rede sobre o padrao de teste "pattern" e'
      * retornada em: "neuronio[niO].activation" ... "neuronio[nfO].activation".
      *
-     * @param - sem parametros.
+
      */
     public void runTestNonSup() {
 
