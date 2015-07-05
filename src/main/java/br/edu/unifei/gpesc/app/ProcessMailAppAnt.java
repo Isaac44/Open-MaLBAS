@@ -18,33 +18,49 @@ package br.edu.unifei.gpesc.app;
 
 import br.edu.unifei.gpesc.sas.modules.NeuralCharacteristic;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
  * @author isaac
  */
-public class Main {
+public class ProcessMailAppAnt {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
+        FileWriter writer = new FileWriter("/tmp/SAS");
+
+        writer.write("Starting...\n"); writer.flush();
+
         String basePath = "/home/isaac/Unifei/CodeStation/SistemaAntiSPAM_SAS/NN-Otavio/dat/";
         File statisticsFile = new File("/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/", "statistics.txt");
         ProcessMail processMail = new ProcessMail(basePath + "data.dat", basePath + "wfin.dat", statisticsFile);
 
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter the path to the file: ");
-            File mailFile = new File(scanner.nextLine());
+        writer.write("Processing...\n"); writer.flush();
 
-            if (mailFile.isFile()) {
-                NeuralCharacteristic result = processMail.processMail(mailFile);
-                System.out.println("Result: "+result.NAME);
-            }
-            else {
-                System.out.println("ERROR: The path is not valid.");
-            }
-        }
+
+
+        NeuralCharacteristic result = processMail.processMail(System.in);
+
+        writer.write("\nResult: " + result.NAME);
+        writer.close();
+
+        System.exit((result == NeuralCharacteristic.SPAM) ? 1 : 0);
+
+
+//        while (true) {
+//            Scanner scanner = new Scanner(System.in);
+//            System.out.println("Enter the path to the file: ");
+//            File mailFile = new File(scanner.nextLine());
+//
+//            if (mailFile.isFile()) {
+//                NeuralCharacteristic result = processMail.processMail(mailFile);
+//                System.out.println("Result: "+result.NAME);
+//            }
+//            else {
+//                System.out.println("ERROR: The path is not valid.");
+//            }
+//        }
     }
 
 }

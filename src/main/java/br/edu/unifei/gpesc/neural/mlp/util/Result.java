@@ -9,8 +9,8 @@ public class Result {
     public int npassos;   // numero de passos de treinamento
     public int nepochs;   // numero de epocas em cada passo
     public int eptot;   // numero total de epocas de treinamento
-    public float errtrain;   // erro total sobre os padroes de treinamento
-    public float errval;   // erro total sobre os padroes de validacao
+    public double errtrain;   // erro total sobre os padroes de treinamento
+    public double errval;   // erro total sobre os padroes de validacao
     public String wini;   // arquivo com os pesos iniciais do treinamento
     public String wfin;   // arquivo com os pesos finais do treinamento
 

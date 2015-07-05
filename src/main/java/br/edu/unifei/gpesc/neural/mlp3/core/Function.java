@@ -14,24 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.neural.mlp2;
+package br.edu.unifei.gpesc.neural.mlp3.core;
 
 /**
- * This class omputes the logsig transfer function: <br>
- * <b>logsig(x) = 1 / (1 + exp(-x))</b>
- *
+ * Interface for the transfer function of the mlp neural network.
  * @author Isaac Caldas Ferreira
  */
-public class LogsigTransferFunction implements TransferFunction {
+public interface Function {
 
     /**
-     * Computes the logsig transfer function, which is given by the equation:
-     * <b>logsig(x) = 1 / (1 + exp(-x))</b>
-     * @param value {@inheritDoc}
-     * @return The logsig result.
+     * Computes the activation for the input value.
+     * @param x The input value.
+     * @return The activation result.
      */
-    @Override
-    public float compute(float value) {
-        return 1f / (1f + (float) Math.exp(-value));
-    }
+    public double compute(double x);
+
+    /**
+     * Computes the delta for the input value.
+     * @param x The X value.
+     * @param y The Y value.
+     * @return The activation result.
+     */
+    public double compute(double x, double y);
 }

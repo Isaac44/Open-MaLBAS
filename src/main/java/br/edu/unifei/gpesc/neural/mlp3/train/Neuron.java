@@ -14,24 +14,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.neural.mlp2;
+package br.edu.unifei.gpesc.neural.mlp3.train;
 
 /**
- * The linear transfer function of the mlp.
- * <br>
- * It only returns the input value, without any modification.
  *
  * @author Isaac Caldas Ferreira
  */
-public class LinearTransferFunction implements TransferFunction {
+public class Neuron {
 
     /**
-     * Do nothing. Only returns the input value.
-     * @param value {@inheritDoc}
-     * @return The input value.
+     * The activation value.
      */
-    @Override
-    public float compute(float value) {
-        return value;
+    double activation;
+
+    /**
+     * The net input.
+     */
+    double netinput;
+
+    /**
+     * The bias connection.
+     */
+    double bias;
+
+    /**
+     * The error derivative.
+     */
+    double delta;
+
+    /**
+     * The bias conection error derivative.
+     */
+    double bed;
+
+    /**
+     * The bias delta.
+     */
+    double dbias;
+
+    public Neuron() {
     }
+
+    public Neuron(double activation) {
+        this.activation = activation;
+    }
+
 }

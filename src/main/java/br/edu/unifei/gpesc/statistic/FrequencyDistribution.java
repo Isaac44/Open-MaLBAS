@@ -46,6 +46,14 @@ public class FrequencyDistribution implements StatisticalDistribution {
     @Override
     public double compute(StatisticalData data, Statistics statistics) {
         double result = 0.0;
+
+        double totalDeOcorrenciasEmConjuntos = 0.0;
+
+        for (int i=0; i < statistics.getSetCount(); i++) {
+//            statistics.get
+        }
+
+
         for (int i=0; i<statistics.getSetCount(); i++) {
             result += (data.getStatistic(i) / (double) statistics.getSetSize(i));
         }

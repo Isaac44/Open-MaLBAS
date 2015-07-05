@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class MlpRun extends Mlp {
 
     public NeuronRun[] neuronio;   // neuronios da rede neural
-    public float[] pattern;   // padrao de execucao ou de teste
+    public double[] pattern;   // padrao de execucao ou de teste
     public LinkRun[][] conexao;   // conexoes da rede neural
 
     /**
@@ -56,10 +56,10 @@ public class MlpRun extends Mlp {
      * camada de entrada. getNumNeuIniOut() - retorna o numero do neuronio
      * inicial na camada de saida. getPattern(int neuronNumber) - retorna o
      * valor de "pattern" relativo ao neuronio "neuronNumber". setPattern(int
-     * neuronNumber, float value) - armazena "value" em "pattern", relativo aa
+     * neuronNumber, double value) - armazena "value" em "pattern", relativo aa
      * "neuronNumber".
      */
-    public float getNeuActiv(int neuronNumber) {
+    public double getNeuActiv(int neuronNumber) {
         return neuronio[neuronNumber].activation;
     }
 
@@ -79,15 +79,15 @@ public class MlpRun extends Mlp {
         return niO;
     }
 
-    public float getPattern(int neuronNumber) {
+    public double getPattern(int neuronNumber) {
         return pattern[neuronNumber];
     }
 
-    public void setPattern(int neuronNumber, float value) {
+    public void setPattern(int neuronNumber, double value) {
         pattern[neuronNumber] = value;
     }
 
-    public void setPatternArray(float[] patternArray) {
+    public void setPatternArray(double[] patternArray) {
         for (int i = 0; i < patternArray.length; i++) {
             pattern[i] = patternArray[i];
         }
@@ -216,21 +216,21 @@ public class MlpRun extends Mlp {
      */
     public void createPattern() {
 
-        pattern = new float[ntneurons];
+        pattern = new double[ntneurons];
     }
 
     /**
      * Implementa a funcao de transferencia logsig.
      *
      * @param x - o valor de "x".
-     * @return y - o valor da funcao sobre "x". public float fLogsig(float x) -
+     * @return y - o valor da funcao sobre "x". public double fLogsig(double x) -
      * implementado na classe base "Mlp".
      */
     /**
      * Implementa a funcao de transferencia tansig.
      *
      * @param x - o valor de "x".
-     * @return y - o valor da funcao sobre "x". public float fTansig(float x) -
+     * @return y - o valor da funcao sobre "x". public double fTansig(double x) -
      * implementado na classe base "Mlp".
      */
     /**
@@ -239,15 +239,15 @@ public class MlpRun extends Mlp {
      * @param - sem parametros.
      * @return - o valor do erro.
      */
-    public float getPatternError() {
+    public double getPatternError() {
 
-        float aux1;
+        double aux1;
         double aux2;
 
         aux1 = 0.0f;
         for (int i = niO; i <= nfO; i++) {
             aux2 = (double) (pattern[i] - neuronio[i].activation);
-            aux1 += (float) Math.abs(aux2);
+            aux1 += (double) Math.abs(aux2);
         }
         return aux1;
     }
@@ -273,9 +273,9 @@ public class MlpRun extends Mlp {
         try {
             input.useLocale(Locale.US);
             for (int i = 0; i < ntneurons; i++) {
-                neuronio[i].bias = input.nextFloat();
+                neuronio[i].bias = input.nextDouble();
                 for (int j = 0; j < ntneurons; j++) {
-                    conexao[i][j].weight = input.nextFloat();
+                    conexao[i][j].weight = input.nextDouble();
                 }
             }
         } // fim try
@@ -533,8 +533,8 @@ public class MlpRun extends Mlp {
     public void runTestSup(String testFileName) {
 
         int npat;   // numero de um padrao de teste
-        float perr;   // erro de um padrao de teste
-        float errtot;   // erro total dos padroes de teste
+        double perr;   // erro de um padrao de teste
+        double errtot;   // erro total dos padroes de teste
         String testDir;   // nome do diretorio que contem resultados da execucao
         String logFile;   // nome do arquivo de "log" da execucao
         Scanner input = null;
@@ -572,10 +572,10 @@ public class MlpRun extends Mlp {
             try {
                 input.useLocale(Locale.US);
                 for (int j = niI; j <= nfI; j++) {
-                    pattern[j] = input.nextFloat();
+                    pattern[j] = input.nextDouble();
                 }
                 for (int j = niO; j <= nfO; j++) {
-                    pattern[j] = input.nextFloat();
+                    pattern[j] = input.nextDouble();
                 }
             } catch (Exception e) {
                 System.err.printf("\nErro na leitura do arquivo: %s\n", testFileName);

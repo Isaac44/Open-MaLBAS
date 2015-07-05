@@ -14,21 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.statistic;
+package br.edu.unifei.gpesc.neural.mlp3.core;
 
 /**
- *
+ * This class computes the logsig transfer function: <br>
+ * <b>logsig(x) = 1 / (1 + exp(-x))</b>
  * @author Isaac Caldas Ferreira
  */
-public class ChiSquaredDistribution implements StatisticalDistribution {
+public class LogSig implements Function {
 
+    /**
+     * Computes the logsig transfer function, which is given by the equation:
+     * <b>logsig(x) = 1 / (1 + exp(-x))</b>
+     *
+     * @param x {@inheritDoc}
+     * @return The logsig result.
+     */
     @Override
-    public double compute(StatisticalData data, Statistics statistics) {
-
-
-
-
-        return 0.0;
+    public double compute(double x) {
+        return 1.0 / (1.0 + Math.exp(-x));
     }
 
+    @Override
+    public double compute(double x, double y) {
+        return x * y * (1.0 - y);
+    }
 }

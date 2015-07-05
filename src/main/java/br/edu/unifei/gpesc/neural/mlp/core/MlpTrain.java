@@ -23,12 +23,12 @@ import java.util.Scanner;
 public class MlpTrain extends Mlp {
 
     public int ntpatterns;   // numero de padroes de treinamento
-    public long seed;   // semente usada para a geracao aleatoria dos bias e dos pesos
-    public float lrate;   // taxa de aprendizagem
-    public float momentum;   // taxa de momentum
+    public long seed = 7;   // semente usada para a geracao aleatoria dos bias e dos pesos
+    public double lrate;   // taxa de aprendizagem
+    public double momentum;   // taxa de momentum
     public NeuronTrain[] neuronio;   // neuronios da rede neural
-    public float[] pattern;   // padrao de validacao
-    public float[][] tpattern;   // padroes de treinamento
+    public double[] pattern;   // padrao de validacao
+    public double[][] tpattern;   // padroes de treinamento
     public LinkTrain[][] conexao;   // conexoes da rede neural
 
     /**
@@ -90,7 +90,7 @@ public class MlpTrain extends Mlp {
      * @param errtot - erro total atual dos padroes de treinamento.
      * @param lerrtot - erro total anterior dos padroes de treinamento.
      */
-    public void changeRates(float errtot, float lerrtot) {
+    public void changeRates(double errtot, double lerrtot) {
 
         if (errtot >= lerrtot) {
             momentum = 0.0f;
@@ -104,7 +104,7 @@ public class MlpTrain extends Mlp {
      * Computa o "bed" para cada bias e o "wed" para cada peso.
      *
      */
-    public void computeBedWed() {
+    private void computeBedWed() {
 
         for (int i = niH1; i <= nfH1; i++) {
             for (int j = niI; j <= nfI; j++) {
@@ -158,10 +158,10 @@ public class MlpTrain extends Mlp {
      *
      * @param ntpat - numero do padrao de treinamento.
      */
-    public void computeError(int ntpat) {
+    private void computeError(int ntpat) {
 
-        float aux1;
-        float aux2;
+        double aux1;
+        double aux2;
 
         // Calculo do delta dos neuronios na camada de saida
         for (int i = niO; i <= nfO; i++) {
@@ -178,7 +178,7 @@ public class MlpTrain extends Mlp {
                 break;
                 case 3: {   // tansig
                     aux2 = neuronio[i].activation;
-                    neuronio[i].delta = aux1 * (float) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
+                    neuronio[i].delta = aux1 * (double) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
                 }
                 break;
             }
@@ -202,7 +202,7 @@ public class MlpTrain extends Mlp {
                 break;
                 case 3: {   // tansig
                     aux2 = neuronio[i].activation;
-                    neuronio[i].delta = aux1 * (float) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
+                    neuronio[i].delta = aux1 * (double) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
                 }
                 break;
             }
@@ -226,7 +226,7 @@ public class MlpTrain extends Mlp {
                 break;
                 case 3: {   // tansig
                     aux2 = neuronio[i].activation;
-                    neuronio[i].delta = aux1 * (float) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
+                    neuronio[i].delta = aux1 * (double) (-1.0 * (Math.pow((double) aux2, 2.0) - 1.0));
                 }
                 break;
             }
@@ -332,6 +332,42 @@ public class MlpTrain extends Mlp {
         }
     }
 
+
+    private static void print(double value) {
+        if (value >= 0) System.out.print("+");
+        System.out.print(String.format("%.18f ", value));
+    }
+
+    private void printC(int start, int end, int start2, int end2) {
+        System.out.println("\n\tConnections (dweight):");
+        for (int i=start; i<=end; i++) {
+            for (int j = start2; j <= end2; j++) {
+                print(conexao[i][j].dweight);
+            }
+            System.out.println();
+        }
+    }
+
+    private void printN(int start, int end) {
+        System.out.println("\n\tNeurons (dbias):");
+        for (int i=start; i<=end; i++) {
+            print(neuronio[i].dbias);
+        }
+
+        System.out.println();
+    }
+
+    private void printDebug() {
+        printN(niH1, nfH1);
+        printC(niH1, nfH1, niI, nfI);
+
+        printN(niH2, nfH2);
+        printC(niH2, nfH2, niH1, nfH1);
+
+        printN(niO, nfO);
+        printC(niO, nfO, niH2, nfH2);
+    }
+
     /**
      * Copia o arquivo "sourceFileName" para o arquivo "targetFileName". Se o
      * arquivo "targetFileName" ja' existir, ele e' sobrescrito.
@@ -393,7 +429,7 @@ public class MlpTrain extends Mlp {
      */
     public void createPattern() {
 
-        pattern = new float[ntneurons];
+        pattern = new double[ntneurons];
     }
 
     /**
@@ -402,7 +438,7 @@ public class MlpTrain extends Mlp {
      */
     public void createTpattern() {
 
-        tpattern = new float[mxpat][ntneurons];
+        tpattern = new double[mxpat][ntneurons];
     }
 
     /**
@@ -428,14 +464,14 @@ public class MlpTrain extends Mlp {
      * Implementa a funcao de transferencia logsig.
      *
      * @param x - o valor de "x".
-     * @return y - o valor da funcao sobre "x". public float fLogsig(float x) -
+     * @return y - o valor da funcao sobre "x". public double fLogsig(double x) -
      * implementado na classe base "Mlp".
      */
     /**
      * Implementa a funcao de transferencia tansig.
      *
      * @param x - o valor de "x".
-     * @return y - o valor da funcao sobre "x". public float fTansig(float x) -
+     * @return y - o valor da funcao sobre "x". public double fTansig(double x) -
      * implementado na classe base "Mlp".
      */
     /**
@@ -443,41 +479,41 @@ public class MlpTrain extends Mlp {
      *
      */
     public void genBiasWeights() {
-
+        seed = 7;
         Random rnd = new Random(seed);
 
         // Gera os bias e os pesos
         for (int i = niH1; i <= nfH1; i++) {
-            neuronio[i].bias = rnd.nextFloat() * mxwei;
+            neuronio[i].bias = rnd.nextDouble() * mxwei;
             if (!rnd.nextBoolean()) {
                 neuronio[i].bias *= -1.0f;
             }
             for (int j = niI; j <= nfI; j++) {
-                conexao[i][j].weight = rnd.nextFloat() * mxwei;
+                conexao[i][j].weight = rnd.nextDouble() * mxwei;
                 if (!rnd.nextBoolean()) {
                     conexao[i][j].weight *= -1.0f;
                 }
             }
         }
         for (int i = niH2; i <= nfH2; i++) {
-            neuronio[i].bias = rnd.nextFloat() * mxwei;
+            neuronio[i].bias = rnd.nextDouble() * mxwei;
             if (!rnd.nextBoolean()) {
                 neuronio[i].bias *= -1.0f;
             }
             for (int j = niH1; j <= nfH1; j++) {
-                conexao[i][j].weight = rnd.nextFloat() * mxwei;
+                conexao[i][j].weight = rnd.nextDouble() * mxwei;
                 if (!rnd.nextBoolean()) {
                     conexao[i][j].weight *= -1.0f;
                 }
             }
         }
         for (int i = niO; i <= nfO; i++) {
-            neuronio[i].bias = rnd.nextFloat() * mxwei;
+            neuronio[i].bias = rnd.nextDouble() * mxwei;
             if (!rnd.nextBoolean()) {
                 neuronio[i].bias *= -1.0f;
             }
             for (int j = niH2; j <= nfH2; j++) {
-                conexao[i][j].weight = rnd.nextFloat() * mxwei;
+                conexao[i][j].weight = rnd.nextDouble() * mxwei;
                 if (!rnd.nextBoolean()) {
                     conexao[i][j].weight *= -1.0f;
                 }
@@ -493,15 +529,15 @@ public class MlpTrain extends Mlp {
      *
      * @return - o valor do erro.
      */
-    public float getPatternError() {
+    public double getPatternError() {
 
-        float aux1;
+        double aux1;
         double aux2;
 
         aux1 = 0.0f;
         for (int i = niO; i <= nfO; i++) {
-            aux2 = (double) (pattern[i] - neuronio[i].activation);
-            aux1 += (float) Math.abs(aux2);
+            aux2 = (pattern[i] - neuronio[i].activation);
+            aux1 += (double) Math.abs(aux2);
         }
         return aux1;
     }
@@ -512,15 +548,15 @@ public class MlpTrain extends Mlp {
      * @param ntpat - numero do padrao.
      * @return - o valor do erro.
      */
-    public float getTpatternError(int ntpat) {
+    public double getTpatternError(int ntpat) {
 
-        float aux1;
+        double aux1;
         double aux2;
 
         aux1 = 0.0f;
         for (int i = niO; i <= nfO; i++) {
             aux2 = (double) (tpattern[ntpat][i] - neuronio[i].activation);
-            aux1 += (float) Math.abs(aux2);
+            aux1 += (double) Math.abs(aux2);
         }
         return aux1;
     }
@@ -827,6 +863,7 @@ public class MlpTrain extends Mlp {
         try {
             input = new Scanner(new File(fileName));
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.printf("\nErro na abertura do arquivo: %s\n", fileName);
             System.exit(1);
         }
@@ -840,10 +877,10 @@ public class MlpTrain extends Mlp {
 
             while (input.hasNext()) {
                 for (j = niI; j <= nfI; j++) {
-                    tpattern[npat][j] = input.nextFloat();
+                    tpattern[npat][j] = input.nextDouble();
                 }
                 for (j = niO; j <= nfO; j++) {
-                    tpattern[npat][j] = input.nextFloat();
+                    tpattern[npat][j] = input.nextDouble();
                 }
                 npat++;
             }  // fim while
@@ -904,16 +941,17 @@ public class MlpTrain extends Mlp {
      * serao lidos.
      * @return - o valor total do erro sobre os padroes de validacao.
      */
-    public float runValSup(String valFileName) {
+    public double runValSup(String valFileName) {
 
-        float perr;   // erro de um padrao de validacao
-        float errtot;   // erro total dos padroes de validacao
+        double perr;   // erro de um padrao de validacao
+        double errtot;   // erro total dos padroes de validacao
         Scanner input = null;
 
         // Abertura do arquivo de padroes de validacao "valFileName"
         try {
             input = new Scanner(new File(valFileName));
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.printf("\nErro na abertura do arquivo: %s\n", valFileName);
             System.exit(1);
         }
@@ -926,10 +964,10 @@ public class MlpTrain extends Mlp {
             try {
                 input.useLocale(Locale.US);
                 for (int j = niI; j <= nfI; j++) {
-                    pattern[j] = input.nextFloat();
+                    pattern[j] = input.nextDouble();
                 }
                 for (int j = niO; j <= nfO; j++) {
-                    pattern[j] = input.nextFloat();
+                    pattern[j] = input.nextDouble();
                 }
             } catch (Exception e) {
                 System.err.printf("\nErro na leitura do arquivo: %s\n", valFileName);
@@ -940,7 +978,10 @@ public class MlpTrain extends Mlp {
 
             inputPattern();
             computeOutput();
+
             perr = getPatternError();
+//            System.out.println("perr = " + perr);
+
             errtot += perr;
 
         }  // fim while
@@ -955,6 +996,12 @@ public class MlpTrain extends Mlp {
         return errtot;
     }
 
+    public static class Print {
+        public void format(String text, Object... args) {
+            System.out.printf(text, args);
+        }
+    }
+
     /**
      * Treina, pelo metodo epoch-by-epoch, a rede neural.
      *
@@ -964,18 +1011,18 @@ public class MlpTrain extends Mlp {
     public void trainByEpoch(String valFileName) {
 
         int passo;   // cada passo inclui "nepochs" epocas de treinamento
-        float tperr;   // erro de um padrao de treinamento
-        float errtot;   // erro total dos padroes de treinamento na epoca atual
-        float lerrtot;   // erro total dos padroes de treinamento na epoca anterior
-        float errtrain;   // erro total dos padroes de treinamento no passo atual
-        float lerrtrain;   // erro total dos padroes de treinamento no passo anterior
-        float errval;   // erro total dos padroes de validacao no passo atual
-        float lerrval;   // erro total dos padroes de validacao no passo anterior
+        double tperr;   // erro de um padrao de treinamento
+        double errtot;   // erro total dos padroes de treinamento na epoca atual
+        double lerrtot;   // erro total dos padroes de treinamento na epoca anterior
+        double errtrain;   // erro total dos padroes de treinamento no passo atual
+        double lerrtrain;   // erro total dos padroes de treinamento no passo anterior
+        double errval;   // erro total dos padroes de validacao no passo atual
+        double lerrval;   // erro total dos padroes de validacao no passo anterior
         String rootDir;   // nome do diretorio raiz que contem resultados do treinamento
         String trainDir;   // nome do diretorio que contem resultados de cada treino
         String logFile;   // nome do arquivo de "log" do treinamento
         Result[] resultados;   // resultados dos dez treinos
-        Formatter output = null;
+        Print output = new Print();
 
         // Criacao do vetor que armazenara' os resultados
         resultados = new Result[11];
@@ -985,7 +1032,7 @@ public class MlpTrain extends Mlp {
         createDir(rootDir);
 
         // Treinamento, em 10 vezes, da rede neural, com diferentes pesos iniciais
-        for (int treino = 1; treino <= 10; treino++) {
+        for (int treino = 1; treino <= 1; treino++) {
 
             // Criacao do diretorio "trainDir"
             if (treino < 10) {
@@ -998,13 +1045,13 @@ public class MlpTrain extends Mlp {
 
             // Criacao do arquivo "logFile" do treino
             logFile = trainDir + "trace-train.log";
-            try {
-                // usa "Locale.US" para evitar "output.format(Locale.US, "...");
-                output = new Formatter(logFile, Charset.defaultCharset().toString(), Locale.US);
-            } catch (Exception e) {
-                System.err.printf("\nErro na criacao do arquivo: %s\n", logFile);
-                System.exit(1);
-            }
+//            try {
+//                // usa "Locale.US" para evitar "output.format(Locale.US, "...");
+//                output = new Formatter(logFile, Charset.defaultCharset().toString(), Locale.US);
+//            } catch (Exception e) {
+//                System.err.printf("\nErro na criacao do arquivo: %s\n", logFile);
+//                System.exit(1);
+//            }
 
             // Geracao dos bias e pesos iniciais
             genBiasWeights();
@@ -1029,6 +1076,8 @@ public class MlpTrain extends Mlp {
             errval = runValSup(valFileName);
             lerrval = 1.0e+30f;
 
+            System.out.println("errval="+errval);
+
             // Treinamento de cada passo de "nepochs" epocas
             passo = 0;
             try {
@@ -1037,42 +1086,49 @@ public class MlpTrain extends Mlp {
                     output.format("\n\n\n\n\nPasso %d:\n\n\n", passo);
 
                     // Salvamento dos bias e pesos iniciais do passo
-                    printBiasWeights("", trainDir + "wini-" + passo + ".dat");
+//                    printBiasWeights("", trainDir + "wini-" + passo + ".dat");
 
                     // Treinamento das "nepochs" epocas
                     for (int ep = 1; ep <= nepochs; ep++) {
                         errtot = 0.0f;
                         resetBedWed();
                         resetNetinputActivation();
+
                         for (int p = 0; p < ntpatterns; p++) {
                             inputTpattern(p);
                             computeOutput();
                             computeError(p);
+
                             computeIncBedWed();
+
                             tperr = getTpatternError(p);
                             errtot += tperr;
                         }
                         computeDbiasDweights();
+//
+//                        printDebug();
+//                        if (lrateI != 0) System.exit(0);
+
                         changeBiasWeights();
                         changeRates(errtot, lerrtot);
-                        output.format("   ===>   Epoca %d:\n", ep);
-                        output.format("      ===>   Erro Total (Epoca Anterior)= %.10f\n", lerrtot);
-                        output.format("      ===>   Erro Total (Epoca Atual)= %.10f\n", errtot);
-                        output.format("      ===>   momentum (Epoca Atual)= %.2f\n", momentum);
-                        output.format("      ===>   lrate (Epoca Atual)= %.10f\n\n\n", lrate);
+//                        output.format("   ===>   Epoca %d:\n", ep);
+//                        output.format("      ===>   Erro Total (Epoca Anterior)= %.10f\n", lerrtot);
+//                        output.format("      ===>   Erro Total (Epoca Atual)= %.10f\n", errtot);
+//                        output.format("      ===>   momentum (Epoca Atual)= %.2f\n", momentum);
+//                        output.format("      ===>   lrate (Epoca Atual)= %.10f\n\n\n", lrate);
                         lerrtot = errtot;
                     }   // fim for-ep
 
                     // Salvamento dos bias e pesos finais do passo
-                    printBiasWeights("", trainDir + "wfin-" + passo + ".dat");
+//                    printBiasWeights("", trainDir + "wfin-" + passo + ".dat");
 
                     // Obtencao do erro sobre o conjunto de treinamento
-                    lerrtrain = errtrain;
-                    errtrain = errtot;
-                    output.format("   ===>   Erro sobre o conjunto de treinamento ");
-                    output.format("(Passo Anterior)= %.10f\n", lerrtrain);
-                    output.format("   ===>   Erro sobre o conjunto de treinamento ");
-                    output.format("(Passo Atual)= %.10f\n", errtrain);
+//                    lerrtrain = errtrain;
+//                    errtrain = errtot;
+//                    output.format("   ===>   Erro sobre o conjunto de treinamento ");
+//                    output.format("(Passo Anterior)= %.10f\n", lerrtrain);
+//                    output.format("   ===>   Erro sobre o conjunto de treinamento ");
+//                    output.format("(Passo Atual)= %.10f\n", errtrain);
 
                     // Obtencao do erro sobre o conjunto de validacao
                     lerrval = errval;
@@ -1090,17 +1146,17 @@ public class MlpTrain extends Mlp {
             }
 
             // Fechamento do arquivo "logFile" do treino
-            if (output != null) {
-                output.close();
-            }
+//            if (output != null) {
+//                output.close();
+//            }
 
             // Remocao do ultimo passo, posto que seu erro e' maior do que o do passo anterior
-            if (passo > 1) {
-                deleteFile(trainDir + "wini-" + passo + ".dat");
-                deleteFile(trainDir + "wfin-" + passo + ".dat");
-                passo--;
-                copyFile(trainDir + "wfin-" + passo + ".dat", trainDir + "wfin.dat");
-            }
+//            if (passo > 1) {
+//                deleteFile(trainDir + "wini-" + passo + ".dat");
+//                deleteFile(trainDir + "wfin-" + passo + ".dat");
+//                passo--;
+//                copyFile(trainDir + "wfin-" + passo + ".dat", trainDir + "wfin.dat");
+//            }
 
             // Salvamento dos dados do treino
             resultados[treino] = new Result();
@@ -1114,9 +1170,11 @@ public class MlpTrain extends Mlp {
 
         }   // fim for-treino
 
+        if (lrateI != 0) System.exit(0);
+
         // Verificacao de qual treino teve melhor desempenho
         int idx = 0;
-        float minval = 1.0e+30f;
+        double minval = 1.0e+30f;
         for (int i = 1; i <= 10; i++) {
             if (resultados[i].errval < minval) {
                 minval = resultados[i].errval;
@@ -1128,7 +1186,7 @@ public class MlpTrain extends Mlp {
         logFile = rootDir + "resultados-treino.log";
         try {
             // usa "Locale.US" para evitar "output.format(Locale.US, "...");
-            output = new Formatter(logFile, Charset.defaultCharset().toString(), Locale.US);
+//            output = new Formatter(logFile, Charset.defaultCharset().toString(), Locale.US);
         } catch (Exception e) {
             System.err.printf("\nErro na criacao do arquivo: %s\n", logFile);
             System.exit(1);
@@ -1162,9 +1220,9 @@ public class MlpTrain extends Mlp {
             System.err.printf("\nErro na gravacao do arquivo: %s\n", logFile);
             System.exit(1);
         }
-        if (output != null) {
-            output.close();
-        }
+//        if (output != null) {
+//            output.close();
+//        }
 
     }
 
@@ -1177,13 +1235,13 @@ public class MlpTrain extends Mlp {
     public void trainByPattern(String valFileName) {
 
         int passo;   // cada passo inclui "nepochs" epocas de treinamento
-        float tperr;   // erro de um padrao de treinamento
-        float errtot;   // erro total dos padroes de treinamento na epoca atual
-        float lerrtot;   // erro total dos padroes de treinamento na epoca anterior
-        float errtrain;   // erro total dos padroes de treinamento no passo atual
-        float lerrtrain;   // erro total dos padroes de treinamento no passo anterior
-        float errval;   // erro total dos padroes de validacao no passo atual
-        float lerrval;   // erro total dos padroes de validacao no passo anterior
+        double tperr;   // erro de um padrao de treinamento
+        double errtot;   // erro total dos padroes de treinamento na epoca atual
+        double lerrtot;   // erro total dos padroes de treinamento na epoca anterior
+        double errtrain;   // erro total dos padroes de treinamento no passo atual
+        double lerrtrain;   // erro total dos padroes de treinamento no passo anterior
+        double errval;   // erro total dos padroes de validacao no passo atual
+        double lerrval;   // erro total dos padroes de validacao no passo anterior
         String rootDir;   // nome do diretorio raiz que contem resultados do treinamento
         String trainDir;   // nome do diretorio que contem resultados de cada treino
         String logFile;   // nome do arquivo de "log" do treinamento
@@ -1327,7 +1385,7 @@ public class MlpTrain extends Mlp {
 
         // Verificacao de qual treino teve melhor desempenho
         int idx = 0;
-        float minval = 1.0e+30f;
+        double minval = 1.0e+30f;
         for (int i = 1; i <= 10; i++) {
             if (resultados[i].errval < minval) {
                 minval = resultados[i].errval;
@@ -1377,6 +1435,10 @@ public class MlpTrain extends Mlp {
             output.close();
         }
 
+    }
+
+    public static void main(String[] args) {
+        Principal.main(args);
     }
 
 }

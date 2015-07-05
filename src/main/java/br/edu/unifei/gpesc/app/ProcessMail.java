@@ -23,6 +23,7 @@ import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
 import static br.edu.unifei.gpesc.sas.modules.SASVectorization.getVectorArray;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -46,10 +47,8 @@ public class ProcessMail {
         }
     }
 
-    public NeuralCharacteristic processMail(File file) {
-        String filePath = file.getAbsolutePath();
-        String fileredMail = mMailFilter.filterFile(filePath);
-        int[] vectorArray = getVectorArray(mCharacteristic, fileredMail);
+    private NeuralCharacteristic process(String filteredMail) {
+        int[] vectorArray = getVectorArray(mCharacteristic, filteredMail);
 
         mMlpRun.setPatternArray(vectorArray);
         mMlpRun.runTestNonSup();
@@ -58,6 +57,17 @@ public class ProcessMail {
         int nfO = mMlpRun.getNumNeuFinOut();
 
         return NeuralCharacteristic.getCharacteristic(mMlpRun.getNeuActiv(niO), mMlpRun.getNeuActiv(nfO));
+    }
+
+    public NeuralCharacteristic processMail(InputStream inputStream) {
+        String filteredMail = mMailFilter.filterMail(inputStream);
+        return process(filteredMail);
+    }
+
+    public NeuralCharacteristic processMail(File file) {
+        String filePath = file.getAbsolutePath();
+        String filteredMail = mMailFilter.filterMail(filePath);
+        return process(filteredMail);
     }
 
 }

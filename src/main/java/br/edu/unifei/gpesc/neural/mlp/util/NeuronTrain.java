@@ -6,12 +6,12 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class NeuronTrain {
 
-    public float activation;   // valor da ativacao do neuronio
-    public float netinput;   // netinput do neuronio
-    public float bias;   // conexao bias para o neuronio
-    public float delta;   // derivada do erro do neuronio
-    public float bed;   // derivada de erro da conexao bias
-    public float dbias;   // delta do bias
+    public double activation;   // valor da ativacao do neuronio
+    public double netinput;   // netinput do neuronio
+    public double bias;   // conexao bias para o neuronio
+    public double delta;   // derivada do erro do neuronio
+    public double bed;   // derivada de erro da conexao bias
+    public double dbias;   // delta do bias
 
     /**
      * Construtor

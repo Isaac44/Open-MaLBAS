@@ -6,9 +6,9 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class NeuronRun {
 
-    public float activation;   // valor da ativacao do neuronio
-    public float netinput;   // netinput do neuronio
-    public float bias;   // conexao bias para o neuronio
+    public double activation;   // valor da ativacao do neuronio
+    public double netinput;   // netinput do neuronio
+    public double bias;   // conexao bias para o neuronio
 
     /**
      * Construtor

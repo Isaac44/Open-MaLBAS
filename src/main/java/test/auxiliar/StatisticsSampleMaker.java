@@ -56,13 +56,14 @@ public class StatisticsSampleMaker {
     }
 
     public static void main(String[] args) throws IOException {
-        final String[] dataArray = { "macaco", "bando", "capela", "grupo", "atlas", "maquina", "marinheiro", "medico", "ferragem", "conselho", "cordilheira", "serra", "serrania", "aparelho", "trem", "banda", "charanga", "filarmonica", "orquestra", "lista", "onda", "esqueleto", "ovelha"};
+        final String[] dataArray = { "macaco", "ferragem", "conselho", "serra", "aparelho", "trem", "banda", "listras", "ovelha" };
+//        final String[] dataArray = { "macaco", "bando", "capela", "grupo", "atlas", "maquina", "marinheiro", "medico", "ferragem", "conselho", "cordilheira", "serra", "serrania", "aparelho", "trem", "banda", "charanga", "filarmonica", "orquestra", "lista", "onda", "esqueleto", "ovelha"};
 
-        String rootFolderPath = "/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/";
+        String rootFolderPath = "/home/isaac/Unifei/Mestrado/SAS/Statistics/MethodsData2/";
 
         // distribution
         int len = dataArray.length;
-        int max = 100;
+        int max = 30;
         int decai = (int) ((max / (float) len) + 0.5f);
 
         int[] hamDistribution = new int[len];
@@ -76,8 +77,8 @@ public class StatisticsSampleMaker {
             value -= decai;
         }
 
-        createStatisticsFileInFolder(new File(rootFolderPath, "ham") , 2000000, dataArray, hamDistribution);
-        createStatisticsFileInFolder(new File(rootFolderPath, "spam"), 2000000, dataArray, spamDistribution);
+        createStatisticsFileInFolder(new File(rootFolderPath, "ham") , 20, dataArray, hamDistribution);
+        createStatisticsFileInFolder(new File(rootFolderPath, "spam"), 20, dataArray, spamDistribution);
 
     }
 

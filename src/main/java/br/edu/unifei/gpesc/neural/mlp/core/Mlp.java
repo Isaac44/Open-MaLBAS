@@ -32,9 +32,9 @@ public abstract class Mlp {
     public int nepochs;   // numero de epocas em cada passo
     public int mxpat;   // numero maximo de padroes de treinamento
     public long seedI;   // semente inicial usada para a geracao aleatoria dos bias e dos pesos
-    public float mxwei;   // valor maximo positivo do peso
-    public float lrateI;   // taxa de aprendizagem inicial
-    public float momentumI;   // taxa de momentum inicial
+    public double mxwei;   // valor maximo positivo do peso
+    public double lrateI;   // taxa de aprendizagem inicial
+    public double momentumI;   // taxa de momentum inicial
 
     /**
      * Metodos: createDir createLink - abstrato createNeuron - abstrato fLogsig
@@ -89,13 +89,13 @@ public abstract class Mlp {
      * @param x - o valor de "x".
      * @return y - o valor da funcao sobre "x".
      */
-    public float fLogsig(float x) {
+    public double fLogsig(double x) {
 
         double aux;
 
         // logsig(x) = 1 / (1 + exp(-x))
         aux = (double) (-1.0 * x);
-        return (float) (1.0 / (1.0 + Math.pow(Math.E, aux)));
+        return (double) (1.0 / (1.0 + Math.pow(Math.E, aux)));
     }
 
     /**
@@ -104,13 +104,13 @@ public abstract class Mlp {
      * @param x - o valor de "x".
      * @return y - o valor da funcao sobre "x".
      */
-    public float fTansig(float x) {
+    public double fTansig(double x) {
 
         double aux;
 
         // tansig(x) = 2 / (1 + exp(-2 * x)) - 1
         aux = (double) (-2.0 * x);
-        return (float) (2.0 / (1.0 + Math.pow(Math.E, aux)) - 1.0);
+        return (double) (2.0 / (1.0 + Math.pow(Math.E, aux)) - 1.0);
     }
 
     /**

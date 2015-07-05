@@ -16,6 +16,8 @@
  */
 package br.edu.unifei.gpesc.neural.mlp2;
 
+import static br.edu.unifei.gpesc.neural.mlp2.NeuralLayer.FunctionEnum.*;
+
 /**
  *
  * @author Isaac Caldas Ferreira
@@ -59,13 +61,10 @@ public class Mlp {
      * @param outLen The output layer length.
      */
     public Mlp(int inLen, int h1Len, int h2Len, int outLen) {
-        TransferFunction tansig = new TansigTransferFunction();
-        TransferFunction logsig = new LogsigTransferFunction();
-
-        mInputLayer = new NeuralLayer(0, inLen, null);
-        mHiddenLayer1 = new NeuralLayer(mInputLayer, h1Len, tansig);
-        mHiddenLayer2 = new NeuralLayer(mHiddenLayer1, h2Len, tansig);
-        mOutputLayer = new NeuralLayer(mHiddenLayer2, outLen, logsig);
+        mInputLayer = new NeuralLayer(0, inLen, NONE);
+        mHiddenLayer1 = new NeuralLayer(mInputLayer, h1Len, TANSIG);
+        mHiddenLayer2 = new NeuralLayer(mHiddenLayer1, h2Len, TANSIG);
+        mOutputLayer = new NeuralLayer(mHiddenLayer2, outLen, LOGSIG);
     }
 
     /**

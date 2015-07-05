@@ -6,9 +6,9 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class LinkTrain {
 
-    public float weight;   // peso
-    public float wed;   // derivada de erro do peso
-    public float dweight;   // delta do peso
+    public double weight;   // peso
+    public double wed;   // derivada de erro do peso
+    public double dweight;   // delta do peso
 
     /**
      * Construtor

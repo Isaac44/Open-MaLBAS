@@ -17,21 +17,9 @@
 package br.edu.unifei.gpesc.neural.mlp2;
 
 /**
- * This class omputes the tansig transfer function: <br>
- * <b>tansig(x) = 2 / (1 + exp(-2 * x)) - 1</b>
  *
  * @author Isaac Caldas Ferreira
  */
-public class TansigTransferFunction implements TransferFunction {
+public class TransferFunctionFactory {
 
-    /**
-     * Computes the tansig transfer function, which is given by the equation:
-     * <b>tansig(x) = 2 / (1 + exp(-2 * x)) - 1</b>
-     * @param value {@inheritDoc}
-     * @return The tansig result.
-     */
-    @Override
-    public float compute(float value) {
-        return (2f / (1f + (float) Math.exp(-2.0 * value))) - 1f;
-    }
 }

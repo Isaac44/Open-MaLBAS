@@ -23,6 +23,34 @@ package br.edu.unifei.gpesc.neural.mlp2;
 public class NeuralLayer {
 
     /**
+     * Transfer function constants.
+     */
+    public static enum FunctionEnum {
+        /**
+         * Constant for none (null) transfer function.
+         */
+        NONE,
+
+        /**
+         * Constant for the linear transfer function.
+         * @see LinearTransferFunction.
+         */
+        LINEAR,
+
+        /**
+         * Constant for the logsig transfer function.
+         * @see LogsigTransferFunction.
+         */
+        LOGSIG,
+
+        /**
+         * Constant for the tansig transfer function.
+         * @see TansigTransferFunction.
+         */
+        TANSIG;
+    }
+
+    /**
      * The quantity of neurons.
      */
     public final int length;
@@ -38,6 +66,11 @@ public class NeuralLayer {
     public final int last;
 
     /**
+     * The transfer function id.
+     */
+    public FunctionEnum functionId;
+
+    /**
      * The transfer function.
      */
     public TransferFunction function;
@@ -46,22 +79,98 @@ public class NeuralLayer {
      * Constructor for this layer.
      * @param firstNeuron The first neuron on the array.
      * @param length The quantity of neurons.
-     * @param function The transfer function for this layer.
+     * @param functionId The transfer function id
+     * ({@link NeuralLayer#LINEAR}, {@link NeuralLayer#LOGSIG} or
+     * {@link NeuralLayer#TANSIG}) for this layer.
      */
-    public NeuralLayer(int firstNeuron, int length, TransferFunction function) {
+    public NeuralLayer(int firstNeuron, int length, FunctionEnum functionId) {
         this.first  = firstNeuron;
         this.length = length;
         this.last   = firstNeuron + length - 1;
-        this.function = function;
+        this.functionId = functionId;
     }
 
     /**
      * This constructor sets this layer to be after the prevLayer.
      * @param prevLayer The previous layer.
      * @param length The quantity of neurons.
-     * @param function The transfer function for this layer.
+     * @param functionId The transfer function id
+     * ({@link NeuralLayer#LINEAR}, {@link NeuralLayer#LOGSIG} or
+     * {@link NeuralLayer#TANSIG}) for this layer.
      */
-    public NeuralLayer(NeuralLayer prevLayer, int length, TransferFunction function) {
-        this(prevLayer.last + 1, length, function);
+    public NeuralLayer(NeuralLayer prevLayer, int length, FunctionEnum functionId) {
+        this(prevLayer.last + 1, length, functionId);
     }
+
+    /**
+     * Sets the transfer function.
+     * @param functionId The transfer function id ({@link NeuralLayer#LINEAR},
+     * {@link NeuralLayer#LOGSIG} or {@link NeuralLayer#TANSIG}) .
+     */
+    public void setTransferFunction(FunctionEnum functionId) {
+        this.functionId = functionId;
+
+        switch (functionId) {
+            case NONE  : this.function = null;
+            case LINEAR: this.function = new LinearTransferFunction(); break;
+            case LOGSIG: this.function = new LogsigTransferFunction(); break;
+            case TANSIG: this.function = new TansigTransferFunction(); break;
+        }
+    }
+
+    /**
+     * The linear transfer function of the mlp.
+     * <br>
+     * It only returns the input value, without any modification.
+     */
+    public static class LinearTransferFunction implements TransferFunction {
+
+        /**
+         * Do nothing. Only returns the input value.
+         * @param value {@inheritDoc}
+         * @return The input value.
+         */
+        @Override
+        public float compute(float value) {
+            return value;
+        }
+    }
+
+    /**
+    * This class computes the logsig transfer function: <br>
+    * <b>logsig(x) = 1 / (1 + exp(-x))</b>
+    */
+   public static class LogsigTransferFunction implements TransferFunction {
+
+       /**
+        * Computes the logsig transfer function, which is given by the equation:
+        * <b>logsig(x) = 1 / (1 + exp(-x))</b>
+        * @param value {@inheritDoc}
+        * @return The logsig result.
+        */
+       @Override
+       public float compute(float value) {
+           return 1f / (1f + (float) Math.exp(-value));
+       }
+   }
+
+   /**
+    * This class omputes the tansig transfer function: <br>
+    * <b>tansig(x) = 2 / (1 + exp(-2 * x)) - 1</b>
+    *
+    * @author Isaac Caldas Ferreira
+    */
+   public static class TansigTransferFunction implements TransferFunction {
+
+       /**
+        * Computes the tansig transfer function, which is given by the equation:
+        * <b>tansig(x) = 2 / (1 + exp(-2 * x)) - 1</b>
+        * @param value {@inheritDoc}
+        * @return The tansig result.
+        */
+       @Override
+       public float compute(float value) {
+           return (2f / (1f + (float) Math.exp(-2.0 * value))) - 1f;
+       }
+   }
 }

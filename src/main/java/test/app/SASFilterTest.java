@@ -34,7 +34,7 @@ public class SASFilterTest {
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail/test/";
         String file = "smtp_1377305710_0x7fd6dc02b830_835.eml";
 
-        String out = filter.filterFile(path + "raw/" + file);
+        String out = filter.filterMail(path + "raw/" + file);
 
         FileOutputStream fileStream = new FileOutputStream(path + "cleanned/" + file);
         fileStream.write(out.getBytes("ASCII"));

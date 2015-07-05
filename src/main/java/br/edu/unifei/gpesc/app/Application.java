@@ -90,7 +90,10 @@ public class Application {
     }
 
     public static void main2(String... args) throws IOException {
-        if (args.length == 0) printHelp();
+        if (args.length == 0) {
+            printHelp();
+            System.exit(1);
+        }
 
         String module = args[0];
 
@@ -133,15 +136,21 @@ public class Application {
         }
     }
 
+//    public static void main(String[] args) throws IOException {
+//        ProcessMailApp.main(args);
+//    }
+
     public static void main(String[] args) throws IOException {
+        main2(args);
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/spam", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/spam");
 
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
-
+//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
 //        main2("--statistics", "MI", path+"ham", path+"spam", path);
-        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/vector/";
-        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
+
+//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
+//        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/vector/";
+//        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
     }
 
 }

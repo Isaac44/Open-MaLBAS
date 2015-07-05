@@ -6,7 +6,7 @@ package br.edu.unifei.gpesc.neural.mlp.util;
  */
 public class LinkRun {
 
-    public float weight;   // peso
+    public double weight;   // peso
 
     /**
      * Construtor

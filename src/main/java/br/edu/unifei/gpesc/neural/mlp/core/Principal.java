@@ -18,6 +18,9 @@ public class Principal {
 
     private static int operacao;   // tipo de operacao solicitada aa rede neural
 
+//    private static String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/";
+    public static String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/";
+
     /**
      * Metodos: main printOperation readOperation
      */
@@ -29,14 +32,14 @@ public class Principal {
     public static void main(String[] args) {
 
         // Constantes
-        final String traceDirName = "neural/trace/";
-        final String opFileName = "neural/dat/operation.dat";
-        final String logFileName = "neural/trace/trace-operation.log";
-        final String archFileName = "neural/dat/data.dat";
-        final String weiFileName = "neural/dat/wfin.dat";
-        final String trainFileName = "neural/dat/tpat.dat";
-        final String valFileName = "neural/dat/vpat.dat";
-        final String testFileName = "neural/dat/pat.dat";
+        final String traceDirName = path + "neural/trace/";
+        final String opFileName = path + "neural/dat/operation.dat";
+        final String logFileName = path + "neural/trace/trace-operation.log";
+        final String archFileName = path + "neural/dat/data.dat";
+        final String weiFileName = path + "neural/dat/wfin.dat";
+        final String trainFileName = path + "neural/dat/tpat.dat";
+        final String valFileName = path + "neural/dat/vpat.dat";
+        final String testFileName = path + "neural/dat/pat.dat";
 
         // Cria o diretorio para armazenar arquivos de "trace"
         try {

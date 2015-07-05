@@ -14,21 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.statistic;
+package br.edu.unifei.gpesc.neural.mlp3.train;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
-public class ChiSquaredDistribution implements StatisticalDistribution {
+public class DualLayer {
 
-    @Override
-    public double compute(StatisticalData data, Statistics statistics) {
+    public final FirstLayer firstLayer;
+    public final FirstLayer nextLayer;
 
-
-
-
-        return 0.0;
+    public DualLayer(FirstLayer first, FirstLayer next) {
+        firstLayer = first;
+        nextLayer = next;
     }
 
 }

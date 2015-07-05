@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
@@ -38,25 +39,32 @@ public class SASFilter {
 
     private final ProcessLog mFolderProcessLog = new ProcessLog();
 
-    public String filterFile(String inputPath) {
-        boolean processed = mMailProcessor.processMail(inputPath);
+    private String filter() {
+        String content = mMailProcessor.getContent();
 
         String out = null;
 
-        if (processed) {
-            String content = mMailProcessor.getContent();
-            if (mMailProcessor.isText()) {
-                StringBuilder strBuilder = new StringBuilder();
-                mFilterExecutor.filterText(content, strBuilder);
-                out = strBuilder.toString();
-            }
-            else if (mMailProcessor.isHtml()) {
-                Elements allElements = Jsoup.parse(content).getAllElements();
-                out = mFilterExecutor.filterHtml(allElements);
-            }
+        if (mMailProcessor.isText()) {
+            StringBuilder strBuilder = new StringBuilder();
+            mFilterExecutor.filterText(content, strBuilder);
+            out = strBuilder.toString();
+        }
+        else if (mMailProcessor.isHtml()) {
+            Elements allElements = Jsoup.parse(content).getAllElements();
+            out = mFilterExecutor.filterHtml(allElements);
         }
 
         return out;
+    }
+
+    public String filterMail(InputStream inputStream) {
+        boolean processed = mMailProcessor.processMail(inputStream);
+        return (processed) ? filter() : null;
+    }
+
+    public String filterMail(String inputPath) {
+        boolean processed = mMailProcessor.processMail(inputPath);
+        return (processed) ? filter() : null;
     }
 
     public void filterFolder(File folderIn, File folderOut) {
@@ -72,7 +80,7 @@ public class SASFilter {
             for (File file : files) {
                 progress.setValue(k++);
 
-                result = filterFile(file.getAbsolutePath());
+                result = filterMail(file.getAbsolutePath());
                 if (result != null) {
                     saveTo(result, new File(folderOut, file.getName()));
                     mFolderProcessLog.incSucessCount();

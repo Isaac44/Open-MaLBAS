@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -59,12 +60,35 @@ public class MailProcessor {
 
     /**
      * Process the email file.
-     * @param mailpath The email file path.
+     * @param mailpath The path to the email file.
      * @return True if no errors ocurred.<br>False otherwise.
      */
     public boolean processMail(String mailpath) {
         try {
             Part mailPart = getProcessableMailContent(mailpath);
+
+            if (mailPart != null) {
+                if (isTextHtml(mailPart)) mMessageType = HTML;
+                else mMessageType = TEXT;
+                mContent = (String) mailPart.getContent();
+                return true;
+            }
+
+        }
+        catch (IOException e) {}
+        catch (MessagingException e) {}
+
+        return false;
+    }
+
+    /**
+     * Process the email from the {@link InputStream}.
+     * @param mailInputStream The stream of the email.
+     * @return True if no errors ocurred.<br>False otherwise.
+     */
+    public boolean processMail(InputStream mailInputStream) {
+        try {
+            Part mailPart = getProcessableMailContent(mailInputStream);
 
             if (mailPart != null) {
                 if (isTextHtml(mailPart)) mMessageType = HTML;
@@ -115,8 +139,13 @@ public class MailProcessor {
      * @throws FileNotFoundException If the file do not exists.
      * @throws IOException If was not possible read the file.
      */
-    public static Part getProcessableMailContent(String mailpath) throws MessagingException, FileNotFoundException, IOException {
+    public static Part getProcessableMailContent(String mailpath) throws MessagingException, IOException {
         MimeMessage message = new MimeMessage(MAIL_SESSION, new BufferedInputStream(new FileInputStream(mailpath)));
+        return getProcessablePart(message);
+    }
+
+    public static Part getProcessableMailContent(InputStream inputStream) throws MessagingException, IOException {
+        MimeMessage message = new MimeMessage(MAIL_SESSION, inputStream);
         return getProcessablePart(message);
     }
 
