@@ -17,22 +17,15 @@
 package br.edu.unifei.gpesc.neural.mlp3.train;
 
 import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
-import br.edu.unifei.gpesc.neural.mlp3.core.LogSig;
-import br.edu.unifei.gpesc.neural.mlp3.core.TanSig;
+import br.edu.unifei.gpesc.neural.mlp3.util.ConsolePrintMlp;
 import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer.Neuron;
-import java.io.FileNotFoundException;
 import java.util.Random;
-import test.mlp.Test3;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
-public class TrainMlp {
-
-        private static final int HIDDEN_1 = 0;
-    private static final int HIDDEN_2 = 1;
-    private static final int OUTPUT = 2;
+public class TrainMlp extends Mlp {
 
     /**
      * The max absolute value of the weight.
@@ -52,223 +45,309 @@ public class TrainMlp {
     /**
      * The network seed. Preferred to be a prime number
      */
-    private long mPrimeSeed = PrimeNumber.getRandomPrimeNumber();
+    private long mPrimeSeed = 7;//PrimeNumber.getRandomPrimeNumber();
 
     /**
      * The learn rate.
      */
     private double mLearnRate = 0.00001;
 
-    private final NeuronLayer mInputLayer;
-    private final NeuronLayer mOutputLayer;
+    /**
+     * The output layer used by validation test.
+     */
+    private final NeuronLayer mValidationOutputLayer;
 
-    private final ConnectionLayer[] mLayerArray;
-
+    /**
+     * The train pattern array.
+     */
     private PatternLayer[] mTrainInputArray;
+
+    /**
+     * The validation pattern array.
+     */
     private PatternLayer[] mValidationArray;
 
-    public TrainMlp(int inLen, int h1Len, int h2Len, int outLen) {
-        mInputLayer = new NeuronLayer(inLen);
-        mOutputLayer = new NeuronLayer(outLen);
+    private ConsolePrintMlp mConsolePrint = new ConsolePrintMlp();
 
-        mLayerArray = new ConnectionLayer[3];
-        mLayerArray[HIDDEN_1] = new ConnectionLayer(h1Len, mInputLayer, new TanSig());
-        mLayerArray[HIDDEN_2] = new ConnectionLayer(h2Len, mLayerArray[HIDDEN_1], new TanSig());
-        mLayerArray[OUTPUT] = new ConnectionLayer(outLen, mLayerArray[HIDDEN_2], new LogSig());
+
+    /**
+     * Creates a Train MLP.
+     *
+     * @param inLen The length of the input layer.
+     * @param h1Len The length of the first hidden layer.
+     * @param h2Len The length of the second hidden layer.
+     * @param outLen The length of the output layer.
+     */
+    public TrainMlp(int inLen, int h1Len, int h2Len, int outLen) {
+        super(inLen, h1Len, h2Len, outLen);
+        mValidationOutputLayer = new NeuronLayer(outLen);
     }
 
-    private void genBiasAndWeights() {
+    /**
+     * Sets the train pattern array.
+     *
+     * @param trainPattern The train pattern array.
+     */
+    public void setInputArray(PatternLayer[] trainPattern) {
+        mTrainInputArray = trainPattern;
+    }
+
+    /**
+     * Sets the validation pattern array.
+     *
+     * @param validationArray The validation pattern array.
+     */
+    public void setValidationArray(PatternLayer[] validationArray) {
+        mValidationArray = validationArray;
+    }
+
+    /**
+     * Sets the seed for the randomizer. Preferreable set a prime number.
+     *
+     * @param seed The seed.
+     */
+    public void setPrimeSeed(long seed) {
+        mPrimeSeed = seed;
+    }
+
+    /**
+     * Sets the number of epochs to be executed.
+     *
+     * @param epochs The number of epochs.
+     */
+    public void setEpochs(int epochs) {
+        mEpochs = epochs;
+    }
+
+    /**
+     * Sets the momentum.
+     *
+     * @param momentum The momentum.
+     */
+    public void setMomentum(double momentum) {
+        mMomentum = momentum;
+    }
+
+    /**
+     * Setts the learn rate.
+     *
+     * @param learnRate The learn rate.
+     */
+    public void setLearnRate(double learnRate) {
+        mLearnRate = learnRate;
+    }
+
+    /**
+     * Sets the maximum weight.
+     *
+     * @param maxWeight The maximum weight.
+     */
+    public void setMaxWeight(double maxWeight) {
+        mMaxAbsoluteWeight = Math.abs(maxWeight);
+    }
+
+    /**
+     * Inits the bias and the weights for all connection layers.
+     */
+    private void initBiasAndWeights() {
         Random random = new Random(mPrimeSeed);
         for (ConnectionLayer layer : mLayerArray) {
             layer.initBiasAndWeights(random, mMaxAbsoluteWeight);
         }
     }
 
-    private void computeOutput() {
-        for (ConnectionLayer layer : mLayerArray) {
-            layer.computeActivationOutput();
-        }
-    }
-
-    public double runValSup() {
-
-        double perr;   // erro de um padrao de validacao
-        double errtot;   // erro total dos padroes de validacao
-
-        // Execucao dos padroes de validacao na rede neural
-        errtot = 0.0;
+    /**
+     * Runs the validation.
+     *
+     * @return The total error obtained.
+     */
+    private double runValidation() {
         NeuronLayer inputLayer = mInputLayer;
-        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
+        ConnectionLayer outputLayer = mLayerArray[Layer.OUTPUT.ordinal()];
+
+        Neuron[] outputNeurons_bkp = outputLayer.getNeuron();
+        outputLayer.setNeuron(mValidationOutputLayer);
+        outputLayer.reset();
+
+        double error;
+        double totalError = 0.0;
 
         for (PatternLayer validationLayer : mValidationArray) {
             inputLayer.setNeuron(validationLayer.inputLayer);
-            computeOutput();
+            computeActivationOutput();
 
-            perr = outputLayer.getDifferenceTotal(validationLayer.outputLayer);
-            errtot += perr;
-
-        }  // fim while
+            error = outputLayer.getDifferenceTotal(validationLayer.outputLayer);
+            totalError += error;
+        }
 
         // reset output layer
-        outputLayer.setNeuron(mOutputLayer);
+        outputLayer.setNeuron(outputNeurons_bkp);
 
         // Retorna o erro total sobre os padroes de validacao
-        return errtot;
+        return totalError;
     }
 
+    /**
+     * Resets all connection layers.
+     */
     private void resetLayers() {
         for (ConnectionLayer layer : mLayerArray) {
             layer.reset();
         }
     }
 
+    /**
+     * Computes the error of this training, via backpropagation.
+     *
+     * @param trainOutput The output layer of a train pattern.
+     */
     private void computeError(NeuronLayer trainOutput) {
         ConnectionLayer[] layers = mLayerArray;
 
-        // Calculo do delta dos neuronios na camada de saida
-        ConnectionLayer.computeOutputError(trainOutput, layers[OUTPUT]);
+        // Computes the error for the output layer
+        ConnectionLayer.computeOutputError(trainOutput, layers[Layer.OUTPUT.ordinal()]);
 
-        // Calculo do delta dos neuronios nas camadas escondidas
-        // Out->H2, H2->H1
-        for (int i=layers.length-1; i>= 1; i--) {
+        // Computes the error for the hidden layers.
+        // Out->H2, H2->H1, ...
+        for (int i = layers.length - 1; i >= 1; i--) {
             layers[i].computeError();
         }
     }
 
+    /**
+     * Computes the bed and the wed increment for all connection layers.
+     */
     private void computeBedAndWedIncrement() {
         for (ConnectionLayer layer : mLayerArray) {
             layer.computeBedAndWedIncrement();
         }
     }
 
-    public void setInputArray(PatternLayer[] trainArray) {
-        mTrainInputArray = trainArray;
-    }
-
-    public void setValidationArray(PatternLayer[] validationArray) {
-        mValidationArray = validationArray;
-    }
-
-    public void setPrimeSeed(long seed) {
-        mPrimeSeed = seed;
-    }
-
-    private void computeDbiasDweights(double lrate, double momentum) {
+    /**
+     * Computes the bias delta and the weight delta, based on the learn rate and
+     * the momentum, for all connection layers.
+     *
+     * @param learnRate The learn rate.
+     * @param momentum The momentum.
+     */
+    private void computeBiasAndWeightsDeltas(double learnRate, double momentum) {
         for (ConnectionLayer layer : mLayerArray) {
-            layer.computeBiasAndWeightsDeltas(lrate, momentum);
+            layer.computeBiasAndWeightsDeltas(learnRate, momentum);
         }
     }
 
-    private void changeBiasWeights() {
+    /**
+     * Computes the bias and the weights for all connection layers.
+     */
+    private void computeBiasAndWeights() {
         for (ConnectionLayer layer : mLayerArray) {
             layer.computeBiasAndWeights();
         }
     }
 
     /**
-     * FIXME: alterando variaveis globais iniciais!!!!
-     * TODO: adicionar modificador 'final' nelas.
-     * @param errtot
-     * @param lerrtot
+     * Changes the value of the momentum based on the current epoch error and
+     * the previous one.
+     *
+     * @param momentum The current momentum.
+     * @param epochError The current epoch error.
+     * @param prevEpochError The previous epoch error.
+     * @return The new value of the momentum.
      */
-    private void changeRates(double errtot, double lerrtot) {
-        if (errtot >= lerrtot) {
-            mMomentum = 0.0f;
-            mLearnRate /= 2.0;
-        } else {
-            mLearnRate *= 1.02;
-        }
+    private double changeMomentum(double momentum, double epochError, double prevEpochError) {
+        return (epochError >= prevEpochError) ? 0.0 : momentum;
     }
 
-    public void trainByEpoch() {
-        int passo;   // cada passo inclui "nepochs" epocas de treinamento
-        double tperr;   // erro de um padrao de treinamento
-        double errtot;   // erro total dos padroes de treinamento na epoca atual
-        double lerrtot;   // erro total dos padroes de treinamento na epoca anterior
-        double errtrain;   // erro total dos padroes de treinamento no passo atual
-        double lerrtrain;   // erro total dos padroes de treinamento no passo anterior
-        double errval;   // erro total dos padroes de validacao no passo atual
-        double lerrval;   // erro total dos padroes de validacao no passo anterior
-        String rootDir;   // nome do diretorio raiz que contem resultados do treinamento
-        String trainDir;   // nome do diretorio que contem resultados de cada treino
-        String logFile;   // nome do arquivo de "log" do treinamento
+    /**
+     * Changes the value of the momentum based on the current epoch error and
+     * the previous one.
+     *
+     * @param momentum The current momentum.
+     * @param epochError The current epoch error.
+     * @param prevEpochError The previous epoch error.
+     * @return The new value of the momentum.
+     */
+    private double changeLearnRate(double learnRate, double errtot, double lerrtot) {
+        return (errtot >= lerrtot) ? (learnRate / 2.0) : (learnRate * 1.02);
+    }
+
+    /**
+     * Runs the treining.
+     */
+    public void runTrainByEpoch() {
+        int ep;
+        int epochs = mEpochs;
+        double momentum = mMomentum;
+        double learnRate = mLearnRate;
 
         NeuronLayer inputLayer = mInputLayer;
-        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
+        ConnectionLayer outputLayer = mLayerArray[Layer.OUTPUT.ordinal()];
 
-        // init bias and weights
-        genBiasAndWeights();
+        // init
+        initBiasAndWeights();
+        double validationError = runValidation();
 
-        // Inicializacao dos erros sobre o conjunto de treinamento
-        errtot = 1.0e+30f;
-        lerrtot = 1.0e+30f;
-        errtrain = 1.0e+30f;
-        lerrtrain = 1.0e+30f;
+        double patError, epochError, prevValidationError;
+        double prevEpochError = Double.MAX_VALUE;
 
-        // Obtem o erro sobre o conjunto de validacao
-        errval = runValSup();
+        // start process
+        int step = 0;
+        do {
+            step++;
 
-        System.out.println("errval = " + errval);
-
-        lerrval = 1.0e+30f;
-
-        MlpTrain.Print output = new MlpTrain.Print();
-
-        passo = 0;
-        while (errval < lerrval) {
-            passo++;
-            output.format("\n\n\n\n\nPasso %d:\n\n\n", passo);
-
-            // Treinamento das "nepochs" epocas
-            for (int ep = 1; ep <= mEpochs; ep++) {
-                errtot = 0.0f;
+            // epochs
+            for (ep = 1; ep <= epochs; ep++) {
+                epochError = 0.0;
                 resetLayers();
 
                 for (PatternLayer trainLayer : mTrainInputArray) {
+
+                    // insert pattern input in the network
                     inputLayer.setNeuron(trainLayer.inputLayer);
-                    computeOutput();
+
+                    // compute activation (through  the layers)
+                    computeActivationOutput();
+
+                    // compute the error on the pattern output
                     computeError(trainLayer.outputLayer);
 
+                    // compute the bed and the wed increments
                     computeBedAndWedIncrement();
 
-                    tperr = outputLayer.getDifferenceTotal(trainLayer.outputLayer);
-                    errtot += tperr;
+                    // get the sum of the difference between the pattern
+                    //output and the network output
+                    patError = outputLayer.getDifferenceTotal(trainLayer.outputLayer);
+
+                    // increment the epoch error
+                    epochError += patError;
                 }
 
-                computeDbiasDweights(mLearnRate, mMomentum);
+                // compute the bias and the weight errors (deltas)
+                computeBiasAndWeightsDeltas(learnRate, momentum);
 
-//                printDebug();
-//                if (mInputLayer != null) System.exit(0);
+                // compute the bias and weight
+                computeBiasAndWeights();
 
-                changeBiasWeights();
-                changeRates(errtot, lerrtot);
+                // update the momentum and learn rate
+                momentum = changeMomentum(momentum, epochError, prevEpochError);
+                learnRate = changeLearnRate(learnRate, epochError, prevEpochError);
 
+                // save the current value
+                prevEpochError = epochError;
 
-//                output.format("   ===>   Epoca %d:\n", ep);
-//                output.format("      ===>   Erro Total (Epoca Anterior)= %.10f\n", lerrtot);
-//                output.format("      ===>   Erro Total (Epoca Atual)= %.10f\n", errtot);
-//                output.format("      ===>   momentum (Epoca Atual)= %.2f\n", mMomentum);
-//                output.format("      ===>   lrate (Epoca Atual)= %.10f\n\n\n", mLearnRate);
+                // print
+                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
+            }
 
-                lerrtot = errtot;
-            }   // fim for-ep
+            // save the current validation error
+            prevValidationError = validationError;
 
-            lerrval = errval;
-            errval = runValSup();
+            // run validation
+            validationError = runValidation();
 
-            output.format("   ===>   Erro sobre o conjunto de validacao ");
-            output.format("(Passo Anterior)= %.10f\n", lerrval);
-            output.format("   ===>   Erro sobre o conjunto de validacao ");
-            output.format("(Passo Atual)= %.10f\n", errval);
-        }
+            // run until the current error is small then the previous
+        } while (validationError < prevValidationError);
     }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        Test3.main(args);
-    }
-
-
-    // TEST
 
     public void runTestSup(PatternLayer[] patterns) {
 
@@ -283,35 +362,35 @@ public class TrainMlp {
         errtot = 0.0f;
 
         NeuronLayer inputLayer = mInputLayer;
-        ConnectionLayer outputLayer = mLayerArray[OUTPUT];
+        ConnectionLayer outputLayer = mLayerArray[Layer.OUTPUT.ordinal()];
 
         for (PatternLayer pattern : patterns) {
             npat++;
 
             inputLayer.setNeuron(pattern.inputLayer);
-            computeOutput();
+            computeActivationOutput();
 
             perr = outputLayer.getDifferenceTotal(pattern.outputLayer);
             errtot += perr;
 
             output.format("Padrao %d:\n", npat);
-            for (Neuron neuron : pattern.inputLayer.mNeuronArray) {
+            for (NeuronLayer.Neuron neuron : pattern.inputLayer.mNeuronArray) {
                 output.format("   %.4f", neuron.activation);
             }
             output.format("\n   ===> Saida Esperada:  ");
-            for (Neuron neuron : pattern.outputLayer.mNeuronArray) {
+            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeuronArray) {
                 output.format("   %.4f", neuron.activation);
             }
-
 
             pattern.outputLayer.computeDifference(outputLayer);
 
             output.format("\n   ===> Saida Obtida:  ");
-            for (Neuron neuron : pattern.outputLayer.mNeuronArray) {
+            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeuronArray) {
                 output.format("   %.4f", neuron.activation);
             }
             output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
 
         }
     }
+
 }

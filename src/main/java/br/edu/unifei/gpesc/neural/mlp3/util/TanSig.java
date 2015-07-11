@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.neural.mlp3.core;
+package br.edu.unifei.gpesc.neural.mlp3.util;
 
 /**
  * This class omputes the tansig transfer function: <br>
@@ -39,21 +39,4 @@ public class TanSig implements Function {
     public double compute(double x, double y) {
         return x * (-1.0 * (Math.pow(y, 2.0) - 1.0));
     }
-
-    public static void main(String[] args) {
-//        double x = 0.009184076354426375;
-//        double y = 0.07006445315680354;
-
-//        double x = 0.009022470232416853;
-//        double y = 0.07006444823243618;
-
-        double x=0.009022470232416853, y=0.07006444823243618;
-
-        System.out.println("delta="+new LogSig().compute(x, y));
-
-        double delta_old = x * y * (1.0f - y);
-        System.out.println("delta=" + delta_old);
-
-    }
-
 }

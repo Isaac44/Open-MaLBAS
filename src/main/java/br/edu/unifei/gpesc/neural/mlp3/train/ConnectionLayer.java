@@ -16,7 +16,8 @@
  */
 package br.edu.unifei.gpesc.neural.mlp3.train;
 
-import br.edu.unifei.gpesc.neural.mlp3.core.Function;
+import br.edu.unifei.gpesc.neural.mlp3.util.Function;
+import java.nio.ByteBuffer;
 import java.util.Random;
 
 /**
@@ -74,6 +75,50 @@ public class ConnectionLayer extends NeuronLayer {
      */
     public void setFunction(Function function) {
         mFunction = function;
+    }
+
+    /**
+     * Returns the length of the matrix of connections.
+     * @return The length of the neuro-connections.
+     */
+    public int getConnectionsLength() {
+        return mConnectionMatrix.length * mConnectionMatrix[0].length;
+    }
+
+    /**
+     * First, this method will put the bias of the neurons and than the
+     * neuron connections weights.
+     * <p> The values are: all the {@link NeuronLayer.Neuron#bias} in the
+     * neuron array and the all the {@link Connection#weight} in the connection matrix.
+     *
+     * @param buffer The output buffer.
+     */
+    public void toByteBuffer(ByteBuffer buffer) {
+        for (Neuron neuron : mNeuronArray) {
+            buffer.putDouble(neuron.bias);
+        }
+
+        for (Connection[] connectionArray : mConnectionMatrix) {
+            for (Connection connection : connectionArray) {
+                buffer.putDouble(connection.weight);
+            }
+        }
+    }
+
+    /**
+     * Loads the bias and the weigths from the buffer.
+     * @param buffer The input buffer.
+     */
+    public void loadFromByteBuffer(ByteBuffer buffer) {
+        for (Neuron neuron : mNeuronArray) {
+            neuron.bias = buffer.getDouble();
+        }
+
+        for (Connection[] connectionArray : mConnectionMatrix) {
+            for (Connection connection : connectionArray) {
+                connection.weight = buffer.getDouble();
+            }
+        }
     }
 
     /**

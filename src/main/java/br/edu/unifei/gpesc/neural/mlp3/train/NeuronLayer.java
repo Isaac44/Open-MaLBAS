@@ -29,6 +29,12 @@ public class NeuronLayer {
     protected Neuron[] mNeuronArray;
 
     /**
+     * Creates a empty Neuron Layer.
+     */
+    public NeuronLayer() {
+    }
+
+    /**
      * Creates a Neuron Layer initializing all neurons with an activation value.
      *
      * @param neuronsActivation The activation value array to initialize all
@@ -65,6 +71,14 @@ public class NeuronLayer {
      */
     public void setNeuron(Neuron[] neuronArray) {
         mNeuronArray = neuronArray;
+    }
+
+    /**
+     * Gets the neuron array.
+     * @return The neuron array.
+     */
+    public Neuron[] getNeuron() {
+        return mNeuronArray;
     }
 
     /**

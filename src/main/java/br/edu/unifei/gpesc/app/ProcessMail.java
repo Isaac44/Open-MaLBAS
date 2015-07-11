@@ -56,7 +56,8 @@ public class ProcessMail {
         int niO = mMlpRun.getNumNeuIniOut();
         int nfO = mMlpRun.getNumNeuFinOut();
 
-        return NeuralCharacteristic.getCharacteristic(mMlpRun.getNeuActiv(niO), mMlpRun.getNeuActiv(nfO));
+//        return NeuralCharacteristic.getCharacteristic(mMlpRun.getNeuActiv(niO), mMlpRun.getNeuActiv(nfO));
+        return null;
     }
 
     public NeuralCharacteristic processMail(InputStream inputStream) {

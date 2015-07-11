@@ -47,7 +47,8 @@
                             
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>br.edu.unifei.gpesc.app.Application</mainClass>
+                                    <!--<mainClass>br.edu.unifei.gpesc.app.Application</mainClass>-->
+                                    <mainClass>test.mlp.Test3</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
