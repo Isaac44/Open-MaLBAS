@@ -40,6 +40,17 @@ public class StatisticalData<T> {
     private double mStatisticalDistribution = 0.0;
 
     /**
+     * Stores the quantity of amostral objects that this element occurs.
+     */
+    private final int[] mAmostralOccurrencesArray;
+
+    /**
+     * The current amostral index.
+     */
+    private final int[] mCurrentAmostralIndexArray;
+
+
+    /**
      * Creates a data statistic, setting up the number of existent sets.
      * @param element The element. Use {@link
      * @param numberOfSets The number of sets where statistics are calculated.
@@ -47,22 +58,22 @@ public class StatisticalData<T> {
     public StatisticalData(T element, int numberOfSets) {
         mElement = element;
         mStatisticDataArray = new int[numberOfSets];
+        mAmostralOccurrencesArray = new int[numberOfSets];
+        mCurrentAmostralIndexArray = new int[numberOfSets];
     }
 
     /**
      * Increment the occurrence of this data in a set.
+     * @param amostralIndex The current amostral (file).
      * @param set The set where this data was found.
      */
-    public void increment(int set) {
+    public void increment(int amostralIndex, int set) {
         mStatisticDataArray[set]++;
-    }
 
-    /**
-     * Decrement the occurrence of this data in a set.
-     * @param set The set where this data was found.
-     */
-    public void decrement(int set) {
-        mStatisticDataArray[set]--;
+        if (mCurrentAmostralIndexArray[set] != amostralIndex) {
+            mAmostralOccurrencesArray[set]++;
+            mCurrentAmostralIndexArray[set] = amostralIndex;
+        }
     }
 
     /**
@@ -103,4 +114,13 @@ public class StatisticalData<T> {
         return mStatisticalDistribution;
     }
 
+    /**
+     * Gets the amostral occurrences of this element. <br>
+     * For example, if this element occurs in 4 files of 10, then 4 is returned.
+     * @param set The amostral space set
+     * @return The amostral occurrences.
+     */
+    public int getAmostralOccurrences(int set) {
+        return mAmostralOccurrencesArray[set];
+    }
 }

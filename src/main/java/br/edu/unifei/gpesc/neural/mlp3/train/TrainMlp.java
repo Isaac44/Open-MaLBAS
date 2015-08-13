@@ -336,7 +336,7 @@ public class TrainMlp extends Mlp {
                 prevEpochError = epochError;
 
                 // print
-                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
+//                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
             }
 
             // save the current validation error

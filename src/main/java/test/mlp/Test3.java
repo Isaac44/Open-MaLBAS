@@ -69,13 +69,16 @@ public class Test3 {
         String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/neural/dat/";
         File mlpData = new File(path, "wfin");
 
-        PatternLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
-        PatternLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
-
-        mlp.setInputArray(trainInput);
-        mlp.setValidationArray(validationInput);
-        mlp.runTrainByEpoch();
-        mlp.saveMlp(mlpData);
+//        PatternLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
+//        PatternLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
+//
+//        mlp.setInputArray(trainInput);
+//        mlp.setValidationArray(validationInput);
+//        mlp.runTrainByEpoch();
+//
+//        System.out.println("Saving");
+//        mlp.saveMlp(mlpData);
+//        System.out.println("Saved");
 
         // Test
         PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);

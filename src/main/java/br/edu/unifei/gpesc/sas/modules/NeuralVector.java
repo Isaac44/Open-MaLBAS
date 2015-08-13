@@ -16,25 +16,30 @@
  */
 package br.edu.unifei.gpesc.sas.modules;
 
+import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
+import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
 import br.edu.unifei.gpesc.statistic.FileStatisticalCharacterization;
 import br.edu.unifei.gpesc.statistic.Normalization;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacterization;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
-import br.edu.unifei.gpesc.util.FileIntOutput;
 import br.edu.unifei.gpesc.util.FileUtils;
 import br.edu.unifei.gpesc.util.ProcessLog;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Scanner;
 
 /**
  * Beta class.
  * @author isaac
  */
-public class SASVectorization {
+public class NeuralVector {
 
     public static final String HAM = NeuralCharacteristic.HAM.STR_VALUE;
     public static final String SPAM = NeuralCharacteristic.SPAM.STR_VALUE;
@@ -112,28 +117,38 @@ public class SASVectorization {
     public static ProcessLog doVectorization(StatisticalCharacteristic<String> characteristic, File folderInput, File outFile) throws IOException  {
         File[] fileArray = folderInput.listFiles(FileUtils.getFileFilter());
         ProcessLog processLog = new ProcessLog();
-        if (fileArray != null)
-        {
+
+        if (fileArray != null) {
+            FileChannel fileOut = new FileOutputStream(outFile).getChannel();
+
             FileStatisticalCharacterization characterization = new FileStatisticalCharacterization(characteristic);
 
             int[] dataVector = characterization.getStatisticalCharacterizationArray();
             double[] dataNormalized = new double[dataVector.length];
 
-            FileIntOutput fileOut = new FileIntOutput(outFile, dataVector.length);
+            // allocate the output buffer
+            // -> 2 Integers + (n files * vector size) Double
+            int bufferSize = 2 * Double.BYTES + fileArray.length * dataVector.length * Double.BYTES;
 
-            fileOut.write(0 /* reserved: quantity of lines */, dataVector.length /* line size */);
+            ByteBuffer outBuffer = ByteBuffer.allocate(bufferSize);
+            outBuffer.putInt(0); // reserved: quantity of valid vectors
+            outBuffer.putInt(dataVector.length); // line size (quantity of indexes of the vector array)
 
             ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
             int k = 0;
 
             for (File file : fileArray) {
-                progress.setValue(k++);
+//                progress.setValue(k++);
 
                 characterization.processFile(file);
 
                 if (!hasOnlyZeros(dataVector)) {
                     Normalization.featureScaling(dataVector, dataNormalized);
-                    fileOut.write(dataNormalized, 10E12);
+
+                    for (double value : dataNormalized) {
+                        outBuffer.putDouble(value);
+                    }
+
                     processLog.incSucessCount();
                 }
                 else {
@@ -141,12 +156,55 @@ public class SASVectorization {
                 }
             }
 
-            fileOut.writeAt(0, processLog.sucess()); // write quantity of lines
+            outBuffer.putInt(0, processLog.sucess());
+            outBuffer.flip();
 
+            fileOut.write(outBuffer);
             fileOut.close();
+
             progress.end();
         }
         return processLog;
+    }
+
+    // -------------------------------------------------------------------------
+
+    /**
+     * SPAM: 1 0
+     * HAM: 0 1
+     * @param patternFile
+     * @param outNeuron1
+     * @param outNeuron2
+     * @return
+     * @throws IOException
+     */
+    public static PatternLayer[] loadNeurons(File patternFile, double outNeuron1, double outNeuron2) throws IOException {
+        FileChannel fileIn = new FileInputStream(patternFile).getChannel();
+        ByteBuffer inBuffer = ByteBuffer.allocate((int) fileIn.size());
+        fileIn.read(inBuffer);
+
+        // create neurons
+        inBuffer.flip();
+        int quantityOfVectors = inBuffer.getInt();
+        int vectorLength = inBuffer.getInt();
+
+        double[] vectorArray = new double[vectorLength];
+
+        // neurons
+        PatternLayer[] patternArray = new PatternLayer[quantityOfVectors];
+        NeuronLayer outputLayer = new NeuronLayer(new double[] {outNeuron1, outNeuron2});
+
+        for (int k=0; k<quantityOfVectors; k++) {
+
+            for (int i=0; i<vectorArray.length; i++) {
+                vectorArray[i] = inBuffer.getDouble();
+            }
+
+            patternArray[k] = new PatternLayer(new NeuronLayer(vectorArray), outputLayer);
+
+        }
+
+        return patternArray;
     }
 
     public static boolean hasOnlyZeros(int[] array) {

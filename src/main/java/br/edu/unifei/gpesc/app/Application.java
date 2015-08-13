@@ -141,7 +141,7 @@ public class Application {
 //    }
 
     public static void main(String[] args) throws IOException {
-        main2(args);
+//        main2(args);
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/spam", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/spam");
 
@@ -151,6 +151,33 @@ public class Application {
 //        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
 //        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/vector/";
 //        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
+
+//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
+//        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vector_chi2/";
+//        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
+
+        genVectors();
+    }
+
+    private static void genVectors() throws IOException {
+        String[] quantities = {"500", "1000", "1500", "2000", "2500"};
+        String[] methods = {"mi", "chi2", "df"};
+
+        String cleanPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
+        String vectorPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vectors/vector";
+        String statisticsPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/statistics/statistics";
+
+        for (String quantity : quantities) {
+            System.out.println("quantity = " + quantity);
+            for (String method : methods) {
+                System.out.println("method = " + method);
+                genVectors(quantity, cleanPath, statisticsPath, method, vectorPath);
+            }
+        }
+    }
+
+    private static void genVectors(String quantity, String cleanPath, String statisticsPath, String method, String vectorPath) throws IOException {
+        main2("--mlp-vector", quantity, cleanPath + "ham", cleanPath + "spam", statisticsPath + "_" + method, vectorPath + "_" + method + "_" + quantity);
     }
 
 }

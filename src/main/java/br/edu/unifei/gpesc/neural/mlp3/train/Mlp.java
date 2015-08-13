@@ -106,7 +106,7 @@ public abstract class Mlp {
         FileChannel fileOut = new FileOutputStream(file).getChannel();
 
         // calculate the size of the file (optimization)
-        int bufferSize = 0;
+        int bufferSize = Integer.BYTES; // reserve first layer
         for (ConnectionLayer layer : mLayerArray) {
             bufferSize += Integer.BYTES; // reserve for neurons size info
             bufferSize += layer.getLength() * Double.BYTES; // reserve for neurons
@@ -117,6 +117,7 @@ public abstract class Mlp {
         ByteBuffer outBuffer = ByteBuffer.allocate(bufferSize);
 
         // layers length
+        outBuffer.putInt(mInputLayer.getLength());
         for (ConnectionLayer layer : mLayerArray) {
             outBuffer.putInt(layer.getLength());
         }
@@ -134,15 +135,16 @@ public abstract class Mlp {
     private static Mlp createMlp(File file, int which) throws IOException  {
         FileChannel fileIn = new FileInputStream(file).getChannel();
 
-        ByteBuffer buffer = ByteBuffer.allocate((int) file.length());
-        fileIn.read(buffer);
+        ByteBuffer inBuffer = ByteBuffer.allocate((int) file.length());
+        fileIn.read(inBuffer);
+        inBuffer.flip();
 
         Mlp mlp;
 
-        int inLen = buffer.getInt();
-        int h1Len = buffer.getInt();
-        int h2Len = buffer.getInt();
-        int outLen = buffer.getInt();
+        int inLen = inBuffer.getInt();
+        int h1Len = inBuffer.getInt();
+        int h2Len = inBuffer.getInt();
+        int outLen = inBuffer.getInt();
 
         switch (which) {
             case 1: mlp = new RunMlp(inLen, h1Len, h2Len, outLen); break;
@@ -150,7 +152,7 @@ public abstract class Mlp {
         }
 
         for (ConnectionLayer layer : mlp.mLayerArray) {
-            layer.loadFromByteBuffer(buffer);
+            layer.loadFromByteBuffer(inBuffer);
         }
 
         return mlp;

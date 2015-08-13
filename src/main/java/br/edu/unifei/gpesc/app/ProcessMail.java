@@ -20,7 +20,7 @@ import br.edu.unifei.gpesc.neural.mlp.core.MlpRun;
 import br.edu.unifei.gpesc.sas.modules.NeuralCharacteristic;
 import br.edu.unifei.gpesc.sas.modules.SASFilter;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
-import static br.edu.unifei.gpesc.sas.modules.SASVectorization.getVectorArray;
+import static br.edu.unifei.gpesc.sas.modules.NeuralVector.getVectorArray;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;

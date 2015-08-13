@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.modules.SASVectorization;
+import br.edu.unifei.gpesc.sas.modules.NeuralVector;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,8 +41,8 @@ public class VectorApp {
 
         System.out.println("count="+characteristic.getObjectCount());
 
-        SASVectorization.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), SASVectorization.HAM, false);
-        SASVectorization.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), SASVectorization.SPAM, false);
+        NeuralVector.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), NeuralVector.HAM, false);
+        NeuralVector.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), NeuralVector.SPAM, false);
 
     }
 

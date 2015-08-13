@@ -14,12 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.neural.mlp2;
+package test.mlp;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
-public class TransferFunctionFactory {
+public class NewInputTest3 {
+
+    public static void main(String[] args) {
+        String path = "";
+//        PatternLayer hamPatterns = NeuralVector.loadNeurons(null, outNeuron1, outNeuron2);
+    }
 
 }

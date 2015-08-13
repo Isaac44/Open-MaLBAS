@@ -43,7 +43,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
     /**
      * The count of elements that belong to only one set. (with repetition)
      */
-    private final long[] mElementSetTotalCountArray;
+    private final int[] mElementSetTotalCountArray;
 
     /**
      * The size of all amostral spaces.
@@ -57,7 +57,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
     public Statistics(int numberOfSets) {
         mElementSetArray = new HashSet[numberOfSets];
         mAmostralSizeArray = new int[numberOfSets];
-        mElementSetTotalCountArray = new long[numberOfSets];
+        mElementSetTotalCountArray = new int[numberOfSets];
 
         for (int i=0; i<numberOfSets; i++) {
             mElementSetArray[i] = new HashSet();
@@ -80,7 +80,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
             mStatisticHashMap.put(data, dataStatistic);
         }
 
-        dataStatistic.increment(set);
+        dataStatistic.increment(mAmostralSizeArray[set], set);
 
         mElementSetTotalCountArray[set]++;
         mElementSetArray[set].add(data);
@@ -132,7 +132,7 @@ public class Statistics<T> implements Iterable<StatisticalData>{
      * @param set The set.
      * @return The total count of elements, with repetition.
      */
-    public long getElementSetTotalCount(int set) {
+    public int getElementSetTotalCount(int set) {
         return mElementSetTotalCountArray[set];
     }
 

@@ -19,7 +19,7 @@ package br.edu.unifei.gpesc.app;
 import static br.edu.unifei.gpesc.app.Messages.*;
 import br.edu.unifei.gpesc.sas.modules.SASFilter;
 import br.edu.unifei.gpesc.sas.modules.SASStatistics;
-import static br.edu.unifei.gpesc.sas.modules.SASVectorization.doVectorization;
+import static br.edu.unifei.gpesc.sas.modules.NeuralVector.doVectorization;
 import br.edu.unifei.gpesc.statistic.Census;
 import br.edu.unifei.gpesc.statistic.MutualInformationDistribution;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;

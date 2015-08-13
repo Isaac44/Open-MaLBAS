@@ -34,17 +34,22 @@ public class TheStatisticsMain {
 
     public static void main(String[] args) throws IOException {
         SASStatistics antispamStatistics = new SASStatistics();
+//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
+
+
         antispamStatistics.processSpamAndHam(new File(path, "spam"), new File(path, "ham"));
 
         Statistics<String> statistics = antispamStatistics.getStatistics();
 
         Census<String> census = new Census<String>(statistics);
         census.computeDistribution(new MutualInformationDistribution());
+//        census.computeDistribution(new FrequencyDistribution());
+//        census.computeDistribution(new ChiSquaredDistribution());
 
         census.sortData(new Census.DecrescentDistributionSort());
 
-        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics.txt"));
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics_mi"));
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
             fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
         }
