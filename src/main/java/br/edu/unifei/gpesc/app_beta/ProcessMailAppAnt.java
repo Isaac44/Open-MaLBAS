@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app;
+package br.edu.unifei.gpesc.app_beta;
 
 import br.edu.unifei.gpesc.sas.modules.NeuralCharacteristic;
 import java.io.File;

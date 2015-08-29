@@ -202,13 +202,13 @@ public class TrainMode {
      * @param hamPath The not spam input folder path.
      * @param spamPath the spam input folder path.
      * @param statisticsPath The statistics file path.
-     * @param inputLayerLength The length of the MLP input layer.
+     * @param inLayerLen The length of the MLP input layer.
      * @param outPath The output path.
      * @throws IOException if any input/output error occurs.
      * @throws IllegalArgumentException if any input folder/file does not exists
      * or if the "ham" or "spam" files cannot be created.
      */
-    public void doMlpVector(String hamPath, String spamPath, String statisticsPath, int inputLayerLength, String outPath) throws IOException {
+    public void doMlpVector(String hamPath, String spamPath, String statisticsPath, int inLayerLen, String outPath) throws IOException {
         File hamFolder = new File(hamPath);
         assertDirectory(hamFolder);
 
@@ -229,12 +229,12 @@ public class TrainMode {
 
         Scanner scanner = new Scanner(statisticsFile);
         scanner.nextLine(); // ignore the method
-        for (int i=0; i<inputLayerLength; i++) {
+        for (int i=0; i<inLayerLen; i++) {
             if (scanner.hasNext()) {
                 characteristic.insertData(scanner.next());
                 scanner.nextLine();
             } else {
-                throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inputLayerLength));
+                throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inLayerLen));
             }
         }
 

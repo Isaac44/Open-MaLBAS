@@ -17,6 +17,11 @@
 package br.edu.unifei.gpesc.neural.mlp3.train;
 
 import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  *
@@ -73,4 +78,31 @@ public class RunMlp extends Mlp {
         }
     }
 
+    /**
+     * Loads the mlp data from a file, the creates the network. <br>
+     * This method is meant to be used with a saved {@link MlpTrain}.
+     * @param file The file to the mlp data.
+     * @return The previously saved mlp.
+     * @throws IOException If any IO error occurs.
+     */
+    public static RunMlp loadMlp(File file) throws IOException {
+        FileChannel fileIn = new FileInputStream(file).getChannel();
+
+        ByteBuffer inBuffer = ByteBuffer.allocate((int) file.length());
+        fileIn.read(inBuffer);
+        inBuffer.flip();
+
+        int inLen = inBuffer.getInt();
+        int h1Len = inBuffer.getInt();
+        int h2Len = inBuffer.getInt();
+        int outLen = inBuffer.getInt();
+
+        RunMlp mlp = new RunMlp(inLen, h1Len, h2Len, outLen);
+
+        for (ConnectionLayer layer : mlp.mLayerArray) {
+            layer.loadFromByteBuffer(inBuffer);
+        }
+
+        return mlp;
+    }
 }

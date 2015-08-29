@@ -141,6 +141,8 @@ public class Application {
 //    }
 
     public static void main(String[] args) throws IOException {
+        main2("--mlp-vector");
+
 //        main2(args);
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/spam", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/spam");
@@ -156,7 +158,7 @@ public class Application {
 //        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vector_chi2/";
 //        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
 
-        genVectors();
+//        genVectors();
     }
 
     private static void genVectors() throws IOException {

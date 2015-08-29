@@ -16,7 +16,6 @@
  */
 package test.mlp;
 
-import br.edu.unifei.gpesc.neural.mlp3.train.Mlp;
 import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
 import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
 import br.edu.unifei.gpesc.neural.mlp3.train.RunMlp;
@@ -84,7 +83,7 @@ public class Test3 {
         PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);
 //        mlp.runTestSup(testInput);
 
-        RunMlp runMlp = Mlp.createRunMlp(mlpData);
+        RunMlp runMlp = RunMlp.loadMlp(mlpData);
         runMlp.runTestSup(testInput);
 
     }

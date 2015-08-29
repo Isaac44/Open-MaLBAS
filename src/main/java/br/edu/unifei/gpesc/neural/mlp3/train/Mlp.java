@@ -20,7 +20,6 @@ import br.edu.unifei.gpesc.neural.mlp3.util.Function;
 import br.edu.unifei.gpesc.neural.mlp3.util.LogSig;
 import br.edu.unifei.gpesc.neural.mlp3.util.TanSig;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -130,39 +129,5 @@ public abstract class Mlp {
         outBuffer.flip();
         fileOut.write(outBuffer);
         fileOut.close();
-    }
-
-    private static Mlp createMlp(File file, int which) throws IOException  {
-        FileChannel fileIn = new FileInputStream(file).getChannel();
-
-        ByteBuffer inBuffer = ByteBuffer.allocate((int) file.length());
-        fileIn.read(inBuffer);
-        inBuffer.flip();
-
-        Mlp mlp;
-
-        int inLen = inBuffer.getInt();
-        int h1Len = inBuffer.getInt();
-        int h2Len = inBuffer.getInt();
-        int outLen = inBuffer.getInt();
-
-        switch (which) {
-            case 1: mlp = new RunMlp(inLen, h1Len, h2Len, outLen); break;
-            default: mlp = new TrainMlp(inLen, h1Len, h2Len, outLen);
-        }
-
-        for (ConnectionLayer layer : mlp.mLayerArray) {
-            layer.loadFromByteBuffer(inBuffer);
-        }
-
-        return mlp;
-    }
-
-    public static RunMlp createRunMlp(File file) throws IOException  {
-        return (RunMlp) createMlp(file, 1);
-    }
-
-    public static TrainMlp createTrainMlp(File file) throws IOException  {
-        return (TrainMlp) createMlp(file, 0);
     }
 }
