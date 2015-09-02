@@ -40,7 +40,7 @@ public class NeuronLayer {
      * @param neuronsActivation The activation value array to initialize all
      * neurons in the neuron array.
      */
-    public NeuronLayer(double[] neuronsActivation) {
+    public NeuronLayer(double... neuronsActivation) {
         mNeuronArray = new Neuron[neuronsActivation.length];
 
         Neuron[] neurons = mNeuronArray;
@@ -146,7 +146,7 @@ public class NeuronLayer {
         /**
          * The activation value.
          */
-        double activation;
+        public double activation;
 
         /**
          * The bias connection.

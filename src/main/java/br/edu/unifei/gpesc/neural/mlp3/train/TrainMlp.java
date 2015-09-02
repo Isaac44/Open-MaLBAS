@@ -17,9 +17,17 @@
 package br.edu.unifei.gpesc.neural.mlp3.train;
 
 import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
+import br.edu.unifei.gpesc.neural.mlp3.train.ConnectionLayer.Connection;
 import br.edu.unifei.gpesc.neural.mlp3.util.ConsolePrintMlp;
 import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer.Neuron;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -45,7 +53,7 @@ public class TrainMlp extends Mlp {
     /**
      * The network seed. Preferred to be a prime number
      */
-    private long mPrimeSeed = 7;//PrimeNumber.getRandomPrimeNumber();
+    private final long mPrimeSeed = 7;//PrimeNumber.getRandomPrimeNumber();
 
     /**
      * The learn rate.
@@ -107,7 +115,7 @@ public class TrainMlp extends Mlp {
      * @param seed The seed.
      */
     public void setPrimeSeed(long seed) {
-        mPrimeSeed = seed;
+//        mPrimeSeed = seed; // DEBUG (descomentar)
     }
 
     /**
@@ -275,6 +283,9 @@ public class TrainMlp extends Mlp {
      * Runs the treining.
      */
     public void runTrainByEpoch() {
+        initDump(); // DEBUG
+
+        // optimization
         int ep;
         int epochs = mEpochs;
         double momentum = mMomentum;
@@ -285,6 +296,10 @@ public class TrainMlp extends Mlp {
 
         // init
         initBiasAndWeights();
+
+        // DEBUG
+        dumpBiasAndWeigths();
+
         double validationError = runValidation();
 
         double patError, epochError, prevValidationError;
@@ -336,7 +351,7 @@ public class TrainMlp extends Mlp {
                 prevEpochError = epochError;
 
                 // print
-//                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
+                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
             }
 
             // save the current validation error
@@ -347,6 +362,9 @@ public class TrainMlp extends Mlp {
 
             // run until the current error is small then the previous
         } while (validationError < prevValidationError);
+
+        // DEBUG
+        closeDump();
     }
 
     public void runTestSup(PatternLayer[] patterns) {
@@ -382,15 +400,128 @@ public class TrainMlp extends Mlp {
                 output.format("   %.4f", neuron.activation);
             }
 
-            pattern.outputLayer.computeDifference(outputLayer);
+            outputLayer.computeDifference(pattern.outputLayer);
 
             output.format("\n   ===> Saida Obtida:  ");
-            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeuronArray) {
+            for (NeuronLayer.Neuron neuron : outputLayer.mNeuronArray) {
                 output.format("   %.4f", neuron.activation);
             }
             output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
 
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Dump -- Test
+    // -------------------------------------------------------------------------
+
+    private Writer mWriter;
+
+    private void initDump() {
+        try {
+            String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/September_Dump/";
+//            String file = "dump_byte";
+            String file = "dump_tpat_2";
+            mWriter = new BufferedWriter(new FileWriter(new File(path, file)));
+        } catch (IOException ex) {
+            Logger.getLogger(TrainMlp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void closeDump() {
+        try {
+            mWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(TrainMlp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void dumpBiasAndWeigths() {
+        String[] layers = {"HIDDEN 1", "HIDDEN 2", "OUTPUT"};
+
+        for (int i=0; i<layers.length; i++) {
+            dumpBiasAndWeigths(layers[i], mLayerArray[i].mNeuronArray, mLayerArray[i].mConnectionMatrix);
+        }
+    }
+
+    private void dumpBiasAndWeigths(String tag, Neuron[] neurons, Connection[][] connections) {
+        try {
+            mWriter.append("\n\n.bias").append("\n");
+            for (Neuron neuron : neurons) {
+                mWriter.append(String.valueOf(neuron.bias));
+                mWriter.append(" ");
+            }
+
+            mWriter.append("\n\n.weight").append("\n");
+            for (Connection[] array : connections) {
+                for (Connection conn : array) {
+                    mWriter.append(String.valueOf(conn.weight));
+                    mWriter.append(" ");
+                }
+                mWriter.append("\n");
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(TrainMlp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void dump(String tag, Neuron[] neurons) {
+        try {
+            mWriter.append("\n\n").append(tag).append("\n");
+
+            mWriter.append(".activation").append("\n");
+            for (Neuron neuron : neurons) {
+                mWriter.append(String.valueOf(neuron.activation));
+                mWriter.append(" ");
+            }
+
+//            mWriter.append(".bed").append("\n");
+//            for (Neuron neuron : neurons) {
+//                mWriter.append(String.valueOf(neuron.bed));
+//                mWriter.append(" ");
+//            }
+//
+//            mWriter.append(".bias").append("\n");
+//            for (Neuron neuron : neurons) {
+//                mWriter.append(String.valueOf(neuron.bias));
+//                mWriter.append(" ");
+//            }
+//
+//            mWriter.append(".dbias").append("\n");
+//            for (Neuron neuron : neurons) {
+//                mWriter.append(String.valueOf(neuron.dbias));
+//                mWriter.append(" ");
+//            }
+//
+//            mWriter.append(".delta").append("\n");
+//            for (Neuron neuron : neurons) {
+//                mWriter.append(String.valueOf(neuron.delta));
+//                mWriter.append(" ");
+//            }
+        } catch (IOException ex) {
+            Logger.getLogger(TrainMlp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void dumpInput() {
+        dump("INPUT", mInputLayer.mNeuronArray);
+    }
+
+    private void dumpNeurons() {
+        dumpInput();
+
+        String[] layers = {"HIDDEN 1", "HIDDEN 2", "OUTPUT"};
+
+        for (int i=0; i<layers.length; i++) {
+            dump(layers[i], mLayerArray[i].mNeuronArray);
+        }
+    }
+
+
+    private void dumpPattern(PatternLayer pat) {
+        dump("PATTENR IN", pat.inputLayer.mNeuronArray);
+        dump("PATTENR OUT", pat.outputLayer.mNeuronArray);
     }
 
 }

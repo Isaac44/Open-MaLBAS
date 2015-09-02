@@ -22,7 +22,7 @@ import static java.lang.Math.log10;
  *
  * @author isaac
  */
-public class MutualInformationDistribution implements StatisticalDistribution {
+public class MutualInformationDistribution implements Distribution {
 
     @Override
     public double compute(StatisticalData data, Statistics statistics) {
@@ -71,15 +71,14 @@ public class MutualInformationDistribution implements StatisticalDistribution {
         double mi_spam = p_elemento_ser_spam * log2(p_elemento_ser_spam / peso_elemento);
         double mi_nao_spam = p_elemento_nao_ser_spam * log2(p_elemento_nao_ser_spam / peso_nao_elemento);
 
-
         double result = mi_ham + mi_nao_ham + mi_spam + mi_nao_spam;
 
-        return result;
+        return (Double.isNaN(result)) ? Double.NEGATIVE_INFINITY : result;
     }
 
     private static final double LOG10_2 = log10(2);
     private static double log2(double value) {
-        return log10(value) / LOG10_2;
+            return log10(value) / LOG10_2;
     }
 
 }

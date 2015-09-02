@@ -16,6 +16,7 @@
  */
 package br.edu.unifei.gpesc.app;
 
+import static br.edu.unifei.gpesc.app.Messages.i18n;
 import br.edu.unifei.gpesc.util.FileUtils;
 import java.io.File;
 import java.io.FileReader;
@@ -47,27 +48,40 @@ public class Configuration {
                     mConfigurations.load(reader);
                     reader.close();
                 }
-                catch (IOException e) {}
+                catch (IOException ignore) {}
             }
         }
     }
 
-    public String getPropertie(String key, String defaultValue) {
+    public String getProperty(String key) {
+        String value = mConfigurations.getProperty(key);
+        if (value == null) {
+            throw new IllegalArgumentException(i18n("Exception.MissingParameter", key));
+        } else {
+            return value;
+        }
+    }
+
+    public int getIntegerProperty(String key) {
+        return Integer.parseInt(getProperty(key));
+    }
+
+    public double getDoublePropertie(String key) {
+        return Double.parseDouble(getProperty(key));
+    }
+
+    public String getProperty(String key, String defaultValue) {
         return mConfigurations.getProperty(key, defaultValue);
     }
 
-    public int getIntPropertie(String key, String defaultValue) {
-        return Integer.parseInt(getPropertie(key, defaultValue));
+    public int getIntegerProperty(String key, int defaultValue) {
+        String value = mConfigurations.getProperty(key);
+        return (value != null) ? Integer.parseInt(value) : defaultValue;
     }
 
-    public float getFloatPropertie(String key, String defaultValue) {
-        return Float.parseFloat(getPropertie(key, defaultValue));
-    }
-
-    public static void main(String[] args) {
-        Configuration config = new Configuration();
-        System.out.println(config.getPropertie("a", null));
-        System.out.println(config.getPropertie("b", null));
+    public double getDoubleProperty(String key, double defaultValue) {
+        String value = mConfigurations.getProperty(key);
+        return (value != null) ? Double.parseDouble(value) : defaultValue;
     }
 
     private static Configuration sInstance;

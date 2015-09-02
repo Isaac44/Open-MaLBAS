@@ -52,11 +52,11 @@ public class Census<T> {
     }
 
     /**
-     * Computes the {@link StatisticalDistribution} for all {@link StatisticalData}
+     * Computes the {@link Distribution} for all {@link StatisticalData}
      * of the {@link Statistics} setted.
      * @param distribution The statistics distribution model to be used.
      */
-    public void computeDistribution(StatisticalDistribution distribution) {
+    public void computeDistribution(Distribution distribution) {
         if (mStatistics != null) {
             computeDistribution(mStatistics, distribution);
         }
@@ -93,27 +93,27 @@ public class Census<T> {
 
     /**
      * This class implementation of {@link DataComparator} sorts the data by its
-     * {@link StatisticalDistribution}.
+     * {@link Distribution}.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getStatisticalDistribution();
+     * @see StatisticalData#getDistribution()
      */
     public static class CrescentDistributionSort implements DataComparator<Object> {
         @Override
         public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
-            return Double.compare(o1.getStatisticalDistribution(), o2.getStatisticalDistribution());
+            return Double.compare(o1.getDistribution(), o2.getDistribution());
         }
     }
 
     /**
      * This class implementation of {@link DataComparator} sorts the data by its
-     * {@link StatisticalDistribution}.
+     * {@link Distribution}.
      * <br> Also sorts by decrescent order: The first element is the biggest
-     * @see StatisticalData#getStatisticalDistribution();
+     * @see StatisticalData#getDistribution()
      */
     public static class DecrescentDistributionSort implements DataComparator<Object> {
         @Override
         public int compare(StatisticalData<Object> o1, StatisticalData<Object> o2) {
-            return Double.compare(o2.getStatisticalDistribution(), o1.getStatisticalDistribution());
+            return Double.compare(o2.getDistribution(), o1.getDistribution());
         }
     }
 
@@ -121,7 +121,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by a
      * set.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getStatisticalDistribution();
+     * @see StatisticalData#getDistribution()
      */
     public static class CrescentStatisticSetSort implements DataComparator<Object> {
 
@@ -148,7 +148,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by a
      * set.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getStatisticalDistribution();
+     * @see StatisticalData#getDistribution()
      */
     public static class DecrescentStatisticSetSort implements DataComparator<Object> {
 
@@ -172,13 +172,13 @@ public class Census<T> {
     }
 
     /**
-     * Computes the {@link StatisticalDistribution} for all {@link StatisticalData}
+     * Computes the {@link Distribution} for all {@link StatisticalData}
      * of the {@link Statistics}. The result values can be getted using
-     * {@link StatisticalData#getStatisticalDistribution()}.
+     * {@link StatisticalData#getDistribution()}.
      * @param statistics The statiscs.
      * @param distribution The statistics distribution model to be used.
      */
-    public static void computeDistribution(Statistics<?> statistics, StatisticalDistribution distribution) {
+    public static void computeDistribution(Statistics<?> statistics, Distribution distribution) {
         double result;
         for (StatisticalData data : statistics) {
             result = distribution.compute(data, statistics);

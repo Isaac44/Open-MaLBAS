@@ -20,7 +20,7 @@ package br.edu.unifei.gpesc.statistic;
  *
  * @author Isaac Caldas Ferreira
  */
-public class SimpleFrequencyDistribution implements StatisticalDistribution {
+public class SimpleFrequencyDistribution implements Distribution {
 
     @Override
     public double compute(StatisticalData data, Statistics statistics) {

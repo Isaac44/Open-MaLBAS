@@ -22,117 +22,93 @@ import java.io.IOException;
 
 /**
  *
- * @author isaac
+ * @author Isaac Caldas Ferreira
  */
 public class Application {
 
-    private static final String ARG_FILTER = "--filter";
-    private static final String ARG_STATISTICS = "--statistics";
-    private static final String ARG_MLP_VECTOR = "--mlp-vector";
+    private static final String ARG_FILTER = "filter";
+    private static final String ARG_STATISTICS = "statistics";
+    private static final String ARG_MLP_VECTOR = "vector";
+    private static final String ARG_MLP_NEURAL = "mlp";
 
-    private static void printFilterHelp() {
-        // Filter. Usage: --filter inputFolder outputFolder
-        print("\t\t");
-        printLog("Application.Help.FilterHeader");
-        print(" ");
-        print(ARG_FILTER);
-        print(" ");
-        printLog("Application.Help.InputFolder");
-        print(" ");
-        printlnLog("Application.Help.OutputFolder");
+    private static final Configuration sConfig = Configuration.getInstance();
+    private static final TrainModule sTrainModule = new TrainModule();
+    private static NeuralModule sNeuralModule = null;
+
+    private static void runFilter() {
+        String hamInPath = sConfig.getProperty("RAW_NOT_SPAM_FOLDER");
+        String hamOutPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String spamInPath = sConfig.getProperty("RAW_SPAM_FOLDER");
+        String spamOutPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+
+        sTrainModule.doFilter(hamInPath, hamOutPath);
+        sTrainModule.doFilter(spamInPath, spamOutPath);
     }
 
-    private static void printStatisticsHelp() {
-        // Statistics. Usage: --statistics distributionMethod[MI|CHI2|DF] notSpamFolder spamFolder statisticsOutputFolder
-        print("\t\t");
-        printLog("Application.Help.StatisticsHeader");
-        print(" ");
-        print(ARG_STATISTICS);
-        print(" ");
-        printLog("Application.Help.Statistics.Distribution");
-        print(":[MI|CHI2|DF] ");
-        printLog("Application.Help.Statistics.NotSpamInputFolder");
-        print(" ");
-        printLog("Application.Help.Statistics.SpamInputFolder");
-        print(" ");
-        printlnLog("Application.Help.OutputFolder");
+    private static void runStatistics() throws IOException {
+        String spamPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
+        String hamPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String statisticsFile = sConfig.getProperty("STATISTICS_FILE");
+        String method = sConfig.getProperty("STATISTICS_METHOD");
+
+        sTrainModule.doStatistics(hamPath, spamPath, statisticsFile, method);
     }
 
-    private static void printMlpVectorHelp() {
-        // MlpVector. Usage: --mlp-vector mlpInputLayerLength --[append|new] hamPath spamPath statisticsPath outPath
-        print("\t\t");
-        printLog("Application.Help.MlpVectorHeader");
-        print(" ");
-        print(ARG_MLP_VECTOR);
-        print(" ");
-        printLog("Application.Help.MlpVector.InputLayerLength");
-        print(" --[append|new] ");
-        printLog("Application.Help.Statistics.NotSpamInputFolder");
-        print(" ");
-        printLog("Application.Help.Statistics.SpamInputFolder");
-        print(" ");
-        printLog("Application.Help.MlpVector.StatisticsFile");
-        print(" ");
-        printlnLog("Application.Help.OutputFolder");
+    private static void runVector() throws IOException {
+        String spamPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
+        String hamPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String statisticsFile = sConfig.getProperty("STATISTICS_FILE");
+        Integer length = sConfig.getIntegerProperty("VECTOR_LENGTH");
+        String outFolder = sConfig.getProperty("VECTOR_OUT_FOLDER");
+
+        sTrainModule.doMlpVector(hamPath, spamPath, statisticsFile, length, outFolder);
     }
 
-    private static void printHelp() {
-        printlnLog("Application.Help.Header");
-
-        // TrainMode
-        print("\t"); printlnLog("Application.Help.TrainMode");
-
-        printFilterHelp();
-        printStatisticsHelp();
-
-        // TestMode
-        println("");
-    }
-
-    public static void main2(String... args) throws IOException {
-        if (args.length == 0) {
-            printHelp();
-            System.exit(1);
+    private static void runMlp() throws IOException {
+        if (sNeuralModule != null) {
+            sNeuralModule.stopProcess();
+        } else {
+            sNeuralModule = new NeuralModule();
         }
 
-        String module = args[0];
+        sNeuralModule.load();
+        sNeuralModule.start();
+    }
 
+    private static void process(String module) throws IOException {
         if (module.equals(ARG_FILTER))
         {
-            if (args.length == 3) {
-                printlnLog("Application.TrainMode.SelectedFilter");
-                TrainMode trainMode = new TrainMode();
-                trainMode.doFilter(args[1], args[2]);
-            } else {
-                printFilterHelp();
-            }
+            printlnLog("Application.TrainMode.SelectedFilter");
+            runFilter();
         }
 
         else if (module.equals(ARG_STATISTICS))
         {
-            if (args.length == 5) {
-                printlnLog("Application.TrainMode.SelectedStatistics");
-                TrainMode trainMode = new TrainMode();
-                trainMode.doStatistics(args[2], args[3], args[4], args[1].toUpperCase());
-            } else {
-                printStatisticsHelp();
-            }
+            printlnLog("Application.TrainMode.SelectedStatistics");
+            runStatistics();
         }
 
         else if (module.equals(ARG_MLP_VECTOR))
         {
-            if (args.length == 6) {
-                printlnLog("Application.TrainMode.SelectedMlpVector");
-                TrainMode trainMode = new TrainMode();
-                trainMode.doMlpVector(args[2], args[3], args[4], Integer.parseInt(args[1]), args[5]);
-            }
-            else {
-                printMlpVectorHelp();
-            }
+            printlnLog("Application.TrainMode.SelectedMlpVector");
+            runVector();
         }
+        else if (module.equals(ARG_MLP_NEURAL))
+        {
+            printlnLog("Application.TrainMode.SelectedMlpVector");
+            runMlp();
+        }
+    }
 
-        else {
-            printHelp();
+    public static void main2(String... args) throws IOException {
+        if (args.length == 0) {
+            printlnLog("Application.TrainMode.All");
+            System.out.println();
+            process(ARG_FILTER);
+            process(ARG_STATISTICS);
+            process(ARG_MLP_VECTOR);
+        } else {
+            process(args[0].toLowerCase());
         }
     }
 
@@ -141,7 +117,7 @@ public class Application {
 //    }
 
     public static void main(String[] args) throws IOException {
-        main2("--mlp-vector");
+        main2(ARG_MLP_NEURAL);
 
 //        main2(args);
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");

@@ -14,14 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app;
+package br.edu.unifei.gpesc.statistic;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
-public class NeuralApp {
+public interface Distribution {
 
-    public static void
-
+    /**
+     * Computes the statistical distribuition.
+     * @param data The statistical data.
+     * @param statistics The statistics.
+     * @return The statistical distribuition for the statistical data.
+     */
+    public double compute(StatisticalData data, Statistics statistics);
 }

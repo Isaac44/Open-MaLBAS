@@ -35,6 +35,9 @@ public class ConsoleProgress {
     }
 
     private void updateProgress(double progressPercentage) {
+
+    }
+    private void updateProgressG(double progressPercentage) {
         System.out.printf("\r%03d%% [", (int) (progressPercentage * 100));
         int i = 0;
         for (; i <= (int) (progressPercentage * WIDTH); i++) {

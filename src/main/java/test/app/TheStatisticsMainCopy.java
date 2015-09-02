@@ -46,7 +46,7 @@ public class TheStatisticsMainCopy {
 
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics.txt"));
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
-            fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
+            fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getDistribution())).append("\n");
         }
         fileWriter.close();
     }

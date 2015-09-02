@@ -14,10 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.neural.mlp3.train;
+package br.edu.unifei.gpesc.app;
 
+import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
+import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer.Neuron;
+import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
+import br.edu.unifei.gpesc.neural.mlp3.train.TrainMlp;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -28,24 +33,27 @@ import java.nio.channels.FileChannel;
  */
 public class TrainBuilder {
 
-    private static final double[] HAM = {1.0, 0.0};
-    private static final double[] SPAM = {0.0, 1.0};
+    public static final double[] HAM = {1.0, 0.0};
+    public static final double[] SPAM = {0.0, 1.0};
+
+//    public static final NeuronLayer HAM = new NeuronLayer(1.0, 0.0);
+//    public static final NeuronLayer SPAM = new NeuronLayer(0.0, 1.0);
 
     private PatternLayer[] mInputLayers;
     private PatternLayer[] mValidationLayers;
 
-    public TrainBuilder(File hamVectors, File spamVectors, float percentToValidate) throws IOException {
+    public TrainBuilder(File hamVectors, File spamVectors, double percentToValidate) throws IOException {
         createMlpLayers(hamVectors, spamVectors, percentToValidate);
     }
 
     public TrainMlp buildWith(int h1Len, int h2Len) {
-        TrainMlp trainMlp = new TrainMlp(mInputLayers.length, h1Len, h2Len, 2);
+        TrainMlp trainMlp = new TrainMlp(mInputLayers[0].inputLayer.getLength(), h1Len, h2Len, 2);
         trainMlp.setInputArray(mInputLayers);
         trainMlp.setValidationArray(mValidationLayers);
         return trainMlp;
     }
 
-    private static PatternLayer[] loadTrainMlp(File vectors, NeuronLayer outputLayer) throws IOException {
+    public static PatternLayer[] loadTrainMlp(File vectors, double[] outputLayer) throws IOException {
         // open file
         FileChannel fileIn = new FileInputStream(vectors).getChannel();
 
@@ -74,7 +82,7 @@ public class TrainBuilder {
             }
 
             // add new pattern.
-            layers[i] = new PatternLayer(new NeuronLayer(activations), outputLayer);
+            layers[i] = new PatternLayer(new NeuronLayer(activations), new NeuronLayer(outputLayer));
         }
 
         return layers;
@@ -108,7 +116,7 @@ public class TrainBuilder {
 
         // copy
         System.arraycopy(array, 0, array1, 0, array1.length);
-        System.arraycopy(array, 0, array2, 0, array2.length);
+        System.arraycopy(array, array1.length, array2, 0, array2.length);
 
         // return
         return new PatternLayer[][] {array1, array2};
@@ -126,12 +134,12 @@ public class TrainBuilder {
         return arrayMerged;
     }
 
-    private void createMlpLayers(File hamVectors, File spamVectors, float percentToValidate) throws IOException {
+    private void createMlpLayers(File hamVectors, File spamVectors, double percentToValidate) throws IOException {
         // open
         final int length;
 
-        PatternLayer[] hamLayers = loadTrainMlp(hamVectors, new NeuronLayer(HAM));
-        PatternLayer[] spamLayers = loadTrainMlp(spamVectors, new NeuronLayer(SPAM));
+        PatternLayer[] hamLayers = loadTrainMlp(hamVectors, HAM);
+        PatternLayer[] spamLayers = loadTrainMlp(spamVectors, SPAM);
 
         // replicate
         if (spamLayers.length < hamLayers.length) {
@@ -153,8 +161,24 @@ public class TrainBuilder {
         PatternLayer[][] spamSplited = split(spamLayers, inLength);
 
         // merge
-        mInputLayers = merge(hamSplited[0], spamSplited[0]);
-        mValidationLayers = merge(hamSplited[1], spamSplited[1]);
+        mInputLayers = merge(spamSplited[0], hamSplited[0]);
+        mValidationLayers = merge(spamSplited[1], hamSplited[1]);
+    }
+
+    private static void write(File file, PatternLayer[] layers) throws IOException {
+        FileWriter writer = new FileWriter(file);
+        for (PatternLayer layer : layers) {
+            for (Neuron neuron : layer.inputLayer.getNeuron()) {
+                writer.append(String.valueOf(neuron.activation));
+                writer.append("\t");
+            }
+            for (Neuron neuron : layer.outputLayer.getNeuron()) {
+                writer.append(String.valueOf(neuron.activation));
+                writer.append("\t");
+            }
+            writer.append("\n");
+        }
+        writer.close();
     }
 
     private static double[][] loadVectors(File vectors) throws IOException {

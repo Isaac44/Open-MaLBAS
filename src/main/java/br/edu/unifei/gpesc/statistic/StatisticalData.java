@@ -95,7 +95,7 @@ public class StatisticalData<T> {
 
     /**
      * Sets the statistical distribution for this data. Use
-     * {@link StatisticalData#getStatisticalDistribution()}
+     * {@link StatisticalData#getDistribution()}
      * to retrieve this value.
      * @param value The statistical data.
      * @see Census
@@ -110,7 +110,7 @@ public class StatisticalData<T> {
      * @see StatisticalData#setStatisticalDistribution(double)
      * @see Census
      */
-    public double getStatisticalDistribution() {
+    public double getDistribution() {
         return mStatisticalDistribution;
     }
 

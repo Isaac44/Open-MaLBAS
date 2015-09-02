@@ -21,10 +21,12 @@ import br.edu.unifei.gpesc.sas.modules.SASFilter;
 import br.edu.unifei.gpesc.sas.modules.SASStatistics;
 import static br.edu.unifei.gpesc.sas.modules.NeuralVector.doVectorization;
 import br.edu.unifei.gpesc.statistic.Census;
+import br.edu.unifei.gpesc.statistic.ChiSquaredDistribution;
 import br.edu.unifei.gpesc.statistic.MutualInformationDistribution;
 import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
 import br.edu.unifei.gpesc.statistic.StatisticalData;
-import br.edu.unifei.gpesc.statistic.StatisticalDistribution;
+import br.edu.unifei.gpesc.statistic.Distribution;
+import br.edu.unifei.gpesc.statistic.FrequencyDistribution;
 import br.edu.unifei.gpesc.util.ProcessLog;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,7 +40,7 @@ import java.util.Scanner;
  *
  * @author Isaac Caldas Ferreira
  */
-public class TrainMode {
+public class TrainModule {
 
     /**
      * The AntiSpam filter. <b>TODO: add filter selection. With this, the user
@@ -121,15 +123,25 @@ public class TrainMode {
     }
 
     /**
-     * Gets the {@link StatisticalDistribution} for the input string.
+     * Gets the {@link Distribution} for the input string.
      * <li>MI: {@link MutualInformationDistribution}. </li>
      * @param method The method name, as shown above.
      * @return The Statistical Distribution selected.
      * @throws IllegalArgumentException if the method argument is invalid.
      */
-    private StatisticalDistribution getStatisticalDistribution(String method) {
-        if (method.equals("MI")) return new MutualInformationDistribution();
-        throw new IllegalArgumentException(i18n("TrainMode.Statistics.IllegalArgument.InvalidMethod", method));
+    private Distribution getDistribution(String method) {
+        if (method.contains("MI")) {
+            return new MutualInformationDistribution();
+        }
+        else if (method.contains("CHI2")) {
+            return new ChiSquaredDistribution();
+        }
+        else if (method.contains("FD")) {
+            return new FrequencyDistribution();
+        }
+        else {
+            throw new IllegalArgumentException(i18n("TrainMode.Statistics.IllegalArgument.InvalidMethod", method));
+        }
     }
 
     /**
@@ -143,7 +155,7 @@ public class TrainMode {
      *
      * @param hamPath The not spam input folder path.
      * @param spamPath The spam input folder path.
-     * @param statisticsPath The statistics output folder path.
+     * @param outFile The statistics output file path.
      * @param method The statistical distribution method.
      * See {@link TrainMode#getStatisticalDistribution(String)}.
      * @throws IOException if any input/output error occurs.
@@ -151,7 +163,9 @@ public class TrainMode {
      * or the statistics file cannot be created or the selected method is
      * invalid.
      */
-    public void doStatistics(String hamPath, String spamPath, String statisticsPath, String method) throws IOException {
+    public void doStatistics(String hamPath, String spamPath,
+            String outFile, String method) throws IOException
+    {
         if (mStatistics == null) mStatistics = new SASStatistics();
 
         File hamFolder = new File(hamPath);
@@ -160,10 +174,10 @@ public class TrainMode {
         File spamFolder = new File(spamPath);
         assertDirectory(spamFolder);
 
-        File statisticsFile = new File(statisticsPath, "statistics");
+        File statisticsFile = new File(outFile);
 
         // statistical distribution
-        StatisticalDistribution distribution = getStatisticalDistribution(method);
+        Distribution distribution = getDistribution(method);
 
         // generate statistics
         printlnLog("TrainMode.ProcessStart", hamPath);
@@ -182,8 +196,13 @@ public class TrainMode {
         printlnLog("TrainMode.Statistics.SavingStatisticsFile", statisticsFile.getAbsolutePath());
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(statisticsFile));
         fileWriter.write(method + "\n");
+
         for (StatisticalData<String> data : census.getStatisticalDataList()) {
-            fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getStatisticalDistribution())).append("\n");
+            fileWriter
+                    .append(data.getElement())
+                    .append("\t")
+                    .append(Double.toString(data.getDistribution()))
+                    .append("\n");
         }
         fileWriter.close();
     }

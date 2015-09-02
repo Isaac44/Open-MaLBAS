@@ -42,7 +42,7 @@ public class ConnectionLayer extends NeuronLayer {
      * Each line corresponds this layer and each column corresponds the previous
      * layer.
      */
-    private final Connection[][] mConnectionMatrix;
+    final Connection[][] mConnectionMatrix;
 
     /**
      * Creates a Connection Layer.
@@ -306,7 +306,7 @@ public class ConnectionLayer extends NeuronLayer {
      *
      * @author Otávio Augusto Salgado Carpinteiro
      */
-    private static class Connection {
+    static class Connection {
 
         /**
          * The weight.

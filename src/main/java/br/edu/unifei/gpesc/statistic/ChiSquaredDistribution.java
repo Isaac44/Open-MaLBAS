@@ -20,7 +20,7 @@ package br.edu.unifei.gpesc.statistic;
  *
  * @author Isaac Caldas Ferreira
  */
-public class ChiSquaredDistribution implements StatisticalDistribution {
+public class ChiSquaredDistribution implements Distribution {
 
     @Override
     public double compute(StatisticalData data, Statistics statistics) {

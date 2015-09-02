@@ -18,7 +18,6 @@ package test.mlp;
 
 import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
 import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
-import br.edu.unifei.gpesc.neural.mlp3.train.RunMlp;
 import br.edu.unifei.gpesc.neural.mlp3.train.TrainMlp;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,23 +67,23 @@ public class Test3 {
         String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/neural/dat/";
         File mlpData = new File(path, "wfin");
 
-//        PatternLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
-//        PatternLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
-//
-//        mlp.setInputArray(trainInput);
-//        mlp.setValidationArray(validationInput);
-//        mlp.runTrainByEpoch();
-//
-//        System.out.println("Saving");
-//        mlp.saveMlp(mlpData);
-//        System.out.println("Saved");
+        PatternLayer[] trainInput = load(new File(path, "tpat.dat"), 10, 2);
+        PatternLayer[] validationInput = load(new File(path, "vpat.dat"), 10, 2);
+
+        mlp.setInputArray(trainInput);
+        mlp.setValidationArray(validationInput);
+        mlp.runTrainByEpoch();
+
+        System.out.println("Saving");
+        mlp.saveMlp(mlpData);
+        System.out.println("Saved");
 
         // Test
-        PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);
+//        PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);
 //        mlp.runTestSup(testInput);
 
-        RunMlp runMlp = RunMlp.loadMlp(mlpData);
-        runMlp.runTestSup(testInput);
+//        RunMlp runMlp = RunMlp.loadMlp(mlpData);
+//        runMlp.runTestSup(testInput);
 
     }
 

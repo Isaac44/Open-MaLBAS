@@ -67,10 +67,10 @@ public class RunMlp extends Mlp {
                 output.format("   %.4f", neuron.activation);
             }
 
-            pattern.outputLayer.computeDifference(outputLayer);
+            outputLayer.computeDifference(pattern.outputLayer);
 
             output.format("\n   ===> Saida Obtida:  ");
-            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeuronArray) {
+            for (NeuronLayer.Neuron neuron : outputLayer.mNeuronArray) {
                 output.format("   %.4f", neuron.activation);
             }
             output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);

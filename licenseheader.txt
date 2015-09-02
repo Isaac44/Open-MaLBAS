@@ -1,7 +1,7 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}Copyright (C) ${date?date?string("yyyy")} Universidade Federal de Itajuba
+${licensePrefix}Copyright (C) ${date?date?string("yyyy")} - GEPESC - Universidade Federal de Itajuba
 ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}This program is free software: you can redistribute it and/or modify
 ${licensePrefix}it under the terms of the GNU General Public License as published by
