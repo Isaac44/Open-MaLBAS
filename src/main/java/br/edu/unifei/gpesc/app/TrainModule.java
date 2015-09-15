@@ -17,16 +17,16 @@
 package br.edu.unifei.gpesc.app;
 
 import static br.edu.unifei.gpesc.app.Messages.*;
-import br.edu.unifei.gpesc.sas.modules.SASFilter;
-import br.edu.unifei.gpesc.sas.modules.SASStatistics;
-import static br.edu.unifei.gpesc.sas.modules.NeuralVector.doVectorization;
-import br.edu.unifei.gpesc.statistic.Census;
-import br.edu.unifei.gpesc.statistic.ChiSquaredDistribution;
-import br.edu.unifei.gpesc.statistic.MutualInformationDistribution;
-import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
-import br.edu.unifei.gpesc.statistic.StatisticalData;
-import br.edu.unifei.gpesc.statistic.Distribution;
-import br.edu.unifei.gpesc.statistic.FrequencyDistribution;
+import br.edu.unifei.gpesc.core.modules.Filter;
+import br.edu.unifei.gpesc.core.modules.Statistics;
+import static br.edu.unifei.gpesc.core.modules.Vector.doVectorization;
+import br.edu.unifei.gpesc.core.statistic.Census;
+import br.edu.unifei.gpesc.core.statistic.ChiSquared;
+import br.edu.unifei.gpesc.core.statistic.MutualInformation;
+import br.edu.unifei.gpesc.core.statistic.Characteristics;
+import br.edu.unifei.gpesc.core.statistic.Data;
+import br.edu.unifei.gpesc.core.statistic.Distribution;
+import br.edu.unifei.gpesc.core.statistic.Frequency;
 import br.edu.unifei.gpesc.util.ProcessLog;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,12 +46,12 @@ public class TrainModule {
      * The AntiSpam filter. <b>TODO: add filter selection. With this, the user
      * can select which filter will be used by the application. </b>
      */
-    private SASFilter mFilter;
+    private Filter mFilter;
 
     /**
      * The AntiSpam Statistics.
      */
-    private SASStatistics mStatistics;
+    private Statistics mStatistics;
 
     /**
      * Asserts if an file or folder exists.
@@ -103,7 +103,7 @@ public class TrainModule {
      * have permission to write in.
      */
     public void doFilter(String inPath, String outPath) {
-        if (mFilter == null) mFilter = new SASFilter();
+        if (mFilter == null) mFilter = new Filter();
 
         File inFolder = new File(inPath);
         assertDirectory(inFolder); // the first arg must be a directory
@@ -124,20 +124,20 @@ public class TrainModule {
 
     /**
      * Gets the {@link Distribution} for the input string.
-     * <li>MI: {@link MutualInformationDistribution}. </li>
+     * <li>MI: {@link MutualInformation}. </li>
      * @param method The method name, as shown above.
      * @return The Statistical Distribution selected.
      * @throws IllegalArgumentException if the method argument is invalid.
      */
     private Distribution getDistribution(String method) {
         if (method.contains("MI")) {
-            return new MutualInformationDistribution();
+            return new MutualInformation();
         }
         else if (method.contains("CHI2")) {
-            return new ChiSquaredDistribution();
+            return new ChiSquared();
         }
         else if (method.contains("FD")) {
-            return new FrequencyDistribution();
+            return new Frequency();
         }
         else {
             throw new IllegalArgumentException(i18n("TrainMode.Statistics.IllegalArgument.InvalidMethod", method));
@@ -166,7 +166,7 @@ public class TrainModule {
     public void doStatistics(String hamPath, String spamPath,
             String outFile, String method) throws IOException
     {
-        if (mStatistics == null) mStatistics = new SASStatistics();
+        if (mStatistics == null) mStatistics = new Statistics();
 
         File hamFolder = new File(hamPath);
         assertDirectory(hamFolder);
@@ -181,10 +181,10 @@ public class TrainModule {
 
         // generate statistics
         printlnLog("TrainMode.ProcessStart", hamPath);
-        mStatistics.processFolder(hamFolder, SASStatistics.HAM_SET);
+        mStatistics.processFolder(hamFolder, Statistics.HAM_SET);
 
         printlnLog("TrainMode.ProcessStart", spamPath);
-        mStatistics.processFolder(spamFolder, SASStatistics.SPAM_SET);
+        mStatistics.processFolder(spamFolder, Statistics.SPAM_SET);
 
         // compute distribution
         printlnLog("TrainMode.Statistics.ComputingDistribution");
@@ -197,7 +197,7 @@ public class TrainModule {
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(statisticsFile));
         fileWriter.write(method + "\n");
 
-        for (StatisticalData<String> data : census.getStatisticalDataList()) {
+        for (Data<String> data : census.getStatisticalDataList()) {
             fileWriter
                     .append(data.getElement())
                     .append("\t")
@@ -244,7 +244,7 @@ public class TrainModule {
         createDirs(outSpamFile.getParentFile());
 
         // open statistics file
-        StatisticalCharacteristic<String> characteristic = new StatisticalCharacteristic<String>();
+        Characteristics<String> characteristic = new Characteristics<String>();
 
         Scanner scanner = new Scanner(statisticsFile);
         scanner.nextLine(); // ignore the method

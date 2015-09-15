@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.modules.SASFilter;
+import br.edu.unifei.gpesc.core.modules.Filter;
 import java.io.File;
 
 /**
@@ -26,7 +26,7 @@ import java.io.File;
 public class TheFilterMain {
 
     public static void filter(String path) {
-        SASFilter filter = new SASFilter();
+        Filter filter = new Filter();
         filter.filterFolder(new File(path, "base/ham"), new File(path, "clean/ham"));
         filter.filterFolder(new File(path, "base/spam"), new File(path, "clean/spam"));
     }

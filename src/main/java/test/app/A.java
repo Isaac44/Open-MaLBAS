@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.filter.UrlFilter;
+import br.edu.unifei.gpesc.core.filter.UrlFilter;
 
 /**
  *

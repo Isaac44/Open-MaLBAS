@@ -16,13 +16,13 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import br.edu.unifei.gpesc.neural.mlp3.train.Mlp;
-import br.edu.unifei.gpesc.neural.mlp3.train.TrainMlp;
-import br.edu.unifei.gpesc.neural.mlp3.util.Function;
-import br.edu.unifei.gpesc.neural.mlp3.util.Linear;
-import br.edu.unifei.gpesc.neural.mlp3.util.LogSig;
-import br.edu.unifei.gpesc.neural.mlp3.util.PrimeNumber;
-import br.edu.unifei.gpesc.neural.mlp3.util.TanSig;
+import br.edu.unifei.gpesc.core.mlp.Mlp;
+import br.edu.unifei.gpesc.core.mlp.TrainMlp;
+import br.edu.unifei.gpesc.core.mlp.Function;
+import br.edu.unifei.gpesc.core.mlp.Linear;
+import br.edu.unifei.gpesc.core.mlp.LogSig;
+import br.edu.unifei.gpesc.core.mlp.PrimeNumber;
+import br.edu.unifei.gpesc.core.mlp.TanSig;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;

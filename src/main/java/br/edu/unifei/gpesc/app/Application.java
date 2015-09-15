@@ -17,6 +17,8 @@
 package br.edu.unifei.gpesc.app;
 
 import static br.edu.unifei.gpesc.app.Messages.*;
+import br.edu.unifei.gpesc.app.sas.Client;
+import br.edu.unifei.gpesc.app.sas.Server;
 import java.io.IOException;
 
 
@@ -26,14 +28,17 @@ import java.io.IOException;
  */
 public class Application {
 
+    private static final String ARG_SERVER = "server";
+    private static final String ARG_CLIENT = "client";
+
     private static final String ARG_FILTER = "filter";
     private static final String ARG_STATISTICS = "statistics";
     private static final String ARG_MLP_VECTOR = "vector";
     private static final String ARG_MLP_NEURAL = "mlp";
 
-    private static final Configuration sConfig = Configuration.getInstance();
-    private static final TrainModule sTrainModule = new TrainModule();
-    private static NeuralModule sNeuralModule = null;
+    private static Configuration sConfig;
+    private static TrainModule sTrainModule;
+    private static NeuralModule sNeuralModule;
 
     private static void runFilter() {
         String hamInPath = sConfig.getProperty("RAW_NOT_SPAM_FOLDER");
@@ -76,6 +81,11 @@ public class Application {
     }
 
     private static void process(String module) throws IOException {
+        // init
+        sConfig = Configuration.getInstance();
+        sTrainModule = new TrainModule();
+
+        // process
         if (module.equals(ARG_FILTER))
         {
             printlnLog("Application.TrainMode.SelectedFilter");
@@ -100,24 +110,38 @@ public class Application {
         }
     }
 
-    public static void main2(String... args) throws IOException {
+    public static void main(String... args) throws IOException {
         if (args.length == 0) {
-            printlnLog("Application.TrainMode.All");
-            System.out.println();
-            process(ARG_FILTER);
-            process(ARG_STATISTICS);
-            process(ARG_MLP_VECTOR);
-        } else {
-            process(args[0].toLowerCase());
+            System.out.println("SAS - Incorret use");
+//            printlnLog("Application.TrainMode.All");
+//            System.out.println();
+//            process(ARG_FILTER);
+//            process(ARG_STATISTICS);
+//            process(ARG_MLP_VECTOR);
+        }
+
+        else {
+            String module = args[0].toLowerCase();
+
+            if (ARG_CLIENT.equals(module)) {
+                System.exit(Client.run());
+            }
+            else if (ARG_SERVER.equals(module)) {
+                new Server().run();
+            }
+            else {
+                process(module);
+            }
         }
     }
+
 
 //    public static void main(String[] args) throws IOException {
 //        ProcessMailApp.main(args);
 //    }
 
-    public static void main(String[] args) throws IOException {
-        main2(ARG_MLP_NEURAL);
+//    public static void main(String[] args) throws IOException {
+//        main2(ARG_MLP_NEURAL);
 
 //        main2(args);
 //        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");
@@ -135,27 +159,27 @@ public class Application {
 //        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
 
 //        genVectors();
-    }
+//    }
 
-    private static void genVectors() throws IOException {
-        String[] quantities = {"500", "1000", "1500", "2000", "2500"};
-        String[] methods = {"mi", "chi2", "df"};
+//    private static void genVectors() throws IOException {
+//        String[] quantities = {"500", "1000", "1500", "2000", "2500"};
+//        String[] methods = {"mi", "chi2", "df"};
+//
+//        String cleanPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
+//        String vectorPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vectors/vector";
+//        String statisticsPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/statistics/statistics";
+//
+//        for (String quantity : quantities) {
+//            System.out.println("quantity = " + quantity);
+//            for (String method : methods) {
+//                System.out.println("method = " + method);
+//                genVectors(quantity, cleanPath, statisticsPath, method, vectorPath);
+//            }
+//        }
+//    }
 
-        String cleanPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
-        String vectorPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vectors/vector";
-        String statisticsPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/statistics/statistics";
-
-        for (String quantity : quantities) {
-            System.out.println("quantity = " + quantity);
-            for (String method : methods) {
-                System.out.println("method = " + method);
-                genVectors(quantity, cleanPath, statisticsPath, method, vectorPath);
-            }
-        }
-    }
-
-    private static void genVectors(String quantity, String cleanPath, String statisticsPath, String method, String vectorPath) throws IOException {
-        main2("--mlp-vector", quantity, cleanPath + "ham", cleanPath + "spam", statisticsPath + "_" + method, vectorPath + "_" + method + "_" + quantity);
-    }
+//    private static void genVectors(String quantity, String cleanPath, String statisticsPath, String method, String vectorPath) throws IOException {
+//        main2("--mlp-vector", quantity, cleanPath + "ham", cleanPath + "spam", statisticsPath + "_" + method, vectorPath + "_" + method + "_" + quantity);
+//    }
 
 }

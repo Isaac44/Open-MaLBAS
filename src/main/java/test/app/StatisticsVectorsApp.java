@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
+import br.edu.unifei.gpesc.core.statistic.Characteristics;
 
 /**
  *
@@ -30,7 +30,7 @@ public class StatisticsVectorsApp {
         final int quantity = 1000;
 
         // vectors
-        StatisticalCharacteristic<String> characteristic = new StatisticalCharacteristic<String>();
+        Characteristics<String> characteristic = new Characteristics<String>();
 
 
 

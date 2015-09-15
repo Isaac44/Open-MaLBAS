@@ -16,8 +16,8 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.modules.NeuralVector;
-import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
+import br.edu.unifei.gpesc.core.modules.Vector;
+import br.edu.unifei.gpesc.core.statistic.Characteristics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.util.Scanner;
 public class VectorApp {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        StatisticalCharacteristic<String> characteristic = new StatisticalCharacteristic<String>();
+        Characteristics<String> characteristic = new Characteristics<String>();
 
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/";
         Scanner scanner = new Scanner(new File(path, "clean/statistics.txt"));
@@ -41,8 +41,8 @@ public class VectorApp {
 
         System.out.println("count="+characteristic.getObjectCount());
 
-        NeuralVector.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), NeuralVector.HAM, false);
-        NeuralVector.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), NeuralVector.SPAM, false);
+        Vector.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), Vector.HAM, false);
+        Vector.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), Vector.SPAM, false);
 
     }
 

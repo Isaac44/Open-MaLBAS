@@ -16,7 +16,7 @@
  */
 package br.edu.unifei.gpesc.app_beta;
 
-import br.edu.unifei.gpesc.sas.modules.NeuralCharacteristic;
+import br.edu.unifei.gpesc.core.modules.NeuralCharacteristic;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

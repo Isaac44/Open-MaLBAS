@@ -16,10 +16,10 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer;
-import br.edu.unifei.gpesc.neural.mlp3.train.NeuronLayer.Neuron;
-import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
-import br.edu.unifei.gpesc.neural.mlp3.train.TrainMlp;
+import br.edu.unifei.gpesc.core.mlp.NeuronLayer;
+import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
+import br.edu.unifei.gpesc.core.mlp.PatternLayer;
+import br.edu.unifei.gpesc.core.mlp.TrainMlp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -33,8 +33,8 @@ import java.nio.channels.FileChannel;
  */
 public class TrainBuilder {
 
-    public static final double[] HAM = {1.0, 0.0};
-    public static final double[] SPAM = {0.0, 1.0};
+    public static final NeuronLayer HAM = new NeuronLayer(1.0, 0.0);
+    public static final NeuronLayer SPAM = new NeuronLayer(0.0, 1.0);
 
 //    public static final NeuronLayer HAM = new NeuronLayer(1.0, 0.0);
 //    public static final NeuronLayer SPAM = new NeuronLayer(0.0, 1.0);
@@ -53,7 +53,7 @@ public class TrainBuilder {
         return trainMlp;
     }
 
-    public static PatternLayer[] loadTrainMlp(File vectors, double[] outputLayer) throws IOException {
+    public static PatternLayer[] loadTrainMlp(File vectors, NeuronLayer output) throws IOException {
         // open file
         FileChannel fileIn = new FileInputStream(vectors).getChannel();
 
@@ -82,7 +82,7 @@ public class TrainBuilder {
             }
 
             // add new pattern.
-            layers[i] = new PatternLayer(new NeuronLayer(activations), new NeuronLayer(outputLayer));
+            layers[i] = new PatternLayer(new NeuronLayer(activations), output);
         }
 
         return layers;
@@ -168,11 +168,11 @@ public class TrainBuilder {
     private static void write(File file, PatternLayer[] layers) throws IOException {
         FileWriter writer = new FileWriter(file);
         for (PatternLayer layer : layers) {
-            for (Neuron neuron : layer.inputLayer.getNeuron()) {
+            for (Neuron neuron : layer.inputLayer.getNeurons()) {
                 writer.append(String.valueOf(neuron.activation));
                 writer.append("\t");
             }
-            for (Neuron neuron : layer.outputLayer.getNeuron()) {
+            for (Neuron neuron : layer.outputLayer.getNeurons()) {
                 writer.append(String.valueOf(neuron.activation));
                 writer.append("\t");
             }

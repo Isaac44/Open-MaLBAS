@@ -16,8 +16,8 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import br.edu.unifei.gpesc.neural.mlp3.train.PatternLayer;
-import br.edu.unifei.gpesc.neural.mlp3.train.RunMlp;
+import br.edu.unifei.gpesc.core.mlp.PatternLayer;
+import br.edu.unifei.gpesc.core.mlp.RunMlp;
 import java.io.File;
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class TestBuilder {
 
         return TrainBuilder.merge(hams, spams);
     }
-
+    
     public static void main(String[] args) throws IOException {
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/September/neural/";
         RunMlp runMlp = RunMlp.loadMlp(new File(path, "train_1.dat"));

@@ -16,11 +16,11 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.statistic.Census;
-import br.edu.unifei.gpesc.statistic.StatisticalData;
-import br.edu.unifei.gpesc.statistic.Statistics;
-import br.edu.unifei.gpesc.sas.modules.SASStatistics;
-import br.edu.unifei.gpesc.statistic.MutualInformationDistribution;
+import br.edu.unifei.gpesc.core.statistic.Census;
+import br.edu.unifei.gpesc.core.statistic.Data;
+import br.edu.unifei.gpesc.core.statistic.Statistic;
+import br.edu.unifei.gpesc.core.modules.Statistics;
+import br.edu.unifei.gpesc.core.statistic.MutualInformation;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,19 +33,19 @@ import java.io.IOException;
 public class TheStatisticsMainCopy {
 
     public static void main(String[] args) throws IOException {
-        SASStatistics antispamStatistics = new SASStatistics();
+        Statistics antispamStatistics = new Statistics();
         String path = "/home/isaac/Unifei/Mestrado/SAS/Statistics/MethodsData/";
         antispamStatistics.processSpamAndHam(new File(path, "spam"), new File(path, "ham"));
 
-        Statistics<String> statistics = antispamStatistics.getStatistics();
+        Statistic<String> statistics = antispamStatistics.getStatistics();
 
         Census<String> census = new Census<String>(statistics);
-        census.computeDistribution(new MutualInformationDistribution());
+        census.computeDistribution(new MutualInformation());
 
         census.sortData(new Census.DecrescentDistributionSort());
 
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(path+"statistics.txt"));
-        for (StatisticalData<String> data : census.getStatisticalDataList()) {
+        for (Data<String> data : census.getStatisticalDataList()) {
             fileWriter.append(data.getElement()).append("\t").append(Double.toString(data.getDistribution())).append("\n");
         }
         fileWriter.close();

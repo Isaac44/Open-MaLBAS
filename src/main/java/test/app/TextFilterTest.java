@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.filter.FilterExecutor;
+import br.edu.unifei.gpesc.core.filter.FilterExecutor;
 import java.util.Scanner;
 
 /**

@@ -17,10 +17,10 @@
 package br.edu.unifei.gpesc.app_beta;
 
 import br.edu.unifei.gpesc.neural.mlp.core.MlpRun;
-import br.edu.unifei.gpesc.sas.modules.NeuralCharacteristic;
-import br.edu.unifei.gpesc.sas.modules.SASFilter;
-import br.edu.unifei.gpesc.statistic.StatisticalCharacteristic;
-import static br.edu.unifei.gpesc.sas.modules.NeuralVector.getVectorArray;
+import br.edu.unifei.gpesc.core.modules.NeuralCharacteristic;
+import br.edu.unifei.gpesc.core.modules.Filter;
+import br.edu.unifei.gpesc.core.statistic.Characteristics;
+import static br.edu.unifei.gpesc.core.modules.Vector.getVectorArray;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,8 +33,8 @@ import java.util.Scanner;
 public class ProcessMail {
 
     private final MlpRun mMlpRun = new MlpRun();
-    private final SASFilter mMailFilter = new SASFilter();
-    private final StatisticalCharacteristic<String> mCharacteristic = new StatisticalCharacteristic<String>();
+    private final Filter mMailFilter = new Filter();
+    private final Characteristics<String> mCharacteristic = new Characteristics<String>();
 
     public ProcessMail(String archFileName, String weiFileName, File characteristicFile) throws FileNotFoundException {
         mMlpRun.initNet(archFileName, weiFileName);

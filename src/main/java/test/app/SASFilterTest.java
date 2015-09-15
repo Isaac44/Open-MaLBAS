@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.sas.modules.SASFilter;
+import br.edu.unifei.gpesc.core.modules.Filter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.io.UnsupportedEncodingException;
 public class SASFilterTest {
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        SASFilter filter = new SASFilter();
+        Filter filter = new Filter();
 
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail/test/";
         String file = "smtp_1377305710_0x7fd6dc02b830_835.eml";
