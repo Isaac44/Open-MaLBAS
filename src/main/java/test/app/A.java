@@ -17,6 +17,8 @@
 package test.app;
 
 import br.edu.unifei.gpesc.core.filter.UrlFilter;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -29,6 +31,9 @@ public class A {
         System.out.println(urlFilter.filter("a.c"));
         System.out.println(urlFilter.filter("a."));
         System.out.println(urlFilter.filter("aadsf.om"));
+
+        BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+
 
     }
 }

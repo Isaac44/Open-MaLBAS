@@ -17,8 +17,8 @@
 package br.edu.unifei.gpesc.core.mlp;
 
 import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
-import br.edu.unifei.gpesc.core.mlp.util.ConsolePrintMlp;
 import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
+import br.edu.unifei.gpesc.log.MlpLogger;
 import java.util.Random;
 
 /**
@@ -67,8 +67,24 @@ public class TrainMlp extends Mlp {
      */
     private PatternLayer[] mValidationArray;
 
-    private ConsolePrintMlp mConsolePrint = new ConsolePrintMlp();
+    /**
+     * The train logger.
+     */
+    private MlpLogger mLogger;
 
+    /**
+     * Creates a Train MLP.
+     *
+     * @param inLen The length of the input layer.
+     * @param h1Len The length of the first hidden layer.
+     * @param h2Len The length of the second hidden layer.
+     * @param outLen The length of the output layer.
+     * @param logger The mlp train logger.
+     */
+    public TrainMlp(int inLen, int h1Len, int h2Len, int outLen, MlpLogger logger) {
+        super(inLen, h1Len, h2Len, outLen);
+        mValidationOutputLayer = new NeuronLayer(outLen);
+    }
 
     /**
      * Creates a Train MLP.
@@ -79,8 +95,15 @@ public class TrainMlp extends Mlp {
      * @param outLen The length of the output layer.
      */
     public TrainMlp(int inLen, int h1Len, int h2Len, int outLen) {
-        super(inLen, h1Len, h2Len, outLen);
-        mValidationOutputLayer = new NeuronLayer(outLen);
+        this(inLen, h1Len, h2Len, outLen, null);
+    }
+
+    /**
+     * Sets the logger.
+     * @param logger The mlp train logger.
+     */
+    public void setLogger(MlpLogger logger) {
+        mLogger = logger;
     }
 
     /**
@@ -272,12 +295,44 @@ public class TrainMlp extends Mlp {
     }
 
     /**
-     * Runs the treining.
+     * Log the current step.
+     * @param step The current value of step.
      */
-    public void runTrainByEpoch() {
+    private void logStep(int step) {
+        if (mLogger != null) {
+            mLogger.logStep(step);
+        }
+    }
+
+    /**
+     * Log the last computed epoch.
+     * @param epoch The epoch.
+     * @param error The validation error.
+     * @param momentum The end momentum.
+     * @param learnRate The end learn rate.
+     */
+    private void logEpoch(int epoch, double error, double momentum, double learnRate) {
+        if (mLogger != null) {
+            mLogger.logEpoch(epoch, error, momentum, learnRate);
+        }
+    }
+
+    /**
+     * Closes the log.
+     */
+    private void logClose() {
+        if (mLogger != null) {
+            mLogger.close();
+        }
+    }
+
+    /**
+     * Runs the training.
+     * @return The last validation error.
+     */
+    public double runTrainByEpoch() {
         // optimization
-        int ep;
-        int epochs = mEpochs;
+        int maxEpochs = mEpochs;
         double momentum = mMomentum;
         double learnRate = mLearnRate;
 
@@ -295,13 +350,17 @@ public class TrainMlp extends Mlp {
         // start process
         int step = 0;
         do {
-            step++;
+            // log
+            logStep(++step);
+            System.out.println("step = " + step);
 
             // epochs
-            for (ep = 1; ep <= epochs; ep++) {
+            for (int epoch = 1; epoch <= maxEpochs; epoch++) {
+                // reset
                 epochError = 0.0;
                 resetLayers();
 
+                // compute for each input pattern
                 for (PatternLayer trainLayer : mTrainInputArray) {
 
                     // insert pattern input in the network
@@ -337,8 +396,8 @@ public class TrainMlp extends Mlp {
                 // save the current value
                 prevEpochError = epochError;
 
-                // print
-                mConsolePrint.printEpoch(step, epochs, epochError, momentum, learnRate, validationError);
+                // log
+                logEpoch(epoch, epochError, momentum, learnRate);
             }
 
             // save the current validation error
@@ -349,6 +408,11 @@ public class TrainMlp extends Mlp {
 
             // run until the current error is small then the previous
         } while (validationError < prevValidationError);
+
+        // log end
+        logClose();
+
+        return validationError;
     }
 
     public void runTestSup(PatternLayer[] patterns) {

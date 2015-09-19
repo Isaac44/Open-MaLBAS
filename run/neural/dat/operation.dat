@@ -1,0 +1,19 @@
+
+
+Operacao
+   tipo: 2
+
+
+//   Tipos possiveis:
+//      1- treinar (pattern basis);
+//      2- treinar (epoch basis);
+//      3- executar (supervisionado);
+//      4- executar (nao-supervisionado).
+
+
+
+//
+//   Observacoes:
+//
+//      1- o treinamento em "epoch basis" (tipo 2) e' mais eficiente por ser mais estavel.
+

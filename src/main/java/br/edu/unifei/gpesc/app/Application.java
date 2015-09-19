@@ -76,7 +76,7 @@ public class Application {
             sNeuralModule = new NeuralModule();
         }
 
-        sNeuralModule.load();
+        sNeuralModule.setUp();
         sNeuralModule.start();
     }
 
@@ -133,6 +133,15 @@ public class Application {
                 process(module);
             }
         }
+    }
+
+    public static void main3(String[] args) throws IOException {
+//        main2(ARG_FILTER);
+//        main2(ARG_STATISTICS);
+//        main2(ARG_MLP_VECTOR);
+
+//        main2(ARG_MLP_NEURAL);
+
     }
 
 

@@ -1,0 +1,42 @@
+
+
+Trace
+   trace: false
+
+
+Arquitetura
+   numero de unidades na camada de entrada: 10
+   numero de unidades na primeira camada escondida: 10
+   numero de unidades na segunda camada escondida: 12
+   numero de unidades na camada de saida: 2
+   funcao de transferencia na primeira camada escondida: 3   (1- linear;   2- logsig;   3- tansig)
+   funcao de transferencia na segunda camada escondida: 3   (1- linear;   2- logsig;   3- tansig)
+   funcao de transferencia na camada de saida: 2   (1- linear;   2- logsig;   3- tansig)
+
+
+Geracao de pesos
+   semente inicial: 0   (0- semente e' gerada aleatoriamente;   ou <valor inteiro>)
+   valor maximo positivo do peso: 0.1
+
+
+Treinamento
+   numero maximo de padroes de treinamento: 600
+   numero de epocas a cada passo de treinamento: 20
+   taxa de aprendizagem inicial: 0.00001
+   momentum inicial: 0.9
+
+
+
+//
+//   Observacoes:
+//
+//      1- a taxa de aprendizagem inicial deve ser baixa (por exemplo, "0.00001"). 
+//         Em seguida, deve-se observar os resultados desta taxa com os resultados 
+//         obtidos com uma taxa maior (por exemplo, "0.0001") e com uma taxa menor 
+//         (por exemplo, "0.000001"). Se os resultados forem melhores com a taxa 
+//         menor, deve-se reduzir ainda mais a taxa (por exemplo, dividindo-a 
+//         sempre por 10) ate' que os resultados deixem de ser melhores. De igual 
+//         forma, se os resultados forem melhores com a taxa maior, deve-se 
+//         aumentar ainda mais a taxa (por exemplo, multiplicando-a sempre por 10) 
+//         ate' que os resultados deixem de ser melhores.
+

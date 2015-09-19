@@ -52,6 +52,8 @@ public class Server {
     }
 
     private void createGrader() throws IOException {
+        System.out.println("Creating grader");
+
         Configuration c = Configuration.getInstance();
 
         String weightsFile = c.getProperty("WEIGHTS_FILE");
@@ -69,6 +71,8 @@ public class Server {
             int readed = socket.getInputStream().read(mClientData);
             int result = mGrader.processMail(new ByteArrayInputStream(mClientData, 0, readed));
 
+            System.out.println("result = " + result);
+
             OutputStream outStream = socket.getOutputStream();
             outStream.write(result);
             outStream.flush();
@@ -85,8 +89,9 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(34645);
 
         while (true) {
+            System.out.println("Waiting connection...");
             Socket socket = serverSocket.accept();
-            System.out.println("handing client");
+            System.out.println("handling client");
             processClient(socket);
         }
     }
