@@ -16,7 +16,9 @@
  */
 package br.edu.unifei.gpesc.app.sas;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import org.apache.commons.io.IOUtils;
 
@@ -26,13 +28,37 @@ import org.apache.commons.io.IOUtils;
  */
 public class Client {
 
-    public static int run() {
+
+
+    private static void sendString(OutputStream outStream, String str) throws IOException {
+        byte[] bytes = str.getBytes();
+
+        // write length
+        outStream.write(bytes.length >> 24);
+        outStream.write(bytes.length >> 16);
+        outStream.write(bytes.length >>  8);
+        outStream.write(bytes.length);
+
+        // write data
+        outStream.write(bytes);
+    }
+
+    public static int run(String userAddress) {
         try {
             // open connection
             Socket socket = new Socket("localhost", 34645);
 
+            // send mail data
+            BufferedOutputStream outStream = new BufferedOutputStream(socket.getOutputStream());
+
+            // send user email
+            sendString(outStream, userAddress);
+
             // send mail
-            IOUtils.copy(System.in, socket.getOutputStream());
+            IOUtils.copy(System.in, outStream);
+
+            // flush
+            outStream.flush();
 
             // get process result
             return socket.getInputStream().read();

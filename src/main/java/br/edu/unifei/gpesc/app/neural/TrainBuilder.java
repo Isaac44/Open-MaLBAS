@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app;
+package br.edu.unifei.gpesc.app.neural;
 
 import br.edu.unifei.gpesc.core.mlp.NeuronLayer;
 import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
 import br.edu.unifei.gpesc.core.mlp.PatternLayer;
 import br.edu.unifei.gpesc.core.mlp.TrainMlp;
+import br.edu.unifei.gpesc.core.modules.Spam;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -33,11 +34,8 @@ import java.nio.channels.FileChannel;
  */
 public class TrainBuilder {
 
-    public static final NeuronLayer HAM = new NeuronLayer(1.0, 0.0);
-    public static final NeuronLayer SPAM = new NeuronLayer(0.0, 1.0);
-
-//    public static final NeuronLayer HAM = new NeuronLayer(1.0, 0.0);
-//    public static final NeuronLayer SPAM = new NeuronLayer(0.0, 1.0);
+    public static final NeuronLayer HAM = new NeuronLayer(Spam.HAM);
+    public static final NeuronLayer SPAM = new NeuronLayer(Spam.SPAM);
 
     private PatternLayer[] mInputLayers;
     private PatternLayer[] mValidationLayers;

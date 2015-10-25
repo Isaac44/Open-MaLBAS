@@ -25,12 +25,12 @@ public enum NeuralCharacteristic {
     /**
      * The HAM constant.
      */
-    HAM("not spam", 0, 1),
+    HAM("not spam", Spam.HAM),
 
     /**
      * The SPAM constant.
      */
-    SPAM("spam", 1, 0),
+    SPAM("spam", Spam.SPAM),
 
     /**
      * The error constant.
@@ -62,7 +62,7 @@ public enum NeuralCharacteristic {
      * The int array for this enum. This is used for identify the result of the
      * neural network.
      */
-    public final int[] INT_VALUE;
+    public final double[] INT_VALUE;
 
     /**
      * Creates a new enum.
@@ -70,7 +70,7 @@ public enum NeuralCharacteristic {
      * @param firstValue The first value of this enum.
      * @param secondValue The second value of this enum.
      */
-    private NeuralCharacteristic(String name, int... values) {
+    private NeuralCharacteristic(String name, double... values) {
         NAME = name;
         if (values.length > 0) {
             STR_VALUE = values[0] + " " + values[1];

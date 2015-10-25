@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Universidade Federal de Itajuba
+ * Copyright (C) 2015 GPESC - Universidade Federal de Itajuba
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package br.edu.unifei.gpesc.app;
 
+import br.edu.unifei.gpesc.app.neural.NeuralModule;
+import br.edu.unifei.gpesc.app.neural.TestBuilder;
 import static br.edu.unifei.gpesc.app.Messages.*;
 import br.edu.unifei.gpesc.app.sas.Client;
 import br.edu.unifei.gpesc.app.sas.Server;
@@ -44,7 +46,7 @@ public class Application {
         String hamInPath = sConfig.getProperty("RAW_NOT_SPAM_FOLDER");
         String hamOutPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
         String spamInPath = sConfig.getProperty("RAW_SPAM_FOLDER");
-        String spamOutPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String spamOutPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
 
         sTrainModule.doFilter(hamInPath, hamOutPath);
         sTrainModule.doFilter(spamInPath, spamOutPath);
@@ -105,7 +107,7 @@ public class Application {
         }
         else if (module.equals(ARG_MLP_NEURAL))
         {
-            printlnLog("Application.TrainMode.SelectedMlpVector");
+            printlnLog("Application.TrainMode.SelectedMlpNeural");
             runMlp();
         }
     }
@@ -123,72 +125,19 @@ public class Application {
         else {
             String module = args[0].toLowerCase();
 
+            if ("run".equals(module)) {
+                TestBuilder.main(args);
+            }
+
             if (ARG_CLIENT.equals(module)) {
-                System.exit(Client.run());
+                System.exit(Client.run(args[1]));
             }
             else if (ARG_SERVER.equals(module)) {
-                new Server().run();
+                new Server().start();
             }
             else {
                 process(module);
             }
         }
     }
-
-    public static void main3(String[] args) throws IOException {
-//        main2(ARG_FILTER);
-//        main2(ARG_STATISTICS);
-//        main2(ARG_MLP_VECTOR);
-
-//        main2(ARG_MLP_NEURAL);
-
-    }
-
-
-//    public static void main(String[] args) throws IOException {
-//        ProcessMailApp.main(args);
-//    }
-
-//    public static void main(String[] args) throws IOException {
-//        main2(ARG_MLP_NEURAL);
-
-//        main2(args);
-//        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/ham", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/ham");
-//        main2("--filter", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/base/spam", "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/spam");
-
-//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
-//        main2("--statistics", "MI", path+"ham", path+"spam", path);
-
-//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/clean/";
-//        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/May/vector/";
-//        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
-
-//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
-//        String pathVector = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vector_chi2/";
-//        main2("--mlp-vector", "2000", path+"ham", path+"spam", path+"statistics", pathVector);
-
-//        genVectors();
-//    }
-
-//    private static void genVectors() throws IOException {
-//        String[] quantities = {"500", "1000", "1500", "2000", "2500"};
-//        String[] methods = {"mi", "chi2", "df"};
-//
-//        String cleanPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Febuary/clean/";
-//        String vectorPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vectors/vector";
-//        String statisticsPath = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/statistics/statistics";
-//
-//        for (String quantity : quantities) {
-//            System.out.println("quantity = " + quantity);
-//            for (String method : methods) {
-//                System.out.println("method = " + method);
-//                genVectors(quantity, cleanPath, statisticsPath, method, vectorPath);
-//            }
-//        }
-//    }
-
-//    private static void genVectors(String quantity, String cleanPath, String statisticsPath, String method, String vectorPath) throws IOException {
-//        main2("--mlp-vector", quantity, cleanPath + "ham", cleanPath + "spam", statisticsPath + "_" + method, vectorPath + "_" + method + "_" + quantity);
-//    }
-
 }

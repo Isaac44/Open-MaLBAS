@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Universidade Federal de Itajuba
+ * Copyright (C) 2015 - GPESC - Universidade Federal de Itajuba
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app;
+package br.edu.unifei.gpesc.app.neural;
 
-import br.edu.unifei.gpesc.core.mlp.Mlp;
-import br.edu.unifei.gpesc.core.mlp.TrainMlp;
+import br.edu.unifei.gpesc.app.Configuration;
+import br.edu.unifei.gpesc.app.Messages;
 import br.edu.unifei.gpesc.core.mlp.Function;
 import br.edu.unifei.gpesc.core.mlp.Linear;
 import br.edu.unifei.gpesc.core.mlp.LogSig;
+import br.edu.unifei.gpesc.core.mlp.Mlp;
+import br.edu.unifei.gpesc.core.mlp.PatternLayer;
 import br.edu.unifei.gpesc.core.mlp.TanSig;
-import br.edu.unifei.gpesc.log.MlpLogger;
+import br.edu.unifei.gpesc.core.mlp.TrainMlp;
+import br.edu.unifei.gpesc.debug.MailSender;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 /**
  *
@@ -34,19 +38,59 @@ import java.util.concurrent.Executors;
  */
 public class NeuralModule {
 
+    /**
+     * Threads to execute the trains.
+     */
     private ExecutorService mTrainExecutor;
+
+    /**
+     * Thread to save the train log.
+     */
     private final ExecutorService mSaveLogExecutor = Executors.newFixedThreadPool(1);
+
+    /**
+     * Train builder.
+     */
     private TrainBuilder mTrainBuilder;
 
-    private String mNeuralFolder;
+    /**
+     * File configuration properties.
+     */
+    private final Configuration mCfg;
 
+    /**
+     * The output folder to store the result weights.
+     */
+    private String mWeightsFolder;
+
+    /**
+     * The first hidden layer length
+     */
     private int mFirstHiddenLength;
+
+    /**
+     * The second hidden layer length
+     */
     private int mSecondHiddenLength;
 
+    /**
+     * The number of epochs
+     */
     private int mEpochs;
+
+    /**
+     * The initial momentum rate.
+     */
     private double mMomentum;
+
+    /**
+     * The initial learn rate.
+     */
     private double mLearnRate;
 
+    /**
+     * The default seed.
+     */
     private long mSeed;
 
     private int mQuantityOfTrains;
@@ -56,6 +100,14 @@ public class NeuralModule {
     private String mSecondHiddenFunction;
     private String mOutputFunction;
 
+    private PatternLayer[] mTestPatterns;
+
+    private Messages mMessages;
+
+    public TrainExecutor() throws IOException {
+        mCfg = new Configuration("neural.properties");
+    }
+
     public void stopProcess() {
         if (mTrainExecutor != null) {
             mTrainExecutor.shutdownNow();
@@ -64,25 +116,39 @@ public class NeuralModule {
     }
 
     public void setUp() throws IOException {
-        Configuration cfg = Configuration.getInstance();
+        mQuantityOfTrains = mCfg.getIntegerProperty("NUMBER_OF_TRAINS");
+        if (mQuantityOfTrains <= 0) {
+            throw new IllegalArgumentException(mMessages.i18n("NeuralModule.IllegalArgument.NumberOfTrainsInferior"));
+        }
 
-        mNeuralFolder = cfg.getProperty("NEURAL_FOLDER");
-        mFirstHiddenLength = cfg.getIntegerProperty("DEFAULT_FIRST_HIDDEN_LENGTH");
-        mSecondHiddenLength = cfg.getIntegerProperty("DEFAULT_SECOND_HIDDEN_LENGTH");
-        mFirstHiddenFunction = cfg.getProperty("DEFAULT_FIRST_HIDDEN_FUNCTION");
-        mSecondHiddenFunction = cfg.getProperty("DEFAULT_SECOND_HIDDEN_FUNCTION");
-        mOutputFunction = cfg.getProperty("DEFAULT_OUTPUT_FUNCTION");
-        mEpochs = cfg.getIntegerProperty("DEFAULT_EPOCHS");
-        mMomentum = cfg.getDoublePropertie("DEFAULT_MOMENTUM");
-        mLearnRate = cfg.getDoublePropertie("DEFAULT_LEARN_RATE");
-        mSeed = getSeed(cfg.getProperty("DEFAULT_RANDOMIZER_SEED"));
-        mQuantityOfTrains = cfg.getIntegerProperty("NUMBER_OF_TRAINS");
-        mNumberOfActiveThreads = cfg.getIntegerProperty("NUMBER_OF_ACTIVES_THREADS");
+        mWeightsFolder = mCfg.getProperty("WEIGHTS_FOLDER");
+        mFirstHiddenLength = mCfg.getIntegerProperty("DEFAULT_FIRST_HIDDEN_LENGTH");
+        mSecondHiddenLength = mCfg.getIntegerProperty("DEFAULT_SECOND_HIDDEN_LENGTH");
+        mFirstHiddenFunction = mCfg.getProperty("DEFAULT_FIRST_HIDDEN_FUNCTION");
+        mSecondHiddenFunction = mCfg.getProperty("DEFAULT_SECOND_HIDDEN_FUNCTION");
+        mOutputFunction = mCfg.getProperty("DEFAULT_OUTPUT_FUNCTION");
+        mEpochs = mCfg.getIntegerProperty("DEFAULT_EPOCHS");
+        mMomentum = mCfg.getDoublePropertie("DEFAULT_MOMENTUM");
+        mLearnRate = mCfg.getDoublePropertie("DEFAULT_LEARN_RATE");
+        mSeed = getSeed(mCfg.getProperty("DEFAULT_RANDOMIZER_SEED"));
+        mNumberOfActiveThreads = mCfg.getIntegerProperty("NUMBER_OF_ACTIVES_THREADS");
 
-        String vectorFolder = cfg.getProperty("VECTOR_FOLDER");
-        Double validationPercent = cfg.getDoublePropertie("VALIDATION_PERCENT");
+        String vectorFolder = mCfg.getProperty("VECTOR_FOLDER");
+        Double validationPercent = mCfg.getDoublePropertie("VALIDATION_PERCENT");
 
-        mTrainBuilder = new TrainBuilder(new File(vectorFolder, "ham"), new File(vectorFolder, "spam"), validationPercent);
+        File hamFile = new File(vectorFolder, "ham");
+        File spamFile = new File(vectorFolder, "spam");
+        mTrainBuilder = new TrainBuilder(hamFile, spamFile, validationPercent);
+
+        openTestPatterns(new File(vectorFolder));
+    }
+
+    private void openTestPatterns(File folder) {
+        try {
+            mTestPatterns = TestBuilder.loadLayers(folder);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void start() {
@@ -142,6 +208,18 @@ public class NeuralModule {
         return getSeed(key, 7);
     }
 
+    private final Object TRAIN_FINISH_LOCK = new Object();
+
+    private void trainFinished() {
+        synchronized (TRAIN_FINISH_LOCK) {
+            mQuantityOfTrains--;
+            if (mQuantityOfTrains <= 0) {
+                mTrainExecutor.shutdown();
+                mSaveLogExecutor.shutdown();
+            }
+        }
+    }
+
     private class TrainMlpRunnable implements Runnable {
         private final String mTag;
         private final int mId;
@@ -151,7 +229,7 @@ public class NeuralModule {
             mTag = "TRAIN_" + id + "_";
         }
 
-        private void setUp(Configuration cfg, TrainMlp mlp, MlpLogger logger, int h1Len, int h2Len) {
+        private void setUp(Configuration cfg, TrainMlp mlp, AsyncLogger logger, int h1Len, int h2Len) {
             // layers
             String h1F = cfg.getProperty(mTag + "FIRST_HIDDEN_FUNCTION", mFirstHiddenFunction);
             String h2F = cfg.getProperty(mTag + "SECOND_HIDDEN_FUNCTION", mSecondHiddenFunction);
@@ -173,24 +251,26 @@ public class NeuralModule {
             // seed
             long seed = getSeed(cfg.getProperty(mTag + "RANDOMIZER_SEED", null), mSeed);
             mlp.setPrimeSeed(seed);
-            System.out.println("Train_" + mId + " seed = " + seed);
 
             // print log head
-            logger.logHead(h1Len, h2Len, h1F, h2F, outF, seed, epochs, momentum, learnRate);
+            logger.logTrainHead(h1Len, h2Len, h1F, h2F, outF, seed, epochs, momentum, learnRate);
         }
 
         @Override
         public void run() {
             try {
-                Configuration cfg = Configuration.getInstance();
-                int h1Len = cfg.getIntegerProperty(mTag + "FIRST_HIDDEN_LENGTH", mFirstHiddenLength);
-                int h2len = cfg.getIntegerProperty(mTag + "SECOND_HIDDEN_LENGTH", mSecondHiddenLength);
+                // time
+                long startTime = System.currentTimeMillis();
+
+                // config
+                int h1Len = mCfg.getIntegerProperty(mTag + "FIRST_HIDDEN_LENGTH", mFirstHiddenLength);
+                int h2len = mCfg.getIntegerProperty(mTag + "SECOND_HIDDEN_LENGTH", mSecondHiddenLength);
 
                 // build mlp
                 TrainMlp mlp = mTrainBuilder.buildWith(h1Len, h2len);
 
                 // save file
-                String file = mNeuralFolder + File.separator + cfg.getProperty(mTag + "FILE", "train_" + mId + ".dat");
+                String file = mWeightsFolder + File.separator + mCfg.getProperty(mTag + "FILE", "train_" + mId + ".dat");
 
                 File saveFile = new File(file);
                 if (!saveFile.isFile()) {
@@ -199,26 +279,36 @@ public class NeuralModule {
 
                 // save log file
                 File logFile = new File(file.replace(".dat", ".log"));
-                MlpLogger logger = new MlpLogger(mSaveLogExecutor, logFile);
+                AsyncLogger logger = new AsyncLogger(mSaveLogExecutor, logFile);
                 mlp.setLogger(logger);
 
                 // setUp
-                setUp(cfg, mlp, logger, h1Len, h2len);
+                setUp(mCfg, mlp, logger, h1Len, h2len);
 
                 // start training
-                Messages.printlnLog("TrainMode.Neural.Start", mId);
-                double error = mlp.runTrainByEpoch();
-                System.out.println("Train_"+mId + " error = " + error);
+                mMessages.printlnLog("TrainMode.Neural.Start", mId);
+                mlp.runTrainByEpoch();
 
                 // save results
-                Messages.printlnLog("TrainMode.Neural.Saving", mId, saveFile.getAbsolutePath());
-
+                mMessages.printlnLog("TrainMode.Neural.Saving", mId, saveFile.getAbsolutePath());
                 mlp.saveMlp(saveFile);
 
-                Messages.printlnLog("TrainMode.Neural.Finished", mId);
+                // run test
+                logger.logSeparator();
+                float result = mlp.runTestSup(mTestPatterns);
+
+                // log end
+                logger.close();
+                mMessages.printlnLog("TrainMode.Neural.Finished", mId);
+
+                // send mail
+                MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
+
+                // notify
+                trainFinished();
             }
             catch (IOException ex) {
-                Messages.printlnLog("TrainMode.Neural.Error", mId, ex.getMessage());
+                mMessages.printlnLog("TrainMode.Neural.Error", mId, ex.getMessage());
             }
         }
 

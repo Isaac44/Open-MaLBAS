@@ -17,6 +17,8 @@
 
 package br.edu.unifei.gpesc.core.statistic;
 
+import java.util.Arrays;
+
 /**
  * This is used to find  what elements are used to create the caracterization
  * of this Statistics.
@@ -68,7 +70,7 @@ public class Characterization<T> {
      * class.</b>
      * @return The generated statistical characterization array.
      */
-    public int[] getStatisticalCharacterizationArray() {
+    public int[] getCharacterizationArray() {
         return mCharacterizationArray;
     }
 
@@ -76,7 +78,7 @@ public class Characterization<T> {
      * This method cleans the statistical characterization array. Use this for
      * recycling process (and avoid unnecessary data allocation).
      */
-    public void cleanStatisticalCharacterizationArray() {
-
+    public void cleanCharacterizationArray() {
+        Arrays.fill(mCharacterizationArray, 0);
     }
 }

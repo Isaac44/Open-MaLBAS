@@ -16,7 +16,6 @@
  */
 package br.edu.unifei.gpesc.core.mlp;
 
-import br.edu.unifei.gpesc.neural.mlp.core.MlpTrain;
 import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
 import br.edu.unifei.gpesc.log.MlpLogger;
 import java.util.Random;
@@ -68,25 +67,6 @@ public class TrainMlp extends Mlp {
     private PatternLayer[] mValidationArray;
 
     /**
-     * The train logger.
-     */
-    private MlpLogger mLogger;
-
-    /**
-     * Creates a Train MLP.
-     *
-     * @param inLen The length of the input layer.
-     * @param h1Len The length of the first hidden layer.
-     * @param h2Len The length of the second hidden layer.
-     * @param outLen The length of the output layer.
-     * @param logger The mlp train logger.
-     */
-    public TrainMlp(int inLen, int h1Len, int h2Len, int outLen, MlpLogger logger) {
-        super(inLen, h1Len, h2Len, outLen);
-        mValidationOutputLayer = new NeuronLayer(outLen);
-    }
-
-    /**
      * Creates a Train MLP.
      *
      * @param inLen The length of the input layer.
@@ -95,7 +75,8 @@ public class TrainMlp extends Mlp {
      * @param outLen The length of the output layer.
      */
     public TrainMlp(int inLen, int h1Len, int h2Len, int outLen) {
-        this(inLen, h1Len, h2Len, outLen, null);
+        super(inLen, h1Len, h2Len, outLen);
+        mValidationOutputLayer = new NeuronLayer(outLen);
     }
 
     /**
@@ -161,7 +142,7 @@ public class TrainMlp extends Mlp {
     }
 
     /**
-     * Sets the maximum weight.
+     * Sets the absolute maximum weight.
      *
      * @param maxWeight The maximum weight.
      */
@@ -328,9 +309,8 @@ public class TrainMlp extends Mlp {
 
     /**
      * Runs the training.
-     * @return The last validation error.
      */
-    public double runTrainByEpoch() {
+    public void runTrainByEpoch() {
         // optimization
         int maxEpochs = mEpochs;
         double momentum = mMomentum;
@@ -352,7 +332,6 @@ public class TrainMlp extends Mlp {
         do {
             // log
             logStep(++step);
-            System.out.println("step = " + step);
 
             // epochs
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
@@ -410,54 +389,52 @@ public class TrainMlp extends Mlp {
         } while (validationError < prevValidationError);
 
         // log end
-        logClose();
-
-        return validationError;
+//        logClose();
     }
 
-    public void runTestSup(PatternLayer[] patterns) {
-
-        int npat;   // numero de um padrao de teste
-        double perr;   // erro de um padrao de teste
-        double errtot;   // erro total dos padroes de teste
-
-        MlpTrain.Print output = new MlpTrain.Print();
-
-        // Execucao dos padroes de teste na rede neural
-        npat = 0;
-        errtot = 0.0f;
-
-        NeuronLayer inputLayer = mInputLayer;
-        ConnectionLayer outputLayer = mLayerArray[Layer.OUTPUT.ordinal()];
-
-        for (PatternLayer pattern : patterns) {
-            npat++;
-
-            inputLayer.setNeurons(pattern.inputLayer);
-            computeActivationOutput();
-
-            perr = outputLayer.getDifferenceTotal(pattern.outputLayer);
-            errtot += perr;
-
-            output.format("Padrao %d:\n", npat);
-            for (NeuronLayer.Neuron neuron : pattern.inputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-            output.format("\n   ===> Saida Esperada:  ");
-            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-
-            outputLayer.computeDifference(pattern.outputLayer);
-
-            output.format("\n   ===> Saida Obtida:  ");
-            for (NeuronLayer.Neuron neuron : outputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-            output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
-
-        }
-    }
+//    public void runTestSup(PatternLayer[] patterns) {
+//
+//        int npat;   // numero de um padrao de teste
+//        double perr;   // erro de um padrao de teste
+//        double errtot;   // erro total dos padroes de teste
+//
+//        MlpTrain.Print output = new MlpTrain.Print();
+//
+//        // Execucao dos padroes de teste na rede neural
+//        npat = 0;
+//        errtot = 0.0f;
+//
+//        NeuronLayer inputLayer = mInputLayer;
+//        ConnectionLayer outputLayer = mLayerArray[Layer.OUTPUT.ordinal()];
+//
+//        for (PatternLayer pattern : patterns) {
+//            npat++;
+//
+//            inputLayer.setNeurons(pattern.inputLayer);
+//            computeActivationOutput();
+//
+//            perr = outputLayer.getDifferenceTotal(pattern.outputLayer);
+//            errtot += perr;
+//
+//            output.format("Padrao %d:\n", npat);
+//            for (NeuronLayer.Neuron neuron : pattern.inputLayer.mNeurons) {
+//                output.format("   %.4f", neuron.activation);
+//            }
+//            output.format("\n   ===> Saida Esperada:  ");
+//            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeurons) {
+//                output.format("   %.4f", neuron.activation);
+//            }
+//
+//            outputLayer.computeDifference(pattern.outputLayer);
+//
+//            output.format("\n   ===> Saida Obtida:  ");
+//            for (NeuronLayer.Neuron neuron : outputLayer.mNeurons) {
+//                output.format("   %.4f", neuron.activation);
+//            }
+//            output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
+//
+//        }
+//    }
 
     // -------------------------------------------------------------------------
     // Dump -- Test

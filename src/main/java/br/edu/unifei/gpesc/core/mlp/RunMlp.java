@@ -34,55 +34,6 @@ public class RunMlp extends Mlp {
         super(inLen, h1Len, h2Len, outLen);
     }
 
-
-    /**
-     *
-     * @param patterns
-     */
-    public void runTestSup(PatternLayer[] patterns) {
-
-        int npat;   // numero de um padrao de teste
-        double perr;   // erro de um padrao de teste
-        double errtot;   // erro total dos padroes de teste
-
-        MlpTrain.Print output = new MlpTrain.Print();
-
-        // Execucao dos padroes de teste na rede neural
-        npat = 0;
-        errtot = 0.0f;
-
-        NeuronLayer inputLayer = mInputLayer;
-        ConnectionLayer outputLayer = getOutputLayer();
-
-        for (PatternLayer pattern : patterns) {
-            npat++;
-
-            inputLayer.setNeurons(pattern.inputLayer);
-            computeActivationOutput();
-
-            perr = outputLayer.getDifferenceTotal(pattern.outputLayer);
-            errtot += perr;
-
-            output.format("Padrao %d:\n", npat);
-            for (NeuronLayer.Neuron neuron : pattern.inputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-            output.format("\n   ===> Saida Esperada:  ");
-            for (NeuronLayer.Neuron neuron : pattern.outputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-
-            output.format("\n   ===> Saida Obtida:  ");
-            for (NeuronLayer.Neuron neuron : outputLayer.mNeurons) {
-                output.format("   %.4f", neuron.activation);
-            }
-            output.format("\n   ===> Erro do padrao de teste:  %.4f\n\n\n\n", perr);
-
-        }
-
-        System.out.println("Erro total = " + errtot);
-    }
-
     /**
      * Runs a not supervisioned test.
      * @param neurons The input activation neurons.

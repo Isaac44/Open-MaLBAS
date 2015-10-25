@@ -25,7 +25,7 @@ public class MonetaryTextFilter extends TextFilter {
     /**
      * The symbols usually founded in monetary values.
      */
-    private static final String[] MONETARY_SYMBOLS = {"$", "%"}; // note: this way is best than use regex
+    private static final String[] MONETARY_SYMBOLS = {"$", "%"}; // note: this way is better than use regex
 
     /**
      * Checks if the input text contains any monetary symbols. See

@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Scanner;
@@ -46,7 +47,7 @@ public class Vector {
 
     public static int[] getVectorArray(Characteristics<String> characteristic, String fileText) {
         Characterization<String> characterization = new Characterization<String>(characteristic);
-        int[] dataVector = characterization.getStatisticalCharacterizationArray();
+        int[] dataVector = characterization.getCharacterizationArray();
         double[] dataNormalized = new double[dataVector.length];
 
         Scanner scanner = new Scanner(fileText);
@@ -70,7 +71,7 @@ public class Vector {
             BufferedWriter writer = new BufferedWriter(new FileWriter(output, append));
             FileCharacterization characterization = new FileCharacterization(characteristic);
 
-            int[] dataVector = characterization.getStatisticalCharacterizationArray();
+            int[] dataVector = characterization.getCharacterizationArray();
             double[] dataNormalized = new double[dataVector.length];
 
             int i;
@@ -119,11 +120,14 @@ public class Vector {
         ProcessLog processLog = new ProcessLog();
 
         if (fileArray != null) {
-            FileChannel fileOut = new FileOutputStream(outFile).getChannel();
+            FileOutputStream fileStream = new FileOutputStream(outFile);
+            FileChannel fileOut = fileStream.getChannel();
+
+            Writer writeLink = new BufferedWriter(new FileWriter(new File(outFile.getAbsolutePath() + ".link")));
 
             FileCharacterization characterization = new FileCharacterization(characteristic);
 
-            int[] dataVector = characterization.getStatisticalCharacterizationArray();
+            int[] dataVector = characterization.getCharacterizationArray();
             double[] dataNormalized = new double[dataVector.length];
 
             // allocate the output buffer
@@ -138,8 +142,9 @@ public class Vector {
             int k = 0;
 
             for (File file : fileArray) {
-//                progress.setValue(k++);
+                progress.setValue(k++);
 
+                characterization.cleanCharacterizationArray();
                 characterization.processFile(file);
 
                 if (!hasOnlyZeros(dataVector)) {
@@ -149,6 +154,7 @@ public class Vector {
                         outBuffer.putDouble(value);
                     }
 
+                    writeLink.append(file.getName()).append("\n");
                     processLog.incSucessCount();
                 }
                 else {
@@ -156,11 +162,15 @@ public class Vector {
                 }
             }
 
+            // quantity of valid patterns
             outBuffer.putInt(0, processLog.sucess());
             outBuffer.flip();
 
             fileOut.write(outBuffer);
             fileOut.close();
+            fileStream.close();
+
+            writeLink.close();
 
             progress.end();
         }
@@ -169,7 +179,7 @@ public class Vector {
 
     public static double[] getVector(Characteristics<String> characteristics, String text ){
         Characterization<String> characterization = new Characterization<String>(characteristics);
-        int[] dataVector = characterization.getStatisticalCharacterizationArray();
+        int[] dataVector = characterization.getCharacterizationArray();
         double[] dataNormalized = new double[dataVector.length];
 
         Scanner scanner = new Scanner(text);

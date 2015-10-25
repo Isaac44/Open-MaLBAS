@@ -18,6 +18,7 @@ package br.edu.unifei.gpesc.app.sas;
 
 import br.edu.unifei.gpesc.core.mlp.RunMlp;
 import br.edu.unifei.gpesc.core.modules.Filter;
+import br.edu.unifei.gpesc.core.modules.Spam;
 import br.edu.unifei.gpesc.core.modules.Vector;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
 import java.io.File;
@@ -27,30 +28,30 @@ import java.io.InputStream;
  *
  * @author Isaac Caldas Ferreira
  */
-public class Grader {
+public class Classificator {
 
     public static final int HAM = 0;
     public static final int SPAM = 1;
-    public static final int NEITHER = 2;
+    public static final int UNKNOWN = 2;
 
     private final RunMlp mMlp;
     private final Filter mFilter = new Filter();
     private final Characteristics<String> mCharacteristics;
 
-    public Grader(RunMlp mlp, Characteristics<String> characteristics) {
+    public Classificator(RunMlp mlp, Characteristics<String> characteristics) {
         mMlp = mlp;
         mCharacteristics = characteristics;
     }
 
-    private int getClassification(double o1, double o2) {
-        if ((o1 >= 0.6) && (o2 <= 0.4)) {
-            return HAM;
-        }
-        else if ((o1 <= 0.4) && (o2 >= 0.6)) {
+    private int getClassification(double v1, double v2) {
+        if (Spam.isSpam(v1, v2)) {
             return SPAM;
         }
+        else if (Spam.isHam(v1, v2)) {
+            return HAM;
+        }
         else {
-            return NEITHER;
+            return UNKNOWN;
         }
     }
 

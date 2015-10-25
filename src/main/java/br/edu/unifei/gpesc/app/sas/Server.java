@@ -27,6 +27,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,14 +38,40 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    private Grader mGrader;
+    /**
+     * The mail classificator.
+     */
+    private Classificator mClassificator;
+
+    /**
+     * The service to store the client mail data.
+     */
+    private final ExecutorService mStorageExecutor = Executors.newFixedThreadPool(1);
+
+    /**
+     * The Storage rules.
+     */
+    private final Storage mStorage = Storage.buildFromConfiguration();
+
+    /**
+     * The ultra-large mail buffer.
+     */
     private final byte[] mClientData = new byte[100 * 1024 * 1024]; // 100 MiB buffer
 
-    private Characteristics<String> createCharacteristics(String file, int len) throws FileNotFoundException {
+    /**
+     * Create the characteristics that are used to build the mail vector.
+     * @param file The file with the features.
+     * @param quantity The quantity of features to be used.
+     * @return The Characteristics.
+     * @throws FileNotFoundException
+     */
+    private Characteristics<String> createCharacteristics(String file, int quantity)
+            throws FileNotFoundException
+    {
         Scanner scan = new Scanner(new File(file));
 
         Characteristics<String> characteristics = new Characteristics<String>();
-        for (int i=0; i<len; i++) {
+        for (int i=0; i<quantity; i++) {
             characteristics.insertData(scan.next());
             scan.nextLine();
         }
@@ -51,58 +79,124 @@ public class Server {
         return characteristics;
     }
 
-    private void createGrader() throws IOException {
-        System.out.println("Creating grader");
+    /**
+     * Creates the classificator.
+     * @throws IOException If any error occurs when openning the input files.
+     */
+    private void createClassificator() throws IOException {
+        System.out.println("Creating classificator");
 
         Configuration c = Configuration.getInstance();
 
         String weightsFile = c.getProperty("WEIGHTS_FILE");
-        String statisticsFile = c.getProperty("STATISTICS_FILE");
+        String statisticsFile = c.getProperty("S_STATISTICS_FILE");
 
         RunMlp mlp = RunMlp.loadMlp(new File(weightsFile));
         Characteristics<String> characteristics =
                 createCharacteristics(statisticsFile, mlp.getInputLayerLength());
 
-        mGrader = new Grader(mlp, characteristics);
+        mClassificator = new Classificator(mlp, characteristics);
     }
 
+    private static Object[] readString(byte[] data, int off) {
+        // read length
+        int length = (data[off++] << 24) | (data[off++] << 16) | (data[off++] << 8) | (data[off++]) ;
+
+        // string
+        String str = new String(data, off, length);
+
+        return new Object[] {str, off+length};
+    }
+
+    /**
+     * Process the client.
+     * <p>
+     * First it will read the client data, process and return the results.
+     * Then the data will be saved.
+     * </p>
+     * @param socket The socket with the connection to the client.
+     */
     private void processClient(Socket socket) {
         try {
+            // read all data
             int readed = socket.getInputStream().read(mClientData);
-            int result = mGrader.processMail(new ByteArrayInputStream(mClientData, 0, readed));
+
+            // read user
+            Object[] user = readString(mClientData, 0);
+
+            String userAddress = (String) user[0];
+            Integer offset = (Integer) user[1];
+
+            // process mail data
+            int result = mClassificator.processMail(
+                    new ByteArrayInputStream(mClientData, offset, readed-offset));
 
             System.out.println("result = " + result);
 
+            // send result
             OutputStream outStream = socket.getOutputStream();
             outStream.write(result);
             outStream.flush();
 
             socket.close();
-        } catch (IOException ex) {
+
+            // async store mail data
+            mStorageExecutor.execute(
+                    new StorageAsync(userAddress,
+                            new String(mClientData, offset, readed-offset), result != 0));
+        }
+        catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void run() throws IOException {
-        createGrader();
+    /**
+     * Starts the server service.
+     */
+    public void start() {
+        try {
+            createClassificator();
 
-        ServerSocket serverSocket = new ServerSocket(34645);
+            ServerSocket serverSocket = new ServerSocket(34645);
 
-        while (true) {
-            System.out.println("Waiting connection...");
-            Socket socket = serverSocket.accept();
-            System.out.println("handling client");
-            processClient(socket);
+            while (true) {
+                System.out.println("Waiting connection...");
+                Socket socket = serverSocket.accept();
+                System.out.println("handling client");
+                processClient(socket);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    private class StorageAsync implements Runnable {
+
+        private final String mmMailData;
+        private final String mmUserAddress;
+        private final boolean mmIsSpam;
+
+        public StorageAsync(String userAddress, String mailData, boolean isSpam) {
+            mmMailData = mailData;
+            mmUserAddress = userAddress;
+            mmIsSpam = isSpam;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("saving mail=" + mmUserAddress);
+            mStorage.store(mmUserAddress, mmMailData, mmIsSpam);
+        }
+
+    }
 
     // -------------------------------------------------------------------------
     // Test
     // -------------------------------------------------------------------------
 
     public static void main(String[] args) throws IOException {
-        new Server().run();
+        new Server().start();
     }
 
 }

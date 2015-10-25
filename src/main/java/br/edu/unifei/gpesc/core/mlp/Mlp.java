@@ -16,7 +16,10 @@
  */
 package br.edu.unifei.gpesc.core.mlp;
 
+import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
+import br.edu.unifei.gpesc.log.MlpLogger;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -26,7 +29,12 @@ import java.nio.channels.FileChannel;
  *
  * @author Isaac Caldas Ferreira
  */
-public abstract class Mlp {
+public class Mlp {
+
+    /**
+     * The maximun difference between the expected result and the result.
+     */
+    private static final double MAX_DIFFERENCE = 0.4;
 
     /**
      * The layer enumerator
@@ -60,6 +68,12 @@ public abstract class Mlp {
     protected final ConnectionLayer[] mLayerArray;
 
     /**
+     * The logger (is optional for trainning).
+     */
+    protected MlpLogger mLogger;
+
+
+    /**
      * Creates a MLP.
      *
      * @param inLen The length of the input layer.
@@ -89,10 +103,22 @@ public abstract class Mlp {
         mLayerArray[layer.ordinal()].setFunction(function);
     }
 
+    public void setLogger(MlpLogger logger) {
+        mLogger = logger;
+    }
+
+    /**
+     * Easy way to get the last layer.
+     * @return The output layer.
+     */
     protected ConnectionLayer getOutputLayer() {
         return mLayerArray[Layer.OUTPUT.ordinal()];
     }
 
+    /**
+     * Gets the length of the input layer.
+     * @return The input layer length.
+     */
     public int getInputLayerLength() {
         return mInputLayer.getLength();
     }
@@ -106,8 +132,99 @@ public abstract class Mlp {
         }
     }
 
+    /**
+     * Logs a pattern using the {@link MlpLogger}.
+     * @param index The index number of the pattern in the array (base 1).
+     * @param expected The expected results.
+     * @param result The results.
+     */
+    private boolean logPattern(int index, Neuron[] expected, Neuron[] result) {
+        boolean correct = true;
+
+        double e, r;
+
+        for (int i=0; i<expected.length; i++) {
+            e = expected[i].activation;
+            r = result[i].activation;
+            correct &= compare(e, r);
+        }
+
+        mLogger.logPattern(index, correct);
+
+        for (int i=0; i<expected.length; i++) {
+            e = expected[i].activation;
+            r = result[i].activation;
+            mLogger.logResult(e, r);
+        }
+
+        return correct;
+    }
+
+    /**
+     * Executes de MLP. <br>
+     *
+     * The {@link MlpLogger} must be setted or {@link NullPointerException} will
+     * be throwed.
+     *
+     * @param patterns The patterns to be processed.
+     */
+    public float runTestSup(PatternLayer[] patterns) {
+        // optimization
+        MlpLogger logger = mLogger;
+
+        int index = 0;      // pattern number
+        double error;   // erro de um padrao de teste
+        double totalError = 0.0;   // erro total dos padroes de teste
+
+        int correct = 0;
+        int incorrect = 0;
+
+        boolean isCorrect;
+
+        // run
+        NeuronLayer inputLayer = mInputLayer;
+        ConnectionLayer outputLayer = getOutputLayer();
+
+        for (PatternLayer pattern : patterns) {
+            inputLayer.setNeurons(pattern.inputLayer);
+            computeActivationOutput();
+            error = outputLayer.getDifferenceTotal(pattern.outputLayer);
+            totalError += error;
+
+            // log
+            isCorrect = logPattern(++index, pattern.outputLayer.mNeurons, outputLayer.mNeurons);
+            logger.logError(error);
+
+            if (isCorrect) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+        }
+
+        // log
+        logger.logTotalError(totalError);
+        logger.logCorrectPatterns(correct);
+        logger.logIncorrectPatterns(incorrect);
+
+        return correct / (float) (correct + incorrect);
+    }
+
+    /**
+     * Checks if the result is what is expected.
+     * @param e The expected result.
+     * @param r The result.
+     * @return true if the absolute differece between e and r do not exceed
+     * the {@link #MAX_DIFFERENCE}. False, otherwise.
+     */
+    public static boolean compare(double e, double r) {
+        return (Math.abs(e - r) <= MAX_DIFFERENCE);
+    }
+
     public void saveMlp(File file) throws IOException {
-        FileChannel fileOut = new FileOutputStream(file).getChannel();
+        // output stream
+        FileOutputStream outStream = new FileOutputStream(file);
+        FileChannel fileOut = outStream.getChannel();
 
         // calculate the size of the file (optimization)
         int bufferSize = Integer.BYTES; // reserve first layer
@@ -133,6 +250,40 @@ public abstract class Mlp {
 
         outBuffer.flip();
         fileOut.write(outBuffer);
+
         fileOut.close();
+        outStream.close();
+    }
+
+       /**
+     * Loads the mlp data from a file, the creates the network. <br>
+     * This method is meant to be used with a saved {@link MlpTrain}.
+     * @param file The file to the mlp data.
+     * @return The previously saved mlp.
+     * @throws IOException If any IO error occurs.
+     */
+    public static Mlp loadMlp(File file) throws IOException {
+        FileInputStream inStream = new FileInputStream(file);
+        FileChannel fileIn = inStream.getChannel();
+
+        ByteBuffer inBuffer = ByteBuffer.allocate((int) file.length());
+        fileIn.read(inBuffer);
+        inBuffer.flip();
+
+        inStream.close();
+        fileIn.close();
+
+        int inLen = inBuffer.getInt();
+        int h1Len = inBuffer.getInt();
+        int h2Len = inBuffer.getInt();
+        int outLen = inBuffer.getInt();
+
+        Mlp mlp = new Mlp(inLen, h1Len, h2Len, outLen);
+
+        for (ConnectionLayer layer : mlp.mLayerArray) {
+            layer.loadFromByteBuffer(inBuffer);
+        }
+
+        return mlp;
     }
 }

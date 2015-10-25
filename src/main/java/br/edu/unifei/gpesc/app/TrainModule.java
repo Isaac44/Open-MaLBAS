@@ -175,6 +175,7 @@ public class TrainModule {
         assertDirectory(spamFolder);
 
         File statisticsFile = new File(outFile);
+        createDirs(statisticsFile.getParentFile());
 
         // statistical distribution
         Distribution distribution = getDistribution(method);

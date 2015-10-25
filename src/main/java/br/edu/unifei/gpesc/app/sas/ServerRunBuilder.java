@@ -22,9 +22,9 @@ package br.edu.unifei.gpesc.app.sas;
  */
 public class ServerRunBuilder extends Thread {
 
-    private final Grader mGrader;
+    private final Classificator mGrader;
 
-    public ServerRunBuilder(Grader grader, Runnable target) {
+    public ServerRunBuilder(Classificator grader, Runnable target) {
         super(target);
         mGrader = grader;
     }

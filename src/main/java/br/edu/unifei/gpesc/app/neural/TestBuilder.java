@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app;
+package br.edu.unifei.gpesc.app.neural;
 
+import br.edu.unifei.gpesc.core.mlp.Mlp;
 import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.core.mlp.RunMlp;
+import br.edu.unifei.gpesc.log.MlpLogger;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -27,17 +30,32 @@ import java.io.IOException;
  */
 public class TestBuilder {
 
-    private static PatternLayer[] loadLayers(File folder) throws IOException {
+    public static PatternLayer[] loadLayers(File folder) throws IOException {
         PatternLayer[] spams = TrainBuilder.loadTrainMlp(new File(folder, "spam"), TrainBuilder.SPAM);
         PatternLayer[] hams = TrainBuilder.loadTrainMlp(new File(folder, "ham"), TrainBuilder.HAM);
 
         return TrainBuilder.merge(hams, spams);
     }
-    
+
     public static void main(String[] args) throws IOException {
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/September/neural/";
-        RunMlp runMlp = RunMlp.loadMlp(new File(path, "train_1.dat"));
-        runMlp.runTestSup(loadLayers(new File("/home/isaac/Unifei/Mestrado/SAS/Mail_Test/September/otavio-nn/otavio_test/")));
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/Testes_Organizados/";
+
+        String path2 = path + "05_mlp_weights/2000/old/";
+        Mlp runMlp = Mlp.loadMlp(new File(path2, "train_2.dat"));
+
+
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        MlpLogger logger = new MlpLogger(executor, new File(path2, "result.log"));
+
+        System.out.println("> Started");
+
+        runMlp.setLogger(logger);
+        runMlp.runTestSup(loadLayers(new File(path, "04_vectors/2000/")));
+
+        logger.close();
+
+
+        executor.shutdown();
     }
 
 //    public static void main(String[] args) throws IOException {

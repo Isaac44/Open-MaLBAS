@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * This class manages all internationalization string resources and provides
  * convenient print methods.
- * 
+ *
  * @author Isaac Caldas Ferreira
  */
 public final class Messages {
@@ -49,7 +49,7 @@ public final class Messages {
      * @return The internationalization string message.
      */
     public static String i18n(String key, Object... args) {
-        return String.format(Messages.i18n(key), args);
+        return String.format(i18n(key), args);
     }
 
     /**

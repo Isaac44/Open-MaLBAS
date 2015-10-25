@@ -27,11 +27,21 @@ import java.util.concurrent.ExecutorService;
  */
 public class MlpLogger extends AsyncWriter {
 
-    private static final String STEP        = i18nF("\n>"     , "Step"     , " ");
+    private static final String STEP        = i18nF("\n> "     , "Step"     , " ");
     private static final String EPOCH       = i18nF("\n\n\t> ", "Epoch"    , " "  );
     private static final String ERROR       = i18nF("\n\t\t> ", "Error"    , " = ");
     private static final String MOMENTUM    = i18nF("\n\t\t> ", "Momentum" , " = ");
     private static final String LEARN_RATE  = i18nF("\n\t\t> ", "LearnRate", " = ");
+
+    private static final String PATTERN = i18nF("\n\t> ", "Pattern", " ");
+    private static final String CORRECT = i18nF(": ", "Correct", "");
+    private static final String INCORRECT = i18nF(": ", "Incorrect", "");
+
+    private static final String TOTAL_ERROR = i18nF("\n\n> ", "TotalError", " = ");
+    private static final String PATTERN_CORRECT = i18nF("\n> ", "Pattern.Correct", " = ");
+    private static final String PATTERN_INCORRECT = i18nF("\n> ", "Pattern.Incorrect", " = ");
+
+    private static final String EXPECTED_RESULT = i18nF("\n\t\t> ", "Pattern.Result"    , " = ");
 
     public MlpLogger(ExecutorService executor, File file) throws FileNotFoundException {
         super(executor, file);
@@ -65,7 +75,10 @@ public class MlpLogger extends AsyncWriter {
         append(LEARN_RATE + learnRate);
     }
 
-    public void logHead(int h1Len, int h2Len, String h1F, String h2F, String outF, long seed, int epochs, double momentum, double learnRate) {
+    public void logTrainHead(int h1Len, int h2Len,
+            String h1F, String h2F, String outF,
+            long seed, int epochs, double momentum, double learnRate)
+    {
         StringBuilder sb = new StringBuilder();
 
         sb.append("MLP");
@@ -95,7 +108,31 @@ public class MlpLogger extends AsyncWriter {
 
         // write log
         append(sb.toString());
+    }
 
+    public void logSeparator() {
+        append("\n\n-------------------------------------------------------------------------------\n\n");
+    }
+
+    public void logResult(double expected, double result) {
+        append(EXPECTED_RESULT + expected + " [" + result + "]");
+    }
+
+    public void logPattern(int index, boolean correct) {
+        String result = correct ? CORRECT : INCORRECT;
+        append(PATTERN + index + result);
+    }
+
+    public void logTotalError(double error) {
+        append(TOTAL_ERROR + error);
+    }
+
+    public void logCorrectPatterns(int quantity) {
+        append(PATTERN_CORRECT + quantity);
+    }
+
+    public void logIncorrectPatterns(int quantity) {
+        append(PATTERN_INCORRECT + quantity);
     }
 
     private static String i18nF(String key) {
