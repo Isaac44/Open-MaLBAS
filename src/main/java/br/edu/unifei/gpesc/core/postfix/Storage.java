@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app.sas;
+package br.edu.unifei.gpesc.core.postfix;
 
-import br.edu.unifei.gpesc.app.Configuration;
+import br.edu.unifei.gpesc.util.Configuration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * Important: Missing the file collision check!
+ * TODO: File collision check.
  * @author Isaac Caldas Ferreira
  */
 public class Storage {
@@ -43,6 +45,8 @@ public class Storage {
      */
     private final File mSpamFolder;
 
+    private final ExecutorService mExecutor;
+
     /**
      * Initizalizes the backup and spam folder for storage. <br>
      * The folders may be null, in this case when .store() is called, nothing
@@ -50,10 +54,13 @@ public class Storage {
      *
      * @param backupFolder The folder to store all e-mails.
      * @param spamFolder The folder to store all spam e-mails.
+     * @param asyncStorage
      */
-    public Storage(File backupFolder, File spamFolder) {
+    public Storage(File backupFolder, File spamFolder, boolean asyncStorage) {
         mBackupFolder = backupFolder;
         mSpamFolder = spamFolder;
+
+        mExecutor = asyncStorage ? Executors.newSingleThreadExecutor() : null;
     }
 
     private File getFolder(File root, String user) {
@@ -112,10 +119,10 @@ public class Storage {
      * Stores the file on the backup folder and the spam folder, if they exists.
      * @param user The user e-mail address.
      * @param mail The mail data.
-     * @param isSpam The anti-spam results. It must be true for the cases
-     * where the e-mail is spam or unknown.
+     * @param isSpam The anti-spam results. It must be false for the cases
+     * where the e-mail is ham or unknown, and true for spam.
      */
-    public void store(String user, String mail, boolean isSpam) {
+    private void storeMail(String user, String mail, boolean isSpam) {
         String fileName = getTimeHash() + ".eml";
         store(mBackupFolder, user, fileName, mail);
 
@@ -125,14 +132,33 @@ public class Storage {
     }
 
     /**
+     * Stores the file on the backup folder and the spam folder, if they exists.
+     * <p>This method is synchonized for multi-threads purposes.</p>
+     *
+     * @param user The user e-mail address.
+     * @param mail The mail data.
+     * @param isSpam The anti-spam results. It must be false for the cases
+     * where the e-mail is ham or unknown, and true for spam.
+     */
+    public synchronized void store(String user, String mail, boolean isSpam) {
+        if (mExecutor != null) {
+            mExecutor.execute(new AsyncStore(user, mail, isSpam));
+        } else {
+            storeMail(user, mail, isSpam);
+        }
+    }
+
+    /**
      * Creates a {@link Storage} using the {@link Configuration} properties:
      * STORE_BACKUP_FOLDER and STORE_SPAM_FOLDER.
      * @return The Storage.
+     * @throws java.io.IOException
      */
-    public static Storage buildFromConfiguration() {
-        File bkpFolder = createFolder("STORE_BACKUP_FOLDER");
-        File spamFolder = createFolder("STORE_SPAM_FOLDER");
-        return new Storage(bkpFolder, spamFolder);
+    public static Storage buildFromConfiguration() throws IOException {
+        Configuration c = new Configuration("config" + File.separator + "sas.properties");
+        File bkpFolder = createFolder(c, "STORE_BACKUP_FOLDER");
+        File spamFolder = createFolder(c, "STORE_SPAM_FOLDER");
+        return new Storage(bkpFolder, spamFolder, true);
     }
 
     /**
@@ -142,8 +168,8 @@ public class Storage {
      * @param key The {@link Configuration} property.
      * @return The folder or null.
      */
-    private static File createFolder(String key) {
-        String folderPath = Configuration.getInstance().getProperty(key, null);
+    private static File createFolder(Configuration c, String key) {
+        String folderPath = c.getProperty(key, null);
 
         if (folderPath != null) {
             File folder = new File(folderPath);
@@ -157,5 +183,24 @@ public class Storage {
         }
 
         return null;
+    }
+
+    private class AsyncStore implements Runnable {
+
+        private final String mmMailData;
+        private final String mmUserAddress;
+        private final boolean mmIsSpam;
+
+        public AsyncStore(String userAddress, String mailData, boolean isSpam) {
+            mmMailData = mailData;
+            mmUserAddress = userAddress;
+            mmIsSpam = isSpam;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("saving mail=" + mmUserAddress);
+            storeMail(mmUserAddress, mmMailData, mmIsSpam);
+        }
     }
 }

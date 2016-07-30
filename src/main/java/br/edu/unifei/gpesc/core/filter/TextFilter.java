@@ -48,7 +48,7 @@ public abstract class TextFilter {
      * @param result The result.
      * @see TextFilter#getFilterResult()
      */
-    protected void setResult(Result result) {
+    protected final void setResult(Result result) {
         mFilterResult = result;
     }
 }

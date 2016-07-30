@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app.sas;
+package br.edu.unifei.gpesc.core.antispam;
 
-import br.edu.unifei.gpesc.core.mlp.RunMlp;
 import br.edu.unifei.gpesc.core.modules.Filter;
 import br.edu.unifei.gpesc.core.modules.Spam;
 import br.edu.unifei.gpesc.core.modules.Vector;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
+import br.edu.unifei.gpesc.mlp.Mlp;
 import java.io.File;
 import java.io.InputStream;
 
@@ -28,17 +28,17 @@ import java.io.InputStream;
  *
  * @author Isaac Caldas Ferreira
  */
-public class Classificator {
+public class AntiSpam {
 
     public static final int HAM = 0;
     public static final int SPAM = 1;
     public static final int UNKNOWN = 2;
 
-    private final RunMlp mMlp;
+    private final Mlp mMlp;
     private final Filter mFilter = new Filter();
     private final Characteristics<String> mCharacteristics;
 
-    public Classificator(RunMlp mlp, Characteristics<String> characteristics) {
+    public AntiSpam(Mlp mlp, Characteristics<String> characteristics) {
         mMlp = mlp;
         mCharacteristics = characteristics;
     }

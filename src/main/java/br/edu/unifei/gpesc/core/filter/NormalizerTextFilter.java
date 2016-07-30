@@ -57,4 +57,13 @@ public class NormalizerTextFilter extends TextFilter {
         return NON_ASCII_PATTERN.matcher(text).replaceAll("").toLowerCase();
     }
 
+    public static void main(String[] args) {
+        NormalizerTextFilter filter = new NormalizerTextFilter();
+
+        String str = "Tĥïŝ ĩš â fůňķŷ Šťŕĭńġ";
+
+        System.out.println(filter.filter(str));
+
+    }
+
 }

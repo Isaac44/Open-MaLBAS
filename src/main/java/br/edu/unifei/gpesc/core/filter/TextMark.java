@@ -48,7 +48,7 @@ public enum TextMark {
     /**
      * Number constant.
      */
-    NUMBER("!_HAS_NUMBER"),
+    NUMBER("!_NUMBER"),
 
     /**
      * Image constant.

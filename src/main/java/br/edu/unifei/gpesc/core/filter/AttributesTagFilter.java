@@ -17,14 +17,13 @@
 package br.edu.unifei.gpesc.core.filter;
 
 import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
 /**
  * This Tag Filter appends all internal attributes of the current Element.
  * <br>
  * It uses the suffix "!_in_attr", where attr is the attribute.
- * 
+ *
  * @author Isaac Caldas Ferreira
  */
 public class AttributesTagFilter implements TagFilter {
@@ -42,13 +41,8 @@ public class AttributesTagFilter implements TagFilter {
      */
     @Override
     public Result filter(Element element, StringBuilder strBuilder) {
-        Attributes attributes = element.attributes();
-
-        if (attributes.size() > 0) {
-            strBuilder.append("!_in_").append(element.tagName()).append(" ");
-            for (Attribute attribute : attributes) {
-                strBuilder.append(attribute.getKey()).append(" ");
-            }
+        for (Attribute attribute : element.attributes()) {
+            strBuilder.append("!_in_").append(attribute.getKey()).append(" ");
         }
 
         return Result.CONTINUE;

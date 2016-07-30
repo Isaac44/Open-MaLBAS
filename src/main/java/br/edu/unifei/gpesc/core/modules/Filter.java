@@ -70,7 +70,7 @@ public class Filter {
     public void filterFolder(File folderIn, File folderOut) {
         mFolderProcessLog.resetCounters();
 
-        File[] files = folderIn.listFiles(FileUtils.getFileFilter());
+        File[] files = folderIn.listFiles(new FileUtils.IsFileFilter());
         if (files != null) {
             ConsoleProgress progress = ConsoleProgress.getGlobalInstance(files.length);
 

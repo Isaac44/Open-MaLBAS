@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Universidade Federal de Itajuba
+ * Copyright (C) 2016 - GEPESC - Universidade Federal de Itajuba
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.core.filter;
-
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
+package br.edu.unifei.gpesc.core.antispam;
 
 /**
  *
  * @author isaac
  */
-public class TagNameFilter implements TagFilter {
+public class AntiSpamFactory {
 
-    private static final Tag IMAGE_TAG = Tag.valueOf("img");
-
-    @Override
-    public Result filter(Element element, StringBuilder strBuilder) {
-        if (element.tag() == IMAGE_TAG) {
-            strBuilder.append(TextMark.IMAGE).append("\n");
-        }
-        return Result.CONTINUE;
+    public AntiSpam newAntiSpam() {
+        return null;
     }
 
 }

@@ -7,16 +7,6 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.unbescape</groupId>
             <artifactId>unbescape</artifactId>
             <version>1.1.0.RELEASE</version>
@@ -30,6 +20,36 @@
             <groupId>colt</groupId>
             <artifactId>colt</artifactId>
             <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>PrimeMlp</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>PrimeShared</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.freeutils</groupId>
+            <artifactId>jcharset</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>3.1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
         </dependency>
     </dependencies>
     <properties>
@@ -49,6 +69,8 @@
                     <argLine>-Xmx6048m</argLine>
                 </configuration>
             </plugin>
+
+<!-- PROGUARD - START -->
 
 <!--             <plugin>
                 <groupId>com.github.wvengen</groupId>
@@ -75,6 +97,8 @@
                     </options>
                 </configuration>
             </plugin>-->
+            
+<!-- PROGUARD - END-->            
                                     
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

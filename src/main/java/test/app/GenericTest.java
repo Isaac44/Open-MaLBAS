@@ -27,7 +27,7 @@ public class GenericTest {
 
     public static void main(String[] args) {
 
-        for (File f : new File("/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/spam/").listFiles(FileUtils.getFileFilter())) {
+        for (File f : new File("/home/isaac/Unifei/Mestrado/SAS/Statistics/DataSample/spam/").listFiles(new FileUtils.IsFileFilter())) {
             System.out.println("s = " + f.getAbsolutePath());
         }
 

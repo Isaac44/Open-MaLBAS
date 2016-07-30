@@ -16,12 +16,16 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import br.edu.unifei.gpesc.app.neural.NeuralModule;
-import br.edu.unifei.gpesc.app.neural.TestBuilder;
+import br.edu.unifei.gpesc.core.neural.NeuralModule;
+import br.edu.unifei.gpesc.core.neural.TestBuilder;
 import static br.edu.unifei.gpesc.app.Messages.*;
 import br.edu.unifei.gpesc.app.sas.Client;
 import br.edu.unifei.gpesc.app.sas.Server;
+import br.edu.unifei.gpesc.util.Configuration;
+import br.edu.unifei.gpesc.util.TraceLog;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -38,44 +42,89 @@ public class Application {
     private static final String ARG_MLP_VECTOR = "vector";
     private static final String ARG_MLP_NEURAL = "mlp";
 
-    private static Configuration sConfig;
+    private static Configuration sMainConfig;
+    private static Configuration sNeuralConfig;
     private static TrainModule sTrainModule;
     private static NeuralModule sNeuralModule;
 
     private static void runFilter() {
-        String hamInPath = sConfig.getProperty("RAW_NOT_SPAM_FOLDER");
-        String hamOutPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
-        String spamInPath = sConfig.getProperty("RAW_SPAM_FOLDER");
-        String spamOutPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
+        Configuration c = getMainConfig();
 
-        sTrainModule.doFilter(hamInPath, hamOutPath);
-        sTrainModule.doFilter(spamInPath, spamOutPath);
+        String hamInPath = c.getProperty("RAW_NOT_SPAM_FOLDER");
+        String hamOutPath = c.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String spamInPath = c.getProperty("RAW_SPAM_FOLDER");
+        String spamOutPath = c.getProperty("PROCESSED_SPAM_FOLDER");
+
+        TrainModule tm = getTrainModule();
+        tm.doFilter(hamInPath, hamOutPath);
+        tm.doFilter(spamInPath, spamOutPath);
     }
 
     private static void runStatistics() throws IOException {
-        String spamPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
-        String hamPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
-        String statisticsFile = sConfig.getProperty("STATISTICS_FILE");
-        String method = sConfig.getProperty("STATISTICS_METHOD");
+        Configuration c = getMainConfig();
 
-        sTrainModule.doStatistics(hamPath, spamPath, statisticsFile, method);
+        String spamPath = c.getProperty("PROCESSED_SPAM_FOLDER");
+        String hamPath = c.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String statisticsFile = c.getProperty("STATISTICS_FILE");
+        String method = c.getProperty("STATISTICS_METHOD");
+
+        getTrainModule().doStatistics(hamPath, spamPath, statisticsFile, method);
     }
 
     private static void runVector() throws IOException {
-        String spamPath = sConfig.getProperty("PROCESSED_SPAM_FOLDER");
-        String hamPath = sConfig.getProperty("PROCESSED_NOT_SPAM_FOLDER");
-        String statisticsFile = sConfig.getProperty("STATISTICS_FILE");
-        Integer length = sConfig.getIntegerProperty("VECTOR_LENGTH");
-        String outFolder = sConfig.getProperty("VECTOR_OUT_FOLDER");
+        Configuration c = getMainConfig();
 
-        sTrainModule.doMlpVector(hamPath, spamPath, statisticsFile, length, outFolder);
+        String spamPath = c.getProperty("PROCESSED_SPAM_FOLDER");
+        String hamPath = c.getProperty("PROCESSED_NOT_SPAM_FOLDER");
+        String statisticsFile = c.getProperty("STATISTICS_FILE");
+        Integer length = c.getIntegerProperty("VECTOR_LENGTH");
+        String outFolder = c.getProperty("VECTOR_OUT_FOLDER");
+
+        getTrainModule().doMlpVector(hamPath, spamPath, statisticsFile, length, outFolder);
+    }
+
+    private static void setupLogger() {
+        // Log on File
+        String logFolder = sMainConfig.getProperty("LOG_FOLDER", null);
+
+        if (logFolder != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_zzz");
+            File file = new File(logFolder, "SAS_" + sdf.format(System.currentTimeMillis()) + ".log");
+            file.getParentFile().mkdirs();
+
+            TraceLog.setLogFile(file.getAbsolutePath());
+        }
+
+        // Log on Console
+        boolean logConsole = sMainConfig.getBooleanProperty("LOG_CONSOLE", false);
+        TraceLog.setConsoleLogEnable(logConsole);
+    }
+
+    private static Configuration getMainConfig() {
+        if (sMainConfig == null) {
+            try {
+                sMainConfig = new Configuration("config" + File.separator + "main.properties");
+                setupLogger();
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
+        return sMainConfig;
+    }
+
+    private static TrainModule getTrainModule() {
+        if (sTrainModule == null) {
+            sTrainModule = new TrainModule();
+        }
+        return sTrainModule;
     }
 
     private static void runMlp() throws IOException {
         if (sNeuralModule != null) {
             sNeuralModule.stopProcess();
         } else {
-            sNeuralModule = new NeuralModule();
+            sNeuralModule = new NeuralModule("config" + File.separator + "neural.properties");
         }
 
         sNeuralModule.setUp();
@@ -83,11 +132,6 @@ public class Application {
     }
 
     private static void process(String module) throws IOException {
-        // init
-        sConfig = Configuration.getInstance();
-        sTrainModule = new TrainModule();
-
-        // process
         if (module.equals(ARG_FILTER))
         {
             printlnLog("Application.TrainMode.SelectedFilter");
@@ -110,11 +154,15 @@ public class Application {
             printlnLog("Application.TrainMode.SelectedMlpNeural");
             runMlp();
         }
+
+        else {
+            System.out.println("SAS - Incorrect Use");
+        }
     }
 
     public static void main(String... args) throws IOException {
         if (args.length == 0) {
-            System.out.println("SAS - Incorret use");
+            System.out.println("SAS - Incorrect use");
 //            printlnLog("Application.TrainMode.All");
 //            System.out.println();
 //            process(ARG_FILTER);

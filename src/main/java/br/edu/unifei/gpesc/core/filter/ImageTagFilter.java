@@ -14,26 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.core.mlp;
+package br.edu.unifei.gpesc.core.filter;
+
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
 
 /**
- * Interface for the transfer function of the mlp neural network.
- * @author Isaac Caldas Ferreira
+ *
+ * @author isaac
  */
-public interface Function {
+public class ImageTagFilter implements TagFilter {
 
-    /**
-     * Computes the activation for the input value.
-     * @param x The input value.
-     * @return The activation result.
-     */
-    public double compute(double x);
+    private static final Tag IMAGE_TAG = Tag.valueOf("img");
 
-    /**
-     * Computes the delta for the input value.
-     * @param x The X value.
-     * @param y The Y value.
-     * @return The activation result.
-     */
-    public double compute(double x, double y);
+    @Override
+    public Result filter(Element element, StringBuilder strBuilder) {
+        if (IMAGE_TAG.equals(element.tag())) {
+            strBuilder.append(TextMark.IMAGE).append("\n");
+        }
+        return Result.CONTINUE;
+    }
+
 }

@@ -16,9 +16,11 @@
  */
 package br.edu.unifei.gpesc.app.sas;
 
-import br.edu.unifei.gpesc.app.Configuration;
-import br.edu.unifei.gpesc.core.mlp.RunMlp;
+import br.edu.unifei.gpesc.core.antispam.AntiSpam;
+import br.edu.unifei.gpesc.core.postfix.Storage;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
+import br.edu.unifei.gpesc.mlp.Mlp;
+import br.edu.unifei.gpesc.util.Configuration;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +43,7 @@ public class Server {
     /**
      * The mail classificator.
      */
-    private Classificator mClassificator;
+    private AntiSpam mClassificator;
 
     /**
      * The service to store the client mail data.
@@ -51,12 +53,16 @@ public class Server {
     /**
      * The Storage rules.
      */
-    private final Storage mStorage = Storage.buildFromConfiguration();
+    private final Storage mStorage;
 
     /**
      * The ultra-large mail buffer.
      */
     private final byte[] mClientData = new byte[100 * 1024 * 1024]; // 100 MiB buffer
+
+    public Server() throws IOException {
+        mStorage = Storage.buildFromConfiguration();
+    }
 
     /**
      * Create the characteristics that are used to build the mail vector.
@@ -86,16 +92,16 @@ public class Server {
     private void createClassificator() throws IOException {
         System.out.println("Creating classificator");
 
-        Configuration c = Configuration.getInstance();
+        Configuration c = new Configuration("config" + File.separator + "sas.properties");
 
         String weightsFile = c.getProperty("WEIGHTS_FILE");
         String statisticsFile = c.getProperty("S_STATISTICS_FILE");
 
-        RunMlp mlp = RunMlp.loadMlp(new File(weightsFile));
+        Mlp mlp = Mlp.loadMlp(new File(weightsFile));
         Characteristics<String> characteristics =
                 createCharacteristics(statisticsFile, mlp.getInputLayerLength());
 
-        mClassificator = new Classificator(mlp, characteristics);
+        mClassificator = new AntiSpam(mlp, characteristics);
     }
 
     private static Object[] readString(byte[] data, int off) {
@@ -188,7 +194,6 @@ public class Server {
             System.out.println("saving mail=" + mmUserAddress);
             mStorage.store(mmUserAddress, mmMailData, mmIsSpam);
         }
-
     }
 
     // -------------------------------------------------------------------------

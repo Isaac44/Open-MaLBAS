@@ -49,7 +49,7 @@ public class Statistics {
      * @param set The set. Use {@link SASStatistics#HAM_SET} or {@link SASStatistics#SPAM_SET}
      */
     public void processFolder(File folder, int set) {
-        File[] fileArray = folder.listFiles(FileUtils.getFileFilter());
+        File[] fileArray = folder.listFiles(new FileUtils.IsFileFilter());
         if (fileArray != null) {
             ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
             int k = 0;

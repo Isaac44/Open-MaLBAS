@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Universidade Federal de Itajuba
+ * Copyright (C) 2015 - GPESC - Universidade Federal de Itajuba
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,14 @@
  */
 package br.edu.unifei.gpesc.app;
 
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
  * This class manages all internationalization string resources and provides
  * convenient print methods.
+ *
+ * This Messages is an Adapter of {@link br.edu.unifei.gpesc.util.Messages}.
  *
  * @author Isaac Caldas Ferreira
  */
@@ -29,7 +32,23 @@ public final class Messages {
     /**
      * The Resource Bundle for this application.
      */
-    private static ResourceBundle sResourceBundle;
+    private static final br.edu.unifei.gpesc.util.Messages sMessages;
+
+    /**
+     * Static initializer.
+     */
+    static {
+        ResourceBundle bundle = ResourceBundle.getBundle("messages");
+
+        // copy all properties
+        Properties p = new Properties();
+        for (String key : bundle.keySet()) {
+            p.put(key, bundle.getString(key));
+        }
+
+        // share
+        sMessages = new br.edu.unifei.gpesc.util.Messages(p);
+    }
 
     /**
      * This method is used to get an internationalization string. <br>
@@ -38,8 +57,7 @@ public final class Messages {
      * @return The internationalization string message.
      */
     public static String i18n(String key) {
-        if (sResourceBundle == null) sResourceBundle = ResourceBundle.getBundle("messages");
-        return sResourceBundle.getString(key);
+        return sMessages.i18n(key);
     }
 
     /**

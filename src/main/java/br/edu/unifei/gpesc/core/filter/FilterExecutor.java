@@ -46,7 +46,7 @@ public class FilterExecutor {
      */
     public FilterExecutor() {
         mTagFilterArray = new TagFilter[] {
-            new IgnoreTagFilter(), new UrlTagFilter(), new TagNameFilter(),
+            new IgnoreTagFilter("script"), new UrlTagFilter(), new ImageTagFilter(),
             new AttributesTagFilter()};
 
         mTextFilterArray = new TextFilter[] {

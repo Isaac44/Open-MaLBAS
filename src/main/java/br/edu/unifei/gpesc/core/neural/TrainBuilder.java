@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app.neural;
+package br.edu.unifei.gpesc.core.neural;
 
-import br.edu.unifei.gpesc.core.mlp.NeuronLayer;
-import br.edu.unifei.gpesc.core.mlp.NeuronLayer.Neuron;
-import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.core.mlp.TrainMlp;
 import br.edu.unifei.gpesc.core.modules.Spam;
+import br.edu.unifei.gpesc.mlp.TrainMlp;
+import br.edu.unifei.gpesc.mlp.layer.NeuronLayer;
+import br.edu.unifei.gpesc.mlp.layer.NeuronLayer.Neuron;
+import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;

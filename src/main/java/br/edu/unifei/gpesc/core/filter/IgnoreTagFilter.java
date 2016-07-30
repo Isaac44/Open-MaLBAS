@@ -23,7 +23,7 @@ import org.jsoup.parser.Tag;
  * This Tag Filter ignores the tags in the IGNORE_TAG_ARRAY. This mean that
  * the process will skip all the content in this tag and append "!_ignore_tag",
  * where tag is the tag ignored.
- * 
+ *
  * @author Isaac Caldas Ferreira
  */
 public class IgnoreTagFilter implements TagFilter {
@@ -57,7 +57,7 @@ public class IgnoreTagFilter implements TagFilter {
         Tag tag = element.tag();
 
         for (Tag ignoreTag : mIgnoreTagArray) {
-            if (ignoreTag == tag) {
+            if (ignoreTag.equals(tag)) {
                 strBuilder.append("!_ignore_").append(ignoreTag);
                 return Result.SKIP_TAG;
             }

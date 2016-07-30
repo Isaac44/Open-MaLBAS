@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app.neural;
+package br.edu.unifei.gpesc.core.neural;
 
-import br.edu.unifei.gpesc.app.Configuration;
 import br.edu.unifei.gpesc.app.Messages;
-import br.edu.unifei.gpesc.core.mlp.Function;
-import br.edu.unifei.gpesc.core.mlp.Linear;
-import br.edu.unifei.gpesc.core.mlp.LogSig;
-import br.edu.unifei.gpesc.core.mlp.Mlp;
-import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.core.mlp.TanSig;
-import br.edu.unifei.gpesc.core.mlp.TrainMlp;
 import br.edu.unifei.gpesc.debug.MailSender;
+import br.edu.unifei.gpesc.mlp.Mlp;
+import br.edu.unifei.gpesc.mlp.TrainMlp;
+import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
+import br.edu.unifei.gpesc.mlp.log.MlpLogger;
+import br.edu.unifei.gpesc.mlp.math.Function;
+import br.edu.unifei.gpesc.mlp.math.Linear;
+import br.edu.unifei.gpesc.mlp.math.LogSig;
+import br.edu.unifei.gpesc.mlp.math.TanSig;
+import br.edu.unifei.gpesc.util.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 /**
  *
@@ -93,21 +93,49 @@ public class NeuralModule {
      */
     private long mSeed;
 
+    /**
+     * The quantity of trains that will be executed.
+     */
     private int mQuantityOfTrains;
+
+    /**
+     * The quantity of threads executing (in parallel).
+     */
     private int mNumberOfActiveThreads;
 
+    /**
+     * The first hidden layer funcion name.
+     */
     private String mFirstHiddenFunction;
+
+    /**
+     * The second hidden layer funcion name.
+     */
     private String mSecondHiddenFunction;
+
+    /**
+     * The outuput layer funcion name.
+     */
     private String mOutputFunction;
 
+    /**
+     * The test patterns. They will be tested after the train and the result
+     * will be stored in the log file.
+     */
     private PatternLayer[] mTestPatterns;
 
-    private Messages mMessages;
-
-    public TrainExecutor() throws IOException {
-        mCfg = new Configuration("neural.properties");
+    /**
+     * Initializes this, loading the configuration of the file.
+     * @param configFile The configuration file path.
+     * @throws IOException
+     */
+    public NeuralModule(String configFile) throws IOException {
+        mCfg = new Configuration(configFile);
     }
 
+    /**
+     * Force the trains to finish.
+     */
     public void stopProcess() {
         if (mTrainExecutor != null) {
             mTrainExecutor.shutdownNow();
@@ -115,10 +143,16 @@ public class NeuralModule {
         }
     }
 
+    /**
+     * Setup this module. <br />
+     * All configuration are readed from the properties file.
+     * @throws IOException
+     * @throws IllegalArgumentException if any argument not optional is missing.
+     */
     public void setUp() throws IOException {
         mQuantityOfTrains = mCfg.getIntegerProperty("NUMBER_OF_TRAINS");
         if (mQuantityOfTrains <= 0) {
-            throw new IllegalArgumentException(mMessages.i18n("NeuralModule.IllegalArgument.NumberOfTrainsInferior"));
+            throw new IllegalArgumentException(Messages.i18n("NeuralModule.IllegalArgument.NumberOfTrainsInferior"));
         }
 
         mWeightsFolder = mCfg.getProperty("WEIGHTS_FOLDER");
@@ -143,14 +177,21 @@ public class NeuralModule {
         openTestPatterns(new File(vectorFolder));
     }
 
+    /**
+     * Loads the test patterns
+     * @param folder The test patterns folder.
+     */
     private void openTestPatterns(File folder) {
         try {
             mTestPatterns = TestBuilder.loadLayers(folder);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }
 
+    /**
+     * Start the trains execution.
+     */
     public void start() {
         stopProcess();
         mTrainExecutor = Executors.newFixedThreadPool(mNumberOfActiveThreads);
@@ -160,6 +201,11 @@ public class NeuralModule {
         }
     }
 
+    /**
+     * Converts the function name to the related implementation.
+     * @param name The funtion name.
+     * @return The function implementation.
+     */
     private Function functionForName(String name) {
         name = name.toUpperCase();
         if ("TANSIG".equals(name)) {
@@ -208,8 +254,15 @@ public class NeuralModule {
         return getSeed(key, 7);
     }
 
+    /**
+     * The finish lock object to avoid concurrency problems.
+     */
     private final Object TRAIN_FINISH_LOCK = new Object();
 
+    /**
+     * When a train finishes, this is called. When all trains are finisheds,
+     * the train executor is shutdown.
+     */
     private void trainFinished() {
         synchronized (TRAIN_FINISH_LOCK) {
             mQuantityOfTrains--;
@@ -220,36 +273,59 @@ public class NeuralModule {
         }
     }
 
+    /**
+     * Train MLP class. <br />
+     */
     private class TrainMlpRunnable implements Runnable {
+
+        /**
+         * The tag of this train.
+         */
         private final String mTag;
+
+        /**
+         * The id of this train.
+         */
         private final int mId;
 
+        /**
+         * Initializes this train with an id.
+         * @param id
+         */
         public TrainMlpRunnable(int id) {
             mId = id;
             mTag = "TRAIN_" + id + "_";
         }
 
-        private void setUp(Configuration cfg, TrainMlp mlp, AsyncLogger logger, int h1Len, int h2Len) {
+        /**
+         * Set up the configurations of this train.
+         * @param c The configuration properties.
+         * @param mlp The mlp
+         * @param logger The logger.
+         * @param h1Len The first hidden layer length.
+         * @param h2Len The second hidden layer length.
+         */
+        private void setUp(Configuration c, TrainMlp mlp, MlpLogger logger, int h1Len, int h2Len) {
             // layers
-            String h1F = cfg.getProperty(mTag + "FIRST_HIDDEN_FUNCTION", mFirstHiddenFunction);
-            String h2F = cfg.getProperty(mTag + "SECOND_HIDDEN_FUNCTION", mSecondHiddenFunction);
-            String outF = cfg.getProperty(mTag + "OUTPUT_FUNCTION", mOutputFunction);
+            String h1F = c.getProperty(mTag + "FIRST_HIDDEN_FUNCTION", mFirstHiddenFunction);
+            String h2F = c.getProperty(mTag + "SECOND_HIDDEN_FUNCTION", mSecondHiddenFunction);
+            String outF = c.getProperty(mTag + "OUTPUT_FUNCTION", mOutputFunction);
 
             mlp.setLayerFunction(Mlp.Layer.HIDDEN_1, functionForName(h1F));
             mlp.setLayerFunction(Mlp.Layer.HIDDEN_2, functionForName(h2F));
             mlp.setLayerFunction(Mlp.Layer.OUTPUT, functionForName(outF));
 
             // train
-            int epochs = cfg.getIntegerProperty(mTag + "EPOCHS", mEpochs);
-            double momentum = cfg.getDoubleProperty(mTag + "MOMENTUM", mMomentum);
-            double learnRate = cfg.getDoubleProperty(mTag + "LEARN_RATE", mLearnRate);
+            int epochs = c.getIntegerProperty(mTag + "EPOCHS", mEpochs);
+            double momentum = c.getDoubleProperty(mTag + "MOMENTUM", mMomentum);
+            double learnRate = c.getDoubleProperty(mTag + "LEARN_RATE", mLearnRate);
 
             mlp.setEpochs(epochs);
             mlp.setMomentum(momentum);
             mlp.setLearnRate(learnRate);
 
             // seed
-            long seed = getSeed(cfg.getProperty(mTag + "RANDOMIZER_SEED", null), mSeed);
+            long seed = getSeed(c.getProperty(mTag + "RANDOMIZER_SEED", null), mSeed);
             mlp.setPrimeSeed(seed);
 
             // print log head
@@ -279,18 +355,18 @@ public class NeuralModule {
 
                 // save log file
                 File logFile = new File(file.replace(".dat", ".log"));
-                AsyncLogger logger = new AsyncLogger(mSaveLogExecutor, logFile);
+                MlpLogger logger = new MlpLogger(mSaveLogExecutor, logFile);
                 mlp.setLogger(logger);
 
                 // setUp
                 setUp(mCfg, mlp, logger, h1Len, h2len);
 
                 // start training
-                mMessages.printlnLog("TrainMode.Neural.Start", mId);
+                Messages.printlnLog("TrainMode.Neural.Start", mId);
                 mlp.runTrainByEpoch();
 
                 // save results
-                mMessages.printlnLog("TrainMode.Neural.Saving", mId, saveFile.getAbsolutePath());
+                Messages.printlnLog("TrainMode.Neural.Saving", mId, saveFile.getAbsolutePath());
                 mlp.saveMlp(saveFile);
 
                 // run test
@@ -299,7 +375,7 @@ public class NeuralModule {
 
                 // log end
                 logger.close();
-                mMessages.printlnLog("TrainMode.Neural.Finished", mId);
+                Messages.printlnLog("TrainMode.Neural.Finished", mId);
 
                 // send mail
                 MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
@@ -308,10 +384,8 @@ public class NeuralModule {
                 trainFinished();
             }
             catch (IOException ex) {
-                mMessages.printlnLog("TrainMode.Neural.Error", mId, ex.getMessage());
+                Messages.printlnLog("TrainMode.Neural.Error", mId, ex.getMessage());
             }
         }
-
     }
-
 }

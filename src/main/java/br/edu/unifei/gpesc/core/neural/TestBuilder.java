@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.edu.unifei.gpesc.app.neural;
+package br.edu.unifei.gpesc.core.neural;
 
-import br.edu.unifei.gpesc.core.mlp.Mlp;
-import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.log.MlpLogger;
+import br.edu.unifei.gpesc.mlp.Mlp;
+import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
+import br.edu.unifei.gpesc.mlp.log.MlpLogger;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;

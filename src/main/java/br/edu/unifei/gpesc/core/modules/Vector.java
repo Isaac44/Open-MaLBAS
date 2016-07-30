@@ -16,15 +16,9 @@
  */
 package br.edu.unifei.gpesc.core.modules;
 
-import br.edu.unifei.gpesc.core.mlp.NeuronLayer;
-import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.core.statistic.FileCharacterization;
-import br.edu.unifei.gpesc.core.statistic.Normalization;
-import br.edu.unifei.gpesc.core.statistic.Characteristics;
-import br.edu.unifei.gpesc.core.statistic.Characterization;
-import br.edu.unifei.gpesc.util.ConsoleProgress;
-import br.edu.unifei.gpesc.util.FileUtils;
-import br.edu.unifei.gpesc.util.ProcessLog;
+import br.edu.unifei.gpesc.core.statistic.*;
+import br.edu.unifei.gpesc.mlp.layer.*;
+import br.edu.unifei.gpesc.util.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +59,7 @@ public class Vector {
     }
 
     public static void folderVectorization(Characteristics<String> characteristic, File folder, File output, String set, boolean append) throws IOException  {
-        File[] fileArray = folder.listFiles(FileUtils.getFileFilter());
+        File[] fileArray = folder.listFiles(new FileUtils.IsFileFilter());
         if (fileArray != null) {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(output, append));
@@ -116,7 +110,7 @@ public class Vector {
     }
 
     public static ProcessLog doVectorization(Characteristics<String> characteristic, File folderInput, File outFile) throws IOException  {
-        File[] fileArray = folderInput.listFiles(FileUtils.getFileFilter());
+        File[] fileArray = folderInput.listFiles(new FileUtils.IsFileFilter());
         ProcessLog processLog = new ProcessLog();
 
         if (fileArray != null) {

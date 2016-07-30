@@ -16,10 +16,10 @@
  */
 package test.mlp;
 
-import br.edu.unifei.gpesc.core.mlp.PatternLayer;
-import br.edu.unifei.gpesc.core.mlp.NeuronLayer;
-import br.edu.unifei.gpesc.core.mlp.RunMlp;
-import br.edu.unifei.gpesc.core.mlp.TrainMlp;
+import br.edu.unifei.gpesc.mlp.Mlp;
+import br.edu.unifei.gpesc.mlp.TrainMlp;
+import br.edu.unifei.gpesc.mlp.layer.NeuronLayer;
+import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class Test3 {
         PatternLayer[] testInput = load(new File(path, "pat.dat"), 10, 2);
 //        mlp.runTestSup(testInput);
 
-        RunMlp runMlp = RunMlp.loadMlp(mlpData);
+        Mlp runMlp = Mlp.loadMlp(mlpData);
         runMlp.runTestSup(testInput);
 
     }

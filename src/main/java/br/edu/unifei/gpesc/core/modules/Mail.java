@@ -16,11 +16,13 @@
  */
 package br.edu.unifei.gpesc.core.modules;
 
+import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -46,7 +48,13 @@ public class Mail {
     /**
      * The default mail session.
      */
-    private static final Session MAIL_SESSION = Session.getInstance(System.getProperties());
+    private static final Session MAIL_SESSION;
+
+    static {
+        Properties props = System.getProperties();
+        props.setProperty("mail.mime.multipart.ignoreexistingboundaryparameter", "true");
+        MAIL_SESSION = Session.getInstance(props);
+    }
 
     /**
      * The current openned mail type.
@@ -73,10 +81,13 @@ public class Mail {
                 mContent = (String) mailPart.getContent();
                 return true;
             }
-
         }
-        catch (IOException e) {}
-        catch (MessagingException e) {}
+        catch (IOException ex) {
+            TraceLog.logE("Processing \"" + mailpath + "\"", ex);
+        }
+        catch (MessagingException ex) {
+            TraceLog.logE("Processing \"" + mailpath + "\"", ex);
+        }
 
         return false;
     }
@@ -98,8 +109,12 @@ public class Mail {
             }
 
         }
-        catch (IOException e) {}
-        catch (MessagingException e) {}
+        catch (IOException ex) {
+            TraceLog.logE(ex);
+        }
+        catch (MessagingException ex) {
+            TraceLog.logE(ex);
+        }
 
         return false;
     }

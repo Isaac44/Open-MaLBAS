@@ -16,15 +16,17 @@
  */
 package br.edu.unifei.gpesc.app.sas;
 
+import br.edu.unifei.gpesc.core.antispam.AntiSpam;
+
 /**
  *
  * @author Isaac Caldas Ferreira
  */
 public class ServerRunBuilder extends Thread {
 
-    private final Classificator mGrader;
+    private final AntiSpam mGrader;
 
-    public ServerRunBuilder(Classificator grader, Runnable target) {
+    public ServerRunBuilder(AntiSpam grader, Runnable target) {
         super(target);
         mGrader = grader;
     }
