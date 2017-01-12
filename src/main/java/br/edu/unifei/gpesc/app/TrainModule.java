@@ -20,8 +20,9 @@ import static br.edu.unifei.gpesc.app.Messages.*;
 import br.edu.unifei.gpesc.core.modules.Filter;
 import br.edu.unifei.gpesc.core.modules.Statistics;
 import static br.edu.unifei.gpesc.core.modules.Vector.doVectorization;
+import static br.edu.unifei.gpesc.core.modules.Vector.simulateVectorization;
 import br.edu.unifei.gpesc.core.statistic.*;
-import br.edu.unifei.gpesc.util.ProcessLog;
+import br.edu.unifei.gpesc.util.VectorCounter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -111,8 +112,8 @@ public class TrainModule {
         mFilter.filterFolder(inFolder, outFolder);
 
         // log process.
-        ProcessLog log = mFilter.getFolderProcessLog();
-        printlnLog("TrainMode.Filter.ProcessResult", log.total(), log.sucess(), log.error());
+        VectorCounter log = mFilter.getFolderProcessLog();
+        printlnLog("TrainMode.Filter.ProcessResult", log.getTotalVectorsCount(), log.getGoodVectorsCount(), log.getZeroedVectorsCount());
 
     }
 
@@ -243,7 +244,7 @@ public class TrainModule {
 
         Scanner scanner = new Scanner(statisticsFile);
         scanner.nextLine(); // ignore the method
-        for (int i=0; i<inLayerLen; i++) {
+        for (int i=0; i < inLayerLen; i++) {
             if (scanner.hasNext()) {
                 characteristic.insertData(scanner.next());
                 scanner.nextLine();
@@ -253,20 +254,211 @@ public class TrainModule {
         }
 
         printlnLog("TrainMode.ProcessStart", hamPath);
-        ProcessLog hamLog = doVectorization(characteristic, hamFolder, outHamFile);
+        VectorCounter hamR = doVectorization(characteristic, hamFolder, outHamFile);
 
         printlnLog("TrainMode.ProcessStart", spamPath);
-        ProcessLog spamLog = doVectorization(characteristic, spamFolder, outSpamFile);
+        VectorCounter spamR = doVectorization(characteristic, spamFolder, outSpamFile);
 
         // logs
-
         println("");
         printLog("Application.NotSpam"); println(": ");
-        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", hamLog.sucess());
-        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", hamLog.error());
+        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", hamR.getGoodVectorsCount());
+        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", hamR.getZeroedVectorsCount());
 
         printLog("Application.Spam"); println(": ");
-        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", spamLog.sucess());
-        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", spamLog.error());
+        print("\t"); printlnLog("TrainMode.MlpVector.AddedPatterns", spamR.getGoodVectorsCount());
+        print("\t"); printlnLog("TrainMode.MlpVector.ZeroedFiles", spamR.getZeroedVectorsCount());
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // Vectores with Percent
+    // ---------------------------------------------------------------------------------------------
+
+    /**
+     * This do-method generated de MLP vectors. Its processes the filtered
+     * emails in the not spam folder (denoted by hamPath) and in the spam folder
+     * (denoted by spamPath), using the statistics file (denoted by
+     * statisticsPath).
+     * <br>
+     * The MLP vectors will have the length denoted by inputLayerLength argument
+     * and will be stored inside the output path (denoted by outPath).
+     * <br>
+     * The file "ham" will be created for the not spam vectors and the file
+     * "spam" for the spam vectors.
+     * @param hamPath The not spam input folder path.
+     * @param spamPath the spam input folder path.
+     * @param statisticsPath The statistics file path.
+     * @param inLayerLen The length of the MLP input layer.
+     * @throws IOException if any input/output error occurs.
+     * @throws IllegalArgumentException if any input folder/file does not exists
+     * or if the "ham" or "spam" files cannot be created.
+     *
+     * @return The percentage of zeroed vetors
+     */
+    private float simulatePercent(String hamPath, String spamPath, String statisticsPath, int inLayerLen) throws IOException {
+        File hamFolder = new File(hamPath);
+        assertDirectory(hamFolder);
+
+        File spamFolder = new File(spamPath);
+        assertDirectory(spamFolder);
+
+        File statisticsFile = new File(statisticsPath);
+        assertExists(statisticsFile);
+
+        // open statistics file
+        Characteristics<String> characteristic = new Characteristics<String>();
+
+        Scanner scanner = new Scanner(statisticsFile);
+        scanner.nextLine(); // ignore the method
+        for (int i=0; i < inLayerLen; i++) {
+            if (scanner.hasNext()) {
+                characteristic.insertData(scanner.next());
+                scanner.nextLine();
+            } else {
+                return 0;
+            }
+        }
+
+        //printlnLog("TrainMode.ProcessStart", hamPath);
+        VectorCounter hamR = simulateVectorization(characteristic, hamFolder);
+
+        //printlnLog("TrainMode.ProcessStart", spamPath);
+        VectorCounter spamR = simulateVectorization(characteristic, spamFolder);
+
+        return computeZeroedPercent(hamR, spamR);
+    }
+
+    private float computeZeroedPercent(VectorCounter hamR, VectorCounter spamR) {
+        int zeroed = hamR.getZeroedVectorsCount() + spamR.getZeroedVectorsCount();
+        int total = hamR.getTotalVectorsCount() + spamR.getTotalVectorsCount();
+        return zeroed / (float) total;
+    }
+
+    public void createVectorsByPercent(String hamPath, String spamPath, String statisticsPath, float zerosPercent, String outPath) throws IOException {
+        int minInput = 1;
+        int maxInput = 100;
+        float zeros;
+
+        // find the max number of features
+        while (true) {
+            System.out.println("minInput = " + minInput + " maxInput = " + maxInput);
+
+            zeros = simulatePercent(hamPath, spamPath, statisticsPath, maxInput);
+
+            System.out.println("zeros = " + (zeros*100) + " | target: " + (zerosPercent*100));
+
+
+            // if less or equal, the maxInput was fouded (less zeroed vectors)
+            if (zeros <= zerosPercent) {
+                break;
+            }
+            // otherwise, try with a larger number
+            else {
+                minInput = maxInput;
+                maxInput *= 10;
+            }
+
+            System.out.println();
+        }
+
+        System.out.println();
+        System.out.println("ETAPA 2");
+
+        // find the best match
+        int middle = 1;
+        int oldMiddle;
+        while (true) {
+            System.out.println("\n-----------------------------------------------------------------\n");
+
+            System.out.println("min = " + minInput + ", max = " + maxInput);
+
+            oldMiddle = middle;
+            middle = Math.round((maxInput + minInput) / 2f); // div 2
+
+            if (oldMiddle == middle) {
+                break;
+            }
+
+
+            zeros = simulatePercent(hamPath, spamPath, statisticsPath, middle);
+            System.out.println("middle = " + middle + " | zeros = " + (zeros*100) + " | target: " + (zerosPercent*100));
+
+            // less zeroed vectors -> decrease the number of features
+            if (zeros < zerosPercent) {
+                maxInput = middle;
+            }
+
+            // more zeroed vectors -> increase the number of features
+            else if (zeros > zerosPercent) {
+                minInput = middle;
+            }
+        }
+
+        // Vectorization
+        System.out.println("middle = " + middle);
+        doMlpVector(hamPath, spamPath, statisticsPath, middle, outPath);
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Vectors with Zeros Count
+    // ---------------------------------------------------------------------------------------------
+
+    private float simulateAverage(String hamPath, String spamPath, String statisticsPath, int inLayerLen) throws IOException {
+        File hamFolder = new File(hamPath);
+        assertDirectory(hamFolder);
+
+        File spamFolder = new File(spamPath);
+        assertDirectory(spamFolder);
+
+        File statisticsFile = new File(statisticsPath);
+        assertExists(statisticsFile);
+
+        // open statistics file
+        Characteristics<String> characteristic = new Characteristics<String>();
+
+        Scanner scanner = new Scanner(statisticsFile);
+        scanner.nextLine(); // ignore the method
+        for (int i=0; i < inLayerLen; i++) {
+            if (scanner.hasNext()) {
+                characteristic.insertData(scanner.next());
+                scanner.nextLine();
+            } else {
+                return 0;
+            }
+        }
+
+        //printlnLog("TrainMode.ProcessStart", hamPath);
+        VectorCounter hamR = simulateVectorization(characteristic, hamFolder);
+
+        //printlnLog("TrainMode.ProcessStart", spamPath);
+        VectorCounter spamR = simulateVectorization(characteristic, spamFolder);
+
+        return computeZerosAverage(hamR, spamR);
+    }
+
+    private float computeZerosAverage(VectorCounter hamR, VectorCounter spamR) {
+        int zerosCount = hamR.getZerosCount() + spamR.getZerosCount();
+        int totalVectors = hamR.getTotalVectorsCount() + spamR.getTotalVectorsCount();
+        return zerosCount / (float) totalVectors;
+    }
+
+    public void createVectorsByAverage(String hamPath, String spamPath, String statisticsPath, float average, String outPath) throws IOException {
+        float avg = simulateAverage(hamPath, spamPath, statisticsPath, (int) average);
+        System.out.println("for " + average + " the average is " + avg);
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        TrainModule module = new TrainModule();
+
+        String out = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/09_TEST";
+        String stat = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/03_statistics/statistics_MI.dat";
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/02_filtered_data/";
+        module.createVectorsByPercent(path + "ham", path + "spam", stat, 1, out);
+
+
+
+    }
+
 }

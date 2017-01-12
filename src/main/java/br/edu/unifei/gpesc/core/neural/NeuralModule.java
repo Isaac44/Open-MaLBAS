@@ -162,13 +162,13 @@ public class NeuralModule {
         mSecondHiddenFunction = mCfg.getProperty("DEFAULT_SECOND_HIDDEN_FUNCTION");
         mOutputFunction = mCfg.getProperty("DEFAULT_OUTPUT_FUNCTION");
         mEpochs = mCfg.getIntegerProperty("DEFAULT_EPOCHS");
-        mMomentum = mCfg.getDoublePropertie("DEFAULT_MOMENTUM");
-        mLearnRate = mCfg.getDoublePropertie("DEFAULT_LEARN_RATE");
+        mMomentum = mCfg.getDoubleProperty("DEFAULT_MOMENTUM");
+        mLearnRate = mCfg.getDoubleProperty("DEFAULT_LEARN_RATE");
         mSeed = getSeed(mCfg.getProperty("DEFAULT_RANDOMIZER_SEED"));
         mNumberOfActiveThreads = mCfg.getIntegerProperty("NUMBER_OF_ACTIVES_THREADS");
 
         String vectorFolder = mCfg.getProperty("VECTOR_FOLDER");
-        Double validationPercent = mCfg.getDoublePropertie("VALIDATION_PERCENT");
+        Double validationPercent = mCfg.getDoubleProperty("VALIDATION_PERCENT");
 
         File hamFile = new File(vectorFolder, "ham");
         File spamFile = new File(vectorFolder, "spam");

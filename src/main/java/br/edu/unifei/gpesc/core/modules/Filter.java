@@ -19,7 +19,7 @@ package br.edu.unifei.gpesc.core.modules;
 import br.edu.unifei.gpesc.core.filter.FilterExecutor;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
-import br.edu.unifei.gpesc.util.ProcessLog;
+import br.edu.unifei.gpesc.util.VectorCounter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,7 +37,7 @@ public class Filter {
     private final Mail mMailProcessor = new Mail();
     private final FilterExecutor mFilterExecutor = new FilterExecutor();
 
-    private final ProcessLog mFolderProcessLog = new ProcessLog();
+    private final VectorCounter mFolderProcessLog = new VectorCounter();
 
     private String filter() {
         String content = mMailProcessor.getContent();
@@ -83,10 +83,10 @@ public class Filter {
                 result = filterMail(file.getAbsolutePath());
                 if (result != null) {
                     saveTo(result, new File(folderOut, file.getName()));
-                    mFolderProcessLog.incSucessCount();
+                    mFolderProcessLog.incGoodVectorsCount();
                 }
                 else {
-                    mFolderProcessLog.incErrorCount();
+                    mFolderProcessLog.incZeroedVectorsCount();
                 }
             }
 
@@ -94,7 +94,7 @@ public class Filter {
         }
     }
 
-    public ProcessLog getFolderProcessLog() {
+    public VectorCounter getFolderProcessLog() {
         return mFolderProcessLog;
     }
 

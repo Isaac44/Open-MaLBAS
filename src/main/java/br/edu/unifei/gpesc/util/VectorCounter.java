@@ -20,34 +20,47 @@ package br.edu.unifei.gpesc.util;
  *
  * @author isaac
  */
-public class ProcessLog {
+public class VectorCounter {
 
-    private int mErrorCount;
-    private int mSucessCount;
+    private int mZeroedVectors;
+    private int mGoodVectors;
+
+    private int mZerosCount;
 
     public void resetCounters() {
-        mErrorCount = 0;
-        mSucessCount = 0;
+        mZeroedVectors = 0;
+        mGoodVectors = 0;
     }
 
-    public void incSucessCount() {
-        mSucessCount++;
+    public void incGoodVectorsCount() {
+        mGoodVectors++;
     }
 
-    public void incErrorCount() {
-        mErrorCount++;
+    public void incZeroedVectorsCount() {
+        mZeroedVectors++;
     }
 
-    public int sucess() {
-        return mSucessCount;
+    public void incZeroesCount() {
+        mZerosCount++;
     }
 
-    public int error() {
-        return mErrorCount;
+    public void addZeroesCount(int quantity) {
+        mZerosCount += quantity;
     }
 
-    public int total() {
-        return mSucessCount + mErrorCount;
+    public int getGoodVectorsCount() {
+        return mGoodVectors;
     }
 
+    public int getZeroedVectorsCount() {
+        return mZeroedVectors;
+    }
+
+    public int getTotalVectorsCount() {
+        return mGoodVectors + mZeroedVectors;
+    }
+
+    public int getZerosCount() {
+        return mZerosCount;
+    }
 }

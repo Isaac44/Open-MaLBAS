@@ -18,48 +18,39 @@ package br.edu.unifei.gpesc.core.postfix;
 
 import br.edu.unifei.gpesc.util.Configuration;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * TODO: File collision check.
+ *
  * @author Isaac Caldas Ferreira
  */
 public class Storage {
 
     /**
-     * Mail charset.
+     * Storers. [0]: backup, [1]: spam
      */
-    private static final Charset ASCII = Charset.forName("ASCII");
+    private final Storer[] mStorers = new Storer[2];
 
     /**
-     * The folder to store all e-mails.
+     * Background store executor.
      */
-    private final File mBackupFolder;
-
-    /**
-     * The folder to store only spam e-mails
-     */
-    private final File mSpamFolder;
-
     private final ExecutorService mExecutor;
 
     /**
      * Initizalizes the backup and spam folder for storage. <br>
-     * The folders may be null, in this case when .store() is called, nothing
-     * will happen.
+     * The folders may be null, in this case when .store() is called, nothing will happen.
      *
-     * @param backupFolder The folder to store all e-mails.
-     * @param spamFolder The folder to store all spam e-mails.
+     * @param backupFolder The folder to store all e-mails received (spams or not spams).
+     * @param spamFolder The folder to store only spam e-mails.
      * @param asyncStorage
      */
     public Storage(File backupFolder, File spamFolder, boolean asyncStorage) {
-        mBackupFolder = backupFolder;
-        mSpamFolder = spamFolder;
-
+        mStorers[0] = (backupFolder != null) ? new Storer(backupFolder) : new EmptyStorer();
+        mStorers[1] = (spamFolder != null) ? new Storer(spamFolder) : new EmptyStorer();
         mExecutor = asyncStorage ? Executors.newSingleThreadExecutor() : null;
     }
 
@@ -75,70 +66,84 @@ public class Storage {
 
     /**
      * Creates a name for the email based on the current time.
+     *
      * @return The hash of the current time in milliseconds.
      */
-    private String getTimeHash() {
-        return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX);
+    private String createEmailFileName() {
+        return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX) + ".eml";
     }
 
     /**
-     * Stores the mail onto a system file.
-     * @param file The file.
-     * @param mail The mail.
+     * Checks if the e-mail fileName exists on the backup folder and/or the spam folder.
+     * @param fileName
+     * @return
      */
-    private void store(File file, String mail) {
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            out.write(mail.getBytes(ASCII));
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean exists(String fileName) {
+        for (Storer storer : mStorers) {
+            if (storer.exists(fileName)) {
+                return true;
+            }
         }
+        return false;
     }
-    /**
-     * Creates the file to store the mail.
-     * <p>
-     * TODO:
-     * Important: this method do NOT check for file collision!
-     * </p>
-     *
-     * @param root The root folder.
-     * @param user The user folder name.
-     * @param fileName The file-to-be-saved name.
-     * @param mail The mail data.
-     */
-    private void store(File root, String user, String fileName, String mail) {
-        if (root != null) {
-            File folder = getFolder(root, user);
-            File file = new File(folder, fileName);
-            store(file, mail);
+
+    private static String userToPath(String userMail) {
+        int atSign = userMail.indexOf('@');
+        String user = userMail.substring(0, atSign);
+        String domain = userMail.substring(atSign+1);
+
+        StringBuilder strBuilder = new StringBuilder(user.length() * 2 + domain.length());
+        strBuilder.append(domain);
+
+        for (char c : user.toCharArray()) {
+            strBuilder.append(File.separatorChar).append(c);
         }
+
+        return strBuilder.toString();
     }
 
     /**
      * Stores the file on the backup folder and the spam folder, if they exists.
+     *
      * @param user The user e-mail address.
-     * @param mail The mail data.
-     * @param isSpam The anti-spam results. It must be false for the cases
-     * where the e-mail is ham or unknown, and true for spam.
+     * @param mailData The mail data.
+     * @param isSpam The anti-spam results. It must be false for the cases where the e-mail is ham
+     * or unknown, and true for spam.
      */
-    private void storeMail(String user, String mail, boolean isSpam) {
-        String fileName = getTimeHash() + ".eml";
-        store(mBackupFolder, user, fileName, mail);
 
+    private void storeMail(String user, String mailData, boolean isSpam) {
+        // Create a name for the e-mail
+        String fileName = createEmailFileName();
+
+        // Spam path
+        mStorers[1].setSubFolder(userToPath(user));
+
+        // Check if exists (avoid collision)
+        if (exists(fileName)) {
+            // rename until find a non-existent name
+            do {
+                fileName = createEmailFileName();
+            } while (exists(fileName));
+        }
+
+        // Backup Storage
+        mStorers[0].store(fileName, mailData);
+
+        // Spam Storage
         if (isSpam) {
-            store(mSpamFolder, user, fileName, mail);
+            mStorers[1].store(fileName, mailData);
         }
     }
 
     /**
      * Stores the file on the backup folder and the spam folder, if they exists.
-     * <p>This method is synchonized for multi-threads purposes.</p>
+     * <p>
+     * This method is synchonized for multi-threads purposes.</p>
      *
      * @param user The user e-mail address.
      * @param mail The mail data.
-     * @param isSpam The anti-spam results. It must be false for the cases
-     * where the e-mail is ham or unknown, and true for spam.
+     * @param isSpam The anti-spam results. It must be false for the cases where the e-mail is ham
+     * or unknown, and true for spam.
      */
     public synchronized void store(String user, String mail, boolean isSpam) {
         if (mExecutor != null) {
@@ -149,8 +154,9 @@ public class Storage {
     }
 
     /**
-     * Creates a {@link Storage} using the {@link Configuration} properties:
-     * STORE_BACKUP_FOLDER and STORE_SPAM_FOLDER.
+     * Creates a {@link Storage} using the {@link Configuration} properties: STORE_BACKUP_FOLDER and
+     * STORE_SPAM_FOLDER.
+     *
      * @return The Storage.
      * @throws java.io.IOException
      */
@@ -163,8 +169,9 @@ public class Storage {
 
     /**
      * Creates a folder using a {@link Configuration} property. <br>
-     * This method will try to build de path to the folder. If its not possible,
-     * null will be returned.
+     * This method will try to build de path to the folder. If its not possible, null will be
+     * returned.
+     *
      * @param key The {@link Configuration} property.
      * @return The folder or null.
      */
@@ -185,6 +192,10 @@ public class Storage {
         return null;
     }
 
+    void setLogFileName(String time) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private class AsyncStore implements Runnable {
 
         private final String mmMailData;
@@ -202,5 +213,18 @@ public class Storage {
             System.out.println("saving mail=" + mmUserAddress);
             storeMail(mmUserAddress, mmMailData, mmIsSpam);
         }
+    }
+
+    public static void main(String[] args) throws ParseException {
+        String root = "/home/isaac/Desktop/BACKUP/Test";
+        Storage s = new Storage(new File(root, "backup"), new File(root, "spam"), true);
+
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+        s.store("hamtaro@unife.edu.br", "meu e-mail simples", true);
+
     }
 }

@@ -27,7 +27,7 @@ public class MutualInformation implements Distribution {
     @Override
     public double compute(Data data, Statistic statistics) {
 
-        double probabilidade_set = 1 / (double) statistics.getSetCount();
+        double probabilidade_set = 1.0 / statistics.getSetCount();
 
         // probabilidade para HAM
         int total_ham = statistics.getElementSetTotalCount(0);
@@ -58,18 +58,15 @@ public class MutualInformation implements Distribution {
         int quantidade_nao_total = quantidade_nao_ham + quantidade_nao_spam;
 
         // probabildade para TOTAL
-        double p_elemento_total = 1.0 * (quantidade_total / (double) total);
-        double p_elemento_nao_total = 1.0 * (quantidade_nao_total / (double) total);
-
-        double peso_elemento = p_elemento_total * probabilidade_set;
-        double peso_nao_elemento = p_elemento_nao_total * probabilidade_set;
+        double p_elemento_total = probabilidade_set * (quantidade_total / (double) total);
+        double p_elemento_nao_total = probabilidade_set * (quantidade_nao_total / (double) total);
 
         // mutual information
 
-        double mi_ham = p_elemento_ser_ham * log2(p_elemento_ser_ham / peso_elemento);
-        double mi_nao_ham = p_elemento_nao_ser_ham * log2(p_elemento_nao_ser_ham / peso_nao_elemento);
-        double mi_spam = p_elemento_ser_spam * log2(p_elemento_ser_spam / peso_elemento);
-        double mi_nao_spam = p_elemento_nao_ser_spam * log2(p_elemento_nao_ser_spam / peso_nao_elemento);
+        double mi_ham = p_elemento_ser_ham * log2(p_elemento_ser_ham / p_elemento_total);
+        double mi_nao_ham = p_elemento_nao_ser_ham * log2(p_elemento_nao_ser_ham / p_elemento_nao_total);
+        double mi_spam = p_elemento_ser_spam * log2(p_elemento_ser_spam / p_elemento_total);
+        double mi_nao_spam = p_elemento_nao_ser_spam * log2(p_elemento_nao_ser_spam / p_elemento_nao_total);
 
         double result = mi_ham + mi_nao_ham + mi_spam + mi_nao_spam;
 
@@ -79,6 +76,10 @@ public class MutualInformation implements Distribution {
     private static final double LOG10_2 = log10(2);
     private static double log2(double value) {
             return log10(value) / LOG10_2;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("args = " + log2(0));
     }
 
 }

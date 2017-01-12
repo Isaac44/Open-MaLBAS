@@ -109,9 +109,9 @@ public class Vector {
         }
     }
 
-    public static ProcessLog doVectorization(Characteristics<String> characteristic, File folderInput, File outFile) throws IOException  {
+    public static VectorCounter doVectorization(Characteristics<String> characteristic, File folderInput, File outFile) throws IOException  {
         File[] fileArray = folderInput.listFiles(new FileUtils.IsFileFilter());
-        ProcessLog processLog = new ProcessLog();
+        VectorCounter processLog = new VectorCounter();
 
         if (fileArray != null) {
             FileOutputStream fileStream = new FileOutputStream(outFile);
@@ -149,15 +149,15 @@ public class Vector {
                     }
 
                     writeLink.append(file.getName()).append("\n");
-                    processLog.incSucessCount();
+                    processLog.incGoodVectorsCount();
                 }
                 else {
-                    processLog.incErrorCount();
+                    processLog.incZeroedVectorsCount();
                 }
             }
 
             // quantity of valid patterns
-            outBuffer.putInt(0, processLog.sucess());
+            outBuffer.putInt(0, processLog.getGoodVectorsCount());
             outBuffer.flip();
 
             fileOut.write(outBuffer);
@@ -184,6 +184,60 @@ public class Vector {
         Normalization.featureScaling(dataVector, dataNormalized);
 
         return dataNormalized;
+    }
+
+    public static VectorCounter simulateVectorization(Characteristics<String> characteristic, File folderInput) throws IOException  {
+        File[] fileArray = folderInput.listFiles(new FileUtils.IsFileFilter());
+        VectorCounter result = new VectorCounter();
+
+        if (fileArray != null) {
+            FileCharacterization characterization = new FileCharacterization(characteristic);
+
+            int[] rawVector = characterization.getCharacterizationArray();
+            double[] normVector = new double[rawVector.length];
+
+            // allocate the output buffer
+            // -> 2 Integers + (n files * vector size) Double
+            int bufferSize = 2 * Double.BYTES + fileArray.length * rawVector.length * Double.BYTES;
+
+            ByteBuffer outBuffer = ByteBuffer.allocate(bufferSize);
+            outBuffer.putInt(0); // reserved: quantity of valid vectors
+            outBuffer.putInt(rawVector.length); // line size (quantity of indexes of the vector array)
+
+            ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
+            int k = 0;
+
+            for (File file : fileArray) {
+                progress.setValue(k++);
+
+                characterization.cleanCharacterizationArray();
+                characterization.processFile(file);
+
+                if (!hasOnlyZeros(rawVector)) {
+                    Normalization.featureScaling(rawVector, normVector);
+
+                    for (double value : normVector) {
+                        outBuffer.putDouble(value);
+                    }
+
+                    result.incGoodVectorsCount();
+                }
+                else {
+                    result.incZeroedVectorsCount();
+                }
+
+                // Zeros count
+                result.addZeroesCount(countZeros(rawVector));
+
+            }
+
+            // quantity of valid patterns
+            outBuffer.putInt(0, result.getGoodVectorsCount());
+            outBuffer.flip();
+
+            progress.end();
+        }
+        return result;
     }
 
     // -------------------------------------------------------------------------
@@ -226,10 +280,20 @@ public class Vector {
         return patternArray;
     }
 
-    public static boolean hasOnlyZeros(int[] array) {
+    private static boolean hasOnlyZeros(int[] array) {
         for (int value : array) {
             if (value != 0) return false;
         }
         return true;
+    }
+
+    private static int countZeros(int[] array) {
+        int count = 0;
+        for (int value : array) {
+            if (value == 0) {
+                count++;
+            }
+        }
+        return count;
     }
 }

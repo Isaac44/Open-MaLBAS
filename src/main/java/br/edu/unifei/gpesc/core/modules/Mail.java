@@ -155,8 +155,11 @@ public class Mail {
      * @throws IOException If was not possible read the file.
      */
     public static Part getProcessableMailContent(String mailpath) throws MessagingException, IOException {
-        MimeMessage message = new MimeMessage(MAIL_SESSION, new BufferedInputStream(new FileInputStream(mailpath)));
-        return getProcessablePart(message);
+        InputStream in = new BufferedInputStream(new FileInputStream(mailpath));
+        MimeMessage message = new MimeMessage(MAIL_SESSION, in);
+        Part part = getProcessablePart(message);
+        in.close();
+        return part;
     }
 
     public static Part getProcessableMailContent(InputStream inputStream) throws MessagingException, IOException {

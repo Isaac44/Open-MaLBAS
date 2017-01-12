@@ -77,10 +77,28 @@ public class Application {
         String spamPath = c.getProperty("PROCESSED_SPAM_FOLDER");
         String hamPath = c.getProperty("PROCESSED_NOT_SPAM_FOLDER");
         String statisticsFile = c.getProperty("STATISTICS_FILE");
-        Integer length = c.getIntegerProperty("VECTOR_LENGTH");
         String outFolder = c.getProperty("VECTOR_OUT_FOLDER");
 
-        getTrainModule().doMlpVector(hamPath, spamPath, statisticsFile, length, outFolder);
+        // Create by length
+        Integer length = c.getIntegerProperty("VECTOR_LENGTH", -1);
+        if (length > 0) {
+            getTrainModule().doMlpVector(hamPath, spamPath, statisticsFile, length, outFolder);
+        }
+        else {
+            // Create by percent
+            double percent = c.getDoubleProperty("VECTOR_ZEROED_PERCENT", -1) / 100.0;
+            if (percent >= 0) {
+                getTrainModule().createVectorsByPercent(hamPath, spamPath, statisticsFile, (float) percent, outFolder);
+            }
+
+            // Create by average
+            else {
+                double average = c.getDoubleProperty("VECTOR_ZEROS_AVERAGE");
+                getTrainModule().createVectorsByAverage(hamPath, spamPath, statisticsFile, (float) average, hamPath);
+            }
+        }
+
+
     }
 
     private static void setupLogger() {
