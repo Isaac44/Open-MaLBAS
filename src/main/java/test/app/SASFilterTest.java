@@ -18,7 +18,6 @@ package test.app;
 
 import br.edu.unifei.gpesc.core.modules.Filter;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -31,14 +30,15 @@ public class SASFilterTest {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         Filter filter = new Filter();
 
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail/test/";
-        String file = "smtp_1377305710_0x7fd6dc02b830_835.eml";
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/TREC-2005-2006-2007/01_raw_data/ham/";
+        String file = "trec_2005_183_203.eml";
 
-        String out = filter.filterMail(path + "raw/" + file);
+        String out = filter.filterMail(path + file);
+        System.out.println("out = " + out);
 
-        FileOutputStream fileStream = new FileOutputStream(path + "cleanned/" + file);
-        fileStream.write(out.getBytes("ASCII"));
-        fileStream.close();
+//        FileOutputStream fileStream = new FileOutputStream(path + "cleanned/" + file);
+//        fileStream.write(out.getBytes("ASCII"));
+//        fileStream.close();
     }
 
 }

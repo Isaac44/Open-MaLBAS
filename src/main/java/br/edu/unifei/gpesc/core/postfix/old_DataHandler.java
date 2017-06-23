@@ -30,7 +30,7 @@ import org.subethamail.smtp.client.SmartClient;
  *
  * @author isaac
  */
-public class DataHandler implements MessageHandler {
+public class old_DataHandler implements MessageHandler {
 
     /**
      * Destiny.
@@ -71,7 +71,7 @@ public class DataHandler implements MessageHandler {
      * @param maxLen The max data length.
      * @param callback The callback for the finish notify.
      */
-    public DataHandler(Storage storage, AntiSpam classificator, int maxLen, Callback callback) {
+    public old_DataHandler(Storage storage, AntiSpam classificator, int maxLen, Callback callback) {
         mStorage = storage;
         mClassificator = classificator;
         mData = new byte[maxLen];
@@ -125,12 +125,12 @@ public class DataHandler implements MessageHandler {
     @Override
     public void done() {
         // Process mail
-        int result = mClassificator.processMail(new ByteArrayInputStream(mData, 0, mDataLen));
+        AntiSpam.Result result = mClassificator.processMail(new ByteArrayInputStream(mData, 0, mDataLen));
 
         // DEBUG
         System.out.println("result = " + result);
 
-        boolean isSpam = result == AntiSpam.SPAM;
+        boolean isSpam = result == AntiSpam.Result.SPAM;
         if (!isSpam) {
             returnMail();
         }
@@ -143,6 +143,6 @@ public class DataHandler implements MessageHandler {
     }
 
     public interface Callback {
-        void handlerFinished(DataHandler handler);
+        void handlerFinished(old_DataHandler handler);
     }
 }

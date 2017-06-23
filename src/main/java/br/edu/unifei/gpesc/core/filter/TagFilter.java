@@ -22,7 +22,7 @@ import org.jsoup.nodes.Element;
  * The interface for the Tag Filter.
  * <br>
  * It is used by the {@link FilterExecutor} to process tag elements of the HTML.
- * 
+ *
  * @author Isaac Caldas Ferreira
  */
 public interface TagFilter {
@@ -32,8 +32,8 @@ public interface TagFilter {
      * <br>
      * Every output token should be placed on the strBuilder argument output.
      * @param element The Element with the current tag and attributes.
-     * @param strBuilder The output StringBuilder.
+     * @param output Where the processed data goes.
      * @return The Result information for the FilterExecutor.
      */
-    public Result filter(Element element, StringBuilder strBuilder);
+    public Result filter(Element element, FilterOutput output);
 }

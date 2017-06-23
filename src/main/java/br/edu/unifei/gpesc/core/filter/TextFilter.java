@@ -25,7 +25,7 @@ public abstract class TextFilter {
     /**
      * Informs what the executor should do after filter the text.
      */
-    private Result mFilterResult;
+    private Result mResult;
 
     /**
      * Filters the input text.
@@ -38,17 +38,17 @@ public abstract class TextFilter {
      * Gets result of the filter.
      * @return The result of the filter.
      */
-    public Result getFilterResult() {
-        return mFilterResult;
+    public Result getResult() {
+        return mResult;
     }
 
     /**
      * Implementations of this class shoud use this method to set the result
      * of the filter.
      * @param result The result.
-     * @see TextFilter#getFilterResult()
+     * @see TextFilter#getResult()
      */
     protected final void setResult(Result result) {
-        mFilterResult = result;
+        mResult = result;
     }
 }

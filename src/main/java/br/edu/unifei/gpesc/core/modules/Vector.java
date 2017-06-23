@@ -20,11 +20,13 @@ import br.edu.unifei.gpesc.core.statistic.*;
 import br.edu.unifei.gpesc.mlp.layer.*;
 import br.edu.unifei.gpesc.util.*;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -111,64 +113,59 @@ public class Vector {
 
     public static VectorCounter doVectorization(Characteristics<String> characteristic, File folderInput, File outFile) throws IOException  {
         File[] fileArray = folderInput.listFiles(new FileUtils.IsFileFilter());
-        VectorCounter processLog = new VectorCounter();
+        VectorCounter log = new VectorCounter();
 
-        if (fileArray != null) {
-            FileOutputStream fileStream = new FileOutputStream(outFile);
-            FileChannel fileOut = fileStream.getChannel();
-
-            Writer writeLink = new BufferedWriter(new FileWriter(new File(outFile.getAbsolutePath() + ".link")));
-
-            FileCharacterization characterization = new FileCharacterization(characteristic);
-
-            int[] dataVector = characterization.getCharacterizationArray();
-            double[] dataNormalized = new double[dataVector.length];
-
-            // allocate the output buffer
-            // -> 2 Integers + (n files * vector size) Double
-            int bufferSize = 2 * Double.BYTES + fileArray.length * dataVector.length * Double.BYTES;
-
-            ByteBuffer outBuffer = ByteBuffer.allocate(bufferSize);
-            outBuffer.putInt(0); // reserved: quantity of valid vectors
-            outBuffer.putInt(dataVector.length); // line size (quantity of indexes of the vector array)
-
-            ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
-            int k = 0;
-
-            for (File file : fileArray) {
-                progress.setValue(k++);
-
-                characterization.cleanCharacterizationArray();
-                characterization.processFile(file);
-
-                if (!hasOnlyZeros(dataVector)) {
-                    Normalization.featureScaling(dataVector, dataNormalized);
-
-                    for (double value : dataNormalized) {
-                        outBuffer.putDouble(value);
-                    }
-
-                    writeLink.append(file.getName()).append("\n");
-                    processLog.incGoodVectorsCount();
-                }
-                else {
-                    processLog.incZeroedVectorsCount();
-                }
-            }
-
-            // quantity of valid patterns
-            outBuffer.putInt(0, processLog.getGoodVectorsCount());
-            outBuffer.flip();
-
-            fileOut.write(outBuffer);
-            fileOut.close();
-            fileStream.close();
-
-            writeLink.close();
-
-            progress.end();
+        if (fileArray == null) {
+            return log;
         }
-        return processLog;
+
+        // Write vectors
+        DataOutputStream dout = new DataOutputStream(new FileOutputStream(outFile));
+        Writer writeLink = new BufferedWriter(new FileWriter(new File(outFile.getAbsolutePath() + ".link")));
+
+        FileCharacterization characterization = new FileCharacterization(characteristic);
+
+        int[] dataVector = characterization.getCharacterizationArray();
+        double[] dataNormalized = new double[dataVector.length];
+
+        // Init Process
+        dout.writeInt(0); // reserve for quantity of valid vectors
+        dout.writeInt(dataVector.length); // line size (quantity of indexes of the vector array)
+
+        ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
+        int k = 0;
+
+        for (File file : fileArray) {
+            progress.setValue(k++);
+
+            characterization.cleanCharacterizationArray();
+            characterization.processFile(file);
+
+            if (!hasOnlyZeros(dataVector)) {
+                Normalization.featureScaling(dataVector, dataNormalized);
+
+                for (double value : dataNormalized) {
+                    dout.writeDouble(value);
+                }
+
+                writeLink.append(file.getName()).append("\n");
+                log.incGoodVectorsCount();
+            }
+            else {
+                log.incZeroedVectorsCount();
+            }
+        }
+
+        dout.close();
+        writeLink.close();
+        progress.end();
+
+        // Write the quantity of patterns
+        RandomAccessFile raf = new RandomAccessFile(outFile, "rw");
+        raf.writeInt(log.getGoodVectorsCount());
+        raf.close();
+
+        return log;
     }
 
     public static double[] getVector(Characteristics<String> characteristics, String text ){

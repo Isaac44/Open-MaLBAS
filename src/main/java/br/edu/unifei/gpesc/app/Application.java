@@ -19,8 +19,8 @@ package br.edu.unifei.gpesc.app;
 import br.edu.unifei.gpesc.core.neural.NeuralModule;
 import br.edu.unifei.gpesc.core.neural.TestBuilder;
 import static br.edu.unifei.gpesc.app.Messages.*;
-import br.edu.unifei.gpesc.app.sas.Client;
-import br.edu.unifei.gpesc.app.sas.Server;
+import br.edu.unifei.gpesc.core.antispam.AntiSpamService;
+import br.edu.unifei.gpesc.core.postfix.StorageService;
 import br.edu.unifei.gpesc.util.Configuration;
 import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.File;
@@ -34,15 +34,20 @@ import java.text.SimpleDateFormat;
  */
 public class Application {
 
-    private static final String ARG_SERVER = "server";
-    private static final String ARG_CLIENT = "client";
+//    private static final String ARG_SERVER = "server";
+//    private static final String ARG_CLIENT = "client";
 
     private static final String ARG_FILTER = "filter";
     private static final String ARG_STATISTICS = "statistics";
     private static final String ARG_MLP_VECTOR = "vector";
     private static final String ARG_MLP_NEURAL = "mlp";
 
+    private static final String ARG_ANTISPAM = "antispam";
+    private static final String ARG_STORAGE_BACKUP = "storage-backup";
+    private static final String ARG_STORAGE_SPAM = "storage-spam";
+
     private static Configuration sMainConfig;
+    private static Configuration sSasConfig;
     private static Configuration sNeuralConfig;
     private static TrainModule sTrainModule;
     private static NeuralModule sNeuralModule;
@@ -97,8 +102,6 @@ public class Application {
                 getTrainModule().createVectorsByAverage(hamPath, spamPath, statisticsFile, (float) average, hamPath);
             }
         }
-
-
     }
 
     private static void setupLogger() {
@@ -131,6 +134,18 @@ public class Application {
         return sMainConfig;
     }
 
+    private static Configuration getSasConfig() {
+        if (sSasConfig == null) {
+            try {
+                sSasConfig = new Configuration("config" + File.separator + "sas.properties");
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
+        return sSasConfig;
+    }
+
     private static TrainModule getTrainModule() {
         if (sTrainModule == null) {
             sTrainModule = new TrainModule();
@@ -147,6 +162,16 @@ public class Application {
 
         sNeuralModule.setUp();
         sNeuralModule.start();
+    }
+
+    private static void runAntiSpam() {
+        Configuration c = getSasConfig();
+        AntiSpamService.from(c).startService();
+    }
+
+    private static void runStorage(boolean spam) {
+        Configuration c = getSasConfig();
+        StorageService.createFrom(c, spam ? StorageService.TYPE_SPAM : StorageService.TYPE_BACKUP).start();
     }
 
     private static void process(String module) throws IOException {
@@ -172,20 +197,41 @@ public class Application {
             printlnLog("Application.TrainMode.SelectedMlpNeural");
             runMlp();
         }
-
+        else if (module.equals(ARG_ANTISPAM))
+        {
+            runAntiSpam();
+        }
+        else if (module.equals(ARG_STORAGE_SPAM)) {
+            runStorage(true);
+        }
+        else if (module.equals(ARG_STORAGE_BACKUP)) {
+            runStorage(false);
+        }
         else {
             System.out.println("SAS - Incorrect Use");
+                printUsage();
         }
     }
 
+    private static void printUsage() {
+        System.out.println("Usage:");
+        System.out.println("filter\n\tFilters all the raw e-mails.");
+        System.out.println("statistics\n\tCreate the statistics file.");
+        System.out.println("vector\n\tGenerates the vectors for the neural network.");
+        System.out.println("mlp\n\tTrains the MLP neural network.");
+        System.out.println("antispam\n\tStarts the AntiSpam module.");
+        System.out.println("storage-spam\n\tStarts the Spam Storage service.");
+        System.out.println("storage-backup\n\tStarts the Backup Storage service.");
+    }
+
     public static void main(String... args) throws IOException {
+        runAntiSpam();
+
+        if (1 != 2) return;
+
+
         if (args.length == 0) {
-            System.out.println("SAS - Incorrect use");
-//            printlnLog("Application.TrainMode.All");
-//            System.out.println();
-//            process(ARG_FILTER);
-//            process(ARG_STATISTICS);
-//            process(ARG_MLP_VECTOR);
+            printUsage();
         }
 
         else {
@@ -193,13 +239,6 @@ public class Application {
 
             if ("run".equals(module)) {
                 TestBuilder.main(args);
-            }
-
-            if (ARG_CLIENT.equals(module)) {
-                System.exit(Client.run(args[1]));
-            }
-            else if (ARG_SERVER.equals(module)) {
-                new Server().start();
             }
             else {
                 process(module);

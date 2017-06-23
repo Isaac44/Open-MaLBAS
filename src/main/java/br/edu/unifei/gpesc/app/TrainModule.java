@@ -27,7 +27,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * The train mode module. This is a main class type. <br>
@@ -239,25 +238,16 @@ public class TrainModule {
         File outSpamFile = new File(outPath, "spam");
         createDirs(outSpamFile.getParentFile());
 
-        // open statistics file
-        Characteristics<String> characteristic = new Characteristics<String>();
-
-        Scanner scanner = new Scanner(statisticsFile);
-        scanner.nextLine(); // ignore the method
-        for (int i=0; i < inLayerLen; i++) {
-            if (scanner.hasNext()) {
-                characteristic.insertData(scanner.next());
-                scanner.nextLine();
-            } else {
-                throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inLayerLen));
-            }
+        Characteristics<String> characteristics = CharacteristicsHelper.fromFile(statisticsFile, inLayerLen);
+        if (characteristics == null) {
+            throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inLayerLen));
         }
 
         printlnLog("TrainMode.ProcessStart", hamPath);
-        VectorCounter hamR = doVectorization(characteristic, hamFolder, outHamFile);
+        VectorCounter hamR = doVectorization(characteristics, hamFolder, outHamFile);
 
         printlnLog("TrainMode.ProcessStart", spamPath);
-        VectorCounter spamR = doVectorization(characteristic, spamFolder, outSpamFile);
+        VectorCounter spamR = doVectorization(characteristics, spamFolder, outSpamFile);
 
         // logs
         println("");
@@ -305,25 +295,16 @@ public class TrainModule {
         File statisticsFile = new File(statisticsPath);
         assertExists(statisticsFile);
 
-        // open statistics file
-        Characteristics<String> characteristic = new Characteristics<String>();
-
-        Scanner scanner = new Scanner(statisticsFile);
-        scanner.nextLine(); // ignore the method
-        for (int i=0; i < inLayerLen; i++) {
-            if (scanner.hasNext()) {
-                characteristic.insertData(scanner.next());
-                scanner.nextLine();
-            } else {
-                return 0;
-            }
+        Characteristics<String> characteristics = CharacteristicsHelper.fromFile(statisticsFile, inLayerLen);
+        if (characteristics == null) {
+            throw new IllegalArgumentException(i18n("TrainMode.IllegalArgument.StatisticsDoesNotContainInputLayerLength", inLayerLen));
         }
 
         //printlnLog("TrainMode.ProcessStart", hamPath);
-        VectorCounter hamR = simulateVectorization(characteristic, hamFolder);
+        VectorCounter hamR = simulateVectorization(characteristics, hamFolder);
 
         //printlnLog("TrainMode.ProcessStart", spamPath);
-        VectorCounter spamR = simulateVectorization(characteristic, spamFolder);
+        VectorCounter spamR = simulateVectorization(characteristics, spamFolder);
 
         return computeZeroedPercent(hamR, spamR);
     }
@@ -415,24 +396,16 @@ public class TrainModule {
         assertExists(statisticsFile);
 
         // open statistics file
-        Characteristics<String> characteristic = new Characteristics<String>();
-
-        Scanner scanner = new Scanner(statisticsFile);
-        scanner.nextLine(); // ignore the method
-        for (int i=0; i < inLayerLen; i++) {
-            if (scanner.hasNext()) {
-                characteristic.insertData(scanner.next());
-                scanner.nextLine();
-            } else {
-                return 0;
-            }
+        Characteristics<String> characteristics = CharacteristicsHelper.fromFile(statisticsFile, inLayerLen);
+        if (characteristics == null) {
+            return 0;
         }
 
         //printlnLog("TrainMode.ProcessStart", hamPath);
-        VectorCounter hamR = simulateVectorization(characteristic, hamFolder);
+        VectorCounter hamR = simulateVectorization(characteristics, hamFolder);
 
         //printlnLog("TrainMode.ProcessStart", spamPath);
-        VectorCounter spamR = simulateVectorization(characteristic, spamFolder);
+        VectorCounter spamR = simulateVectorization(characteristics, spamFolder);
 
         return computeZerosAverage(hamR, spamR);
     }

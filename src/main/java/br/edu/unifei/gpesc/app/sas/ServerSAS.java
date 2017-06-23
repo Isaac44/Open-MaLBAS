@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  *
  * @author Isaac Caldas Ferreira
  */
-public class Server {
+public class ServerSAS {
 
     /**
      * The mail classificator.
@@ -61,7 +61,7 @@ public class Server {
      */
     private final byte[] mClientData = new byte[100 * 1024 * 1024]; // 100 MiB buffer
 
-    public Server() throws IOException {
+    public ServerSAS() throws IOException {
         mStorage = Storage.buildFromConfiguration();
     }
 
@@ -86,6 +86,15 @@ public class Server {
         return characteristics;
     }
 
+    private void createCommunication(Configuration c) {
+        int port = c.getIntegerProperty("POSTFIX_PORT");
+        int maxConn = c.getIntegerProperty("POSTFIX_MAX_CONNECTIONS");
+        String server = c.getProperty("POSTFIX_SERVER");
+
+
+
+    }
+
     /**
      * Creates the classificator.
      * @throws IOException If any error occurs when openning the input files.
@@ -95,8 +104,8 @@ public class Server {
 
         Configuration c = new Configuration("config" + File.separator + "sas.properties");
 
-        String weightsFile = c.getProperty("MLP_WEIGHTS_FILE");
-        String statisticsFile = c.getProperty("MLP_STATISTICS_FILE");
+        String weightsFile = c.getProperty("WEIGHTS_FILE");
+        String statisticsFile = c.getProperty("S_STATISTICS_FILE");
 
         Mlp mlp = Mlp.loadMlp(new File(weightsFile));
         Characteristics<String> characteristics =
@@ -153,7 +162,7 @@ public class Server {
                             new String(mClientData, offset, readed-offset), result != AntiSpam.Result.HAM));
         }
         catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerSAS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -202,7 +211,7 @@ public class Server {
     // -------------------------------------------------------------------------
 
     public static void main(String[] args) throws IOException {
-        new Server().start();
+        new ServerSAS().start();
     }
 
 }

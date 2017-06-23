@@ -17,6 +17,7 @@
 package test.app;
 
 import br.edu.unifei.gpesc.core.filter.FilterExecutor;
+import br.edu.unifei.gpesc.core.filter.StringBuilderOutput;
 import java.io.File;
 import java.io.IOException;
 import org.jsoup.Jsoup;
@@ -34,9 +35,11 @@ public class HtmlFilterTest {
         Elements elements = document.body().getAllElements();
 
         FilterExecutor hfe = new FilterExecutor();
-        String htmlFiltered = hfe.filterHtml(elements);
 
-        System.out.println(htmlFiltered);
+        StringBuilderOutput output = new StringBuilderOutput();
+        hfe.filterHtml(elements, output);
+
+        System.out.println(output.toString());
     }
 
 }

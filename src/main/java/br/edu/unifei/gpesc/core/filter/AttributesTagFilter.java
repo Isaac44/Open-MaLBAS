@@ -36,13 +36,13 @@ public class AttributesTagFilter implements TagFilter {
      * Every token appended will be separated by an space.
      *
      * @param element The Element with the current tag and attributes.
-     * @param strBuilder The output StringBuilder.
+     * @param output The output.
      * @return The return will always be {@link Result#CONTINUE}.
      */
     @Override
-    public Result filter(Element element, StringBuilder strBuilder) {
+    public Result filter(Element element, FilterOutput output) {
         for (Attribute attribute : element.attributes()) {
-            strBuilder.append("!_in_").append(attribute.getKey()).append(" ");
+            output.append("!_in_").append(attribute.getKey()).append(" ");
         }
 
         return Result.CONTINUE;

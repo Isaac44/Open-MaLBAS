@@ -16,11 +16,6 @@
  */
 package br.edu.unifei.gpesc.core.antispam;
 
-import br.edu.unifei.gpesc.core.modules.Filter;
-import br.edu.unifei.gpesc.core.modules.Spam;
-import br.edu.unifei.gpesc.core.modules.Vector;
-import br.edu.unifei.gpesc.core.statistic.Characteristics;
-import br.edu.unifei.gpesc.mlp.Mlp;
 import java.io.File;
 import java.io.InputStream;
 
@@ -28,48 +23,39 @@ import java.io.InputStream;
  *
  * @author Isaac Caldas Ferreira
  */
-public class AntiSpam {
+public interface AntiSpam {
 
-    public static final int HAM = 0;
-    public static final int SPAM = 1;
-    public static final int UNKNOWN = 2;
+    public static enum Result {
 
-    private final Mlp mMlp;
-    private final Filter mFilter = new Filter();
-    private final Characteristics<String> mCharacteristics;
+        /**
+         * The Not-Spam Class
+         */
+        HAM,
 
-    public AntiSpam(Mlp mlp, Characteristics<String> characteristics) {
-        mMlp = mlp;
-        mCharacteristics = characteristics;
+        /**
+         * The Spam Class
+         */
+        SPAM,
+
+        /**
+         * When an e-mail cannot be classified as {@link #HAM} nor {@link #SPAM}
+         */
+        UNKNOWN
     }
 
-    private int getClassification(double v1, double v2) {
-        if (Spam.isSpam(v1, v2)) {
-            return SPAM;
-        }
-        else if (Spam.isHam(v1, v2)) {
-            return HAM;
-        }
-        else {
-            return UNKNOWN;
-        }
-    }
+    /**
+     * Process an e-mail file.
+     *
+     * @param mailFile The input file
+     * @return {@link Result#HAM}, {@link Result#SPAM} or {@link Result#UNKNOWN}
+     */
+    public Result processMail(File mailFile);
 
-    private int process(String mail) {
-        double[] vector = Vector.getVector(mCharacteristics, mail);
-        double[] output = mMlp.runTestNonSup(vector);
-        return getClassification(output[0], output[1]);
-    }
-
-    public int processMail(InputStream mailStream) {
-        String filtered = mFilter.filterMail(mailStream);
-        return process(filtered);
-    }
-
-    public int processMail(File mailFile) {
-        String filtered = mFilter.filterMail(mailFile.getAbsolutePath());
-        return process(filtered);
-    }
-
-
+    /**
+     * Process an e-mail from stream.
+     *
+     * @param mailStream The input file
+     * @return {@link Result#HAM}, {@link Result#SPAM} or {@link Result#UNKNOWN}.
+     */
+    public Result processMail(InputStream mailStream);
 }

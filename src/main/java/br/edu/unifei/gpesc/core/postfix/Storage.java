@@ -111,7 +111,7 @@ public class Storage {
      * or unknown, and true for spam.
      */
 
-    private void storeMail(String user, String mailData, boolean isSpam) {
+    private synchronized void storeMail(String user, String mailData, boolean isSpam) {
         // Create a name for the e-mail
         String fileName = createEmailFileName();
 

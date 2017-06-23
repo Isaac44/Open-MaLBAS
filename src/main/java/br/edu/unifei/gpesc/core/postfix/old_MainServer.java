@@ -27,7 +27,7 @@ import org.subethamail.smtp.server.SMTPServer;
  *
  * @author isaac
  */
-public class MainServer {
+public class old_MainServer {
 
     private static class HandlerFactory implements MessageHandlerFactory {
 
@@ -37,7 +37,7 @@ public class MainServer {
         private final AntiSpamFactory mFactory;
         private final int mMaxMailLength;
 
-        private final LinkedList<DataHandler> mRecycleHandlers = new LinkedList<DataHandler>();
+        private final LinkedList<old_DataHandler> mRecycleHandlers = new LinkedList<old_DataHandler>();
 
         public HandlerFactory(Storage storage, AntiSpamFactory factory, int maxMailLength) {
             mStorage = storage;
@@ -45,15 +45,15 @@ public class MainServer {
             mMaxMailLength = maxMailLength;
         }
 
-        private DataHandler getHandler() {
+        private old_DataHandler getHandler() {
             if (mRecycleHandlers.isEmpty()) {
-                return new DataHandler(mStorage, mFactory.newAntiSpam(), mMaxMailLength, mHandlerCallback);
+                return new old_DataHandler(mStorage, mFactory.newAntiSpam(), mMaxMailLength, mHandlerCallback);
             } else {
                 return mRecycleHandlers.removeLast();
             }
         }
 
-        private void recycleHandler(DataHandler handler) {
+        private void recycleHandler(old_DataHandler handler) {
             mRecycleHandlers.addLast(handler);
         }
 
@@ -64,9 +64,9 @@ public class MainServer {
             }
         }
 
-        private final DataHandler.Callback mHandlerCallback = new DataHandler.Callback() {
+        private final old_DataHandler.Callback mHandlerCallback = new old_DataHandler.Callback() {
             @Override
-            public void handlerFinished(DataHandler handler) {
+            public void handlerFinished(old_DataHandler handler) {
                 synchronized (LOCK) {
                     recycleHandler(handler);
                 }

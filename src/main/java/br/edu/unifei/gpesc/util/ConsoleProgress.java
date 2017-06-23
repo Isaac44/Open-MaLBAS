@@ -35,7 +35,7 @@ public class ConsoleProgress {
     }
 
     private void updateProgress(double progressPercentage) {
-        updateProgressG(progressPercentage);
+//        updateProgressG(progressPercentage);
     }
 
     private void updateProgressG(double progressPercentage) {

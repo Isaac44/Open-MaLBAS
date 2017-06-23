@@ -17,6 +17,9 @@
 package br.edu.unifei.gpesc.core.modules;
 
 import br.edu.unifei.gpesc.core.filter.FilterExecutor;
+import br.edu.unifei.gpesc.core.filter.FilterOutput;
+import br.edu.unifei.gpesc.core.filter.StringBuilderOutput;
+import br.edu.unifei.gpesc.core.filter.WriterOutput;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
 import br.edu.unifei.gpesc.util.VectorCounter;
@@ -40,21 +43,22 @@ public class Filter {
     private final VectorCounter mFolderProcessLog = new VectorCounter();
 
     private String filter() {
+        StringBuilderOutput output = new StringBuilderOutput();
+        filter(output);
+        return output.toString();
+    }
+
+    private void filter(FilterOutput output) {
         String content = mMailProcessor.getContent();
 
-        String out = null;
-
         if (mMailProcessor.isText()) {
-            StringBuilder strBuilder = new StringBuilder();
-            mFilterExecutor.filterText(content, strBuilder);
-            out = strBuilder.toString();
+            mFilterExecutor.filterText(content, output);
         }
         else if (mMailProcessor.isHtml()) {
             Elements allElements = Jsoup.parse(content).getAllElements();
-            out = mFilterExecutor.filterHtml(allElements);
+            mFilterExecutor.filterHtml(allElements, output);
         }
 
-        return out;
     }
 
     public String filterMail(InputStream inputStream) {
@@ -68,25 +72,34 @@ public class Filter {
     }
 
     public void filterFolder(File folderIn, File folderOut) {
+        System.out.println("USANDO O FILTRO DIRETO");
         mFolderProcessLog.resetCounters();
 
         File[] files = folderIn.listFiles(new FileUtils.IsFileFilter());
         if (files != null) {
             ConsoleProgress progress = ConsoleProgress.getGlobalInstance(files.length);
 
-            String result;
             int k = 0;
 
             for (File file : files) {
                 progress.setValue(k++);
 
-                result = filterMail(file.getAbsolutePath());
-                if (result != null) {
-                    saveTo(result, new File(folderOut, file.getName()));
-                    mFolderProcessLog.incGoodVectorsCount();
+                // Process and save at the same time
+                try {
+                    File fileOut = new File(folderOut, file.getName());
+
+                    if (mMailProcessor.processMail(file.getAbsolutePath())) {
+                        WriterOutput output = new WriterOutput(new BufferedWriter(new FileWriter(fileOut)));
+                        filter(output);
+                        output.close();
+                        mFolderProcessLog.incGoodVectorsCount();
+                    }
+                    else {
+                        mFolderProcessLog.incZeroedVectorsCount();
+                    }
                 }
-                else {
-                    mFolderProcessLog.incZeroedVectorsCount();
+                catch (IOException e) {
+                    System.out.println("IOException (write): " + file.getName());
                 }
             }
 

@@ -71,71 +71,54 @@ public class FilterExecutor {
      * Filters a HTML parsed by the JSoup.
      *
      * @param elements The root element array.
-     * @return A String with all elements after applied the filters.
+     * @param output Where all the elements are appended after applied the filters.
      */
-    public String filterHtml(Elements elements) {
+    public void filterHtml(Elements elements, FilterOutput output) {
         // variables
         Result tagResult;
 
         Element element;
-        int index = 0;
-
         String text;
 
-        boolean forceNextLoop = false;
-        boolean forceEndWhile = false;
+        // Process
+        int nextElement = 0;
 
-        // result
-        StringBuilder strBuilder = new StringBuilder();
-
-        // process
-        do {
-            element = elements.get(index);
-            index++;
+        while (nextElement < elements.size()) {
+            element = elements.get(nextElement);
+            nextElement++;
 
             // process tag
             for (TagFilter tagFilter : mTagFilterArray) {
-                tagResult = tagFilter.filter(element, strBuilder);
+                tagResult = tagFilter.filter(element, output);
 
-                switch (tagResult)
-                {
-                    case SKIP_TAG: {
-                        index = getNextElementSiblingIndex(elements, element);
-                        if (index == -1) forceEndWhile = true;
-                        else forceNextLoop = true;
-                        break;
-                    }
+                if (tagResult == Result.SKIP_TAG) {
+                    nextElement += getChildrenCount(element);
+                    break;
                 }
             }
 
-            if (forceEndWhile) break;
-            if (forceNextLoop) continue;
-
-            // process text
+            // Process text
             text = element.ownText();
             if (!text.isEmpty()) {
-                filterText(text, strBuilder);
+                filterText(text, output);
             }
-
-        } while (index < elements.size());
-
-        return strBuilder.toString();
+        }
     }
 
     /**
      * This method filters all input text by
      * @param text
-     * @param strBuilder
+     * @param output
      */
-    public void filterText(String text, StringBuilder strBuilder) {
+    public void filterText(String text, FilterOutput output) {
         Scanner scanner = new Scanner(text);
         String resultText;
 
         while (scanner.hasNext()) {
             resultText = filterText(scanner.next());
-            strBuilder.append(resultText).append(" ");
+            output.append(resultText).append(" ");
         }
-        strBuilder.append("\n");
+        output.append("\n");
     }
 
     /**
@@ -146,30 +129,19 @@ public class FilterExecutor {
     public String filterText(String text) {
         for (TextFilter textFilter : mTextFilterArray) {
             text = textFilter.filter(text);
-            if (textFilter.getFilterResult() == Result.BREAK) break;
+            if (textFilter.getResult() == Result.BREAK) break;
         }
         return text;
     }
 
-    /**
-     * This method finds the index sibling element index of element.
-     * @param elements The html tree.
-     * @param element The element.
-     * @return The sibling's index of element or -1 if there is none.
-     */
-    private int getNextElementSiblingIndex(Elements elements, Element element) {
-        int nextSibling = element.siblingIndex() + 1;
-        Element parent = element.parent();
-        if (parent != null) {
-            Elements children = parent.children();
-            if (nextSibling < children.size()) {
-                Element sibling = children.get(nextSibling);
-                if (sibling != null) {
-                    return elements.indexOf(sibling);
-                }
-            }
-        }
-        return -1;
-    }
+    public int getChildrenCount(Element parent) {
+        Elements children = parent.children();
+        int sum = children.size();
 
+        for (Element child : children) {
+            sum += getChildrenCount(child);
+        }
+
+        return sum;
+    }
 }

@@ -48,17 +48,17 @@ public class IgnoreTagFilter implements TagFilter {
     /**
      * Checks if the current tag is present in the ignore tag array.
      * @param element The Element with the tag and attributes.
-     * @param strBuilder {@inheritDoc}
+     * @param output {@inheritDoc}
      * @return {@link Result#SKIP_TAG} if the tag is in the ignore array or
      * {@link Result#CONTINUE} otherwise.
      */
     @Override
-    public Result filter(Element element, StringBuilder strBuilder) {
+    public Result filter(Element element, FilterOutput output) {
         Tag tag = element.tag();
 
         for (Tag ignoreTag : mIgnoreTagArray) {
             if (ignoreTag.equals(tag)) {
-                strBuilder.append("!_ignore_").append(ignoreTag);
+                output.append("!_ignore_").append(ignoreTag.getName());
                 return Result.SKIP_TAG;
             }
         }
