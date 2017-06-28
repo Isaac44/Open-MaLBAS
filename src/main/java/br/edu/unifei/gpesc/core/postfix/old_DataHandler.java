@@ -119,7 +119,7 @@ public class old_DataHandler implements MessageHandler {
      * @param isSpam
      */
     private void storeMail(boolean isSpam) {
-        mStorage.store(mTo, new String(mData, 0, mDataLen), isSpam);
+//        mStorage.store(mTo, new String(mData, 0, mDataLen), isSpam);
     }
 
     @Override

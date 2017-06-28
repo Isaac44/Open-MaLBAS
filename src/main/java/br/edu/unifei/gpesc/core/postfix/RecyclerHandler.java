@@ -16,6 +16,7 @@
  */
 package br.edu.unifei.gpesc.core.postfix;
 
+import br.edu.unifei.gpesc.util.TransactionalInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import org.subethamail.smtp.MessageHandler;
@@ -28,7 +29,7 @@ import org.subethamail.smtp.TooMuchDataException;
  */
 public abstract class RecyclerHandler implements MessageHandler {
 
-    private static final int INITIAL_BUFFER_LENGTH = 1024 * 1024; // 1 MiB
+    private final TransactionalInputStream mTransitionInput = new TransactionalInputStream(1204 * 1024, 8 * 1024);
 
     /**
      * Destiny.
@@ -39,16 +40,6 @@ public abstract class RecyclerHandler implements MessageHandler {
      * Origin.
      */
     private String mmFrom;
-
-    /**
-     * The mail data.
-     */
-    private byte[] mmData = new byte[INITIAL_BUFFER_LENGTH];
-
-    /**
-     * The mail data length.
-     */
-    private int mmDataLen;
 
     private final RecyclerHandlerFactory mFactory;
 
@@ -68,21 +59,14 @@ public abstract class RecyclerHandler implements MessageHandler {
 
     @Override
     public void data(InputStream in) throws RejectException, TooMuchDataException, IOException {
-        ensureBufferLength(in.available());
-        mmDataLen = in.read(mmData);
-    }
-
-    private void ensureBufferLength(int requiredLen) {
-        if (mmData.length < requiredLen) {
-            mmData = new byte[requiredLen + 1];
-        }
+        mTransitionInput.copyData(in);
     }
 
     @Override
     public final void done() {
-        onDataReceived(mmFrom, mmTo, mmData, mmDataLen);
+        onDataReceived(mmFrom, mmTo, mTransitionInput);
         mFactory.recycleHandler(this);
     }
 
-    protected abstract void onDataReceived(String from, String to, byte[] data, int dataLen);
+    protected abstract void onDataReceived(String from, String to, TransactionalInputStream in);
 }

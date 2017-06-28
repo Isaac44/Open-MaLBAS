@@ -162,8 +162,8 @@ public class Mail {
         return part;
     }
 
-    public static Part getProcessableMailContent(InputStream inputStream) throws MessagingException, IOException {
-        MimeMessage message = new MimeMessage(MAIL_SESSION, inputStream);
+    public static Part getProcessableMailContent(InputStream in) throws MessagingException, IOException {
+        MimeMessage message = new MimeMessage(MAIL_SESSION, in);
         return getProcessablePart(message);
     }
 

@@ -21,7 +21,7 @@ package br.edu.unifei.gpesc.core.postfix;
  *
  * @author Isaac C. Ferreira
  */
-public class EmptyStorer extends Storer {
+public class EmptyStorer extends old_Storer {
 
     /**
      * Does nothing.

@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  *
  * @author Isaac Caldas Ferreira
  */
-public class Server {
+public class old_Server {
 
     /**
      * The mail classificator.
@@ -61,8 +61,9 @@ public class Server {
      */
     private final byte[] mClientData = new byte[100 * 1024 * 1024]; // 100 MiB buffer
 
-    public Server() throws IOException {
-        mStorage = Storage.buildFromConfiguration();
+    public old_Server() throws IOException {
+//        mStorage = Storage.buildFromConfiguration();
+        mStorage = null;
     }
 
     /**
@@ -153,7 +154,7 @@ public class Server {
                             new String(mClientData, offset, readed-offset), result != AntiSpam.Result.HAM));
         }
         catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(old_Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -193,7 +194,7 @@ public class Server {
         @Override
         public void run() {
             System.out.println("saving mail=" + mmUserAddress);
-            mStorage.store(mmUserAddress, mmMailData, mmIsSpam);
+//            mStorage.store(mmUserAddress, mmMailData, mmIsSpam);
         }
     }
 
@@ -202,7 +203,7 @@ public class Server {
     // -------------------------------------------------------------------------
 
     public static void main(String[] args) throws IOException {
-        new Server().start();
+        new old_Server().start();
     }
 
 }

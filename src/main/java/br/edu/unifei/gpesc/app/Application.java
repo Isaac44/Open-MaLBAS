@@ -169,9 +169,10 @@ public class Application {
         AntiSpamService.from(c).startService();
     }
 
-    private static void runStorage(boolean spam) {
+    private static void runStorage(boolean spam) throws IOException {
+        printlnLog("Application.Services.StorageStarted");
         Configuration c = getSasConfig();
-        StorageService.createFrom(c, spam ? StorageService.TYPE_SPAM : StorageService.TYPE_BACKUP).start();
+        StorageService.createFrom(c, spam ? StorageService.Type.SPAM : StorageService.Type.BACKUP).startService();
     }
 
     private static void process(String module) throws IOException {
@@ -225,11 +226,6 @@ public class Application {
     }
 
     public static void main(String... args) throws IOException {
-        runAntiSpam();
-
-        if (1 != 2) return;
-
-
         if (args.length == 0) {
             printUsage();
         }

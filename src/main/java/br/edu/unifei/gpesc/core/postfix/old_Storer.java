@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
  *
  * @author Isaac C. Ferreira
  */
-public class Storer {
+public class old_Storer {
 
     /**
      * Mail charset.
@@ -36,11 +36,11 @@ public class Storer {
 
     private File mFolder;
 
-    public Storer(File root) {
+    public old_Storer(File root) {
         mFolder = mRoot = root;
     }
 
-    public Storer() {
+    public old_Storer() {
         this(null);
     }
 

@@ -53,11 +53,15 @@ public class CharacteristicsHelper {
                     }
                 }
             }
-        } catch (IOException e) {
+
+            return characteristics;
+        }
+        catch (IOException e) {
+            return null;
+        }
+        finally {
             scanner.close();
         }
-
-        return null;
     }
 
 }

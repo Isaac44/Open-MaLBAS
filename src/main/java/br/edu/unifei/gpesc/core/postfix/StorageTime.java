@@ -25,6 +25,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ *  Esta tem por objetivo atualizar o horario nos arquivos de log das Storages.
+ * Com isto, o Modulo de Notificacao pode determinar quais e-mails devem ser enviados e quais nao.
  *
  * @author Isaac C. Ferreira
  */
@@ -43,7 +45,7 @@ public class StorageTime {
             @Override
             public void run() {
                 String time = DATE_FORMAT.format(tomorrow);
-                storage.setLogFileName(time);
+//                storage.setLogFileName(time);
                 startService(storage);
             }
         }, tomorrow);

@@ -20,9 +20,7 @@ package br.edu.unifei.gpesc.core.antispam;
 import br.edu.unifei.gpesc.core.postfix.RecyclerHandler;
 import br.edu.unifei.gpesc.core.postfix.RecyclerHandlerFactory;
 import br.edu.unifei.gpesc.util.Configuration;
-import br.edu.unifei.gpesc.util.TraceLog;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import br.edu.unifei.gpesc.util.TransactionalInputStream;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.server.SMTPServer;
 
@@ -40,24 +38,20 @@ public class AntiSpamService {
     /**
      * The SAS classficator.
      */
-    private AntiSpamFactory mAntiSpamFactory;
+    private final AntiSpamFactory mAntiSpamFactory;
 
     public AntiSpamService(AntiSpamFactory asFactory, int port, SmtpSender spamSender, SmtpSender backupSender) {
         mSpamSender = spamSender;
         mBackupSender = backupSender;
         mPort = port;
+        mAntiSpamFactory = asFactory;
     }
 
     private static SmtpSender createSender(Configuration c, String sType) {
         String server = c.getProperty("STORAGE_" + sType + "_SERVER", null);
         if (server != null) {
             int port = c.getIntegerProperty("STORAGE_" + sType + "_PORT");
-            try {
-                return new SmtpSender(server, port);
-            } catch (IOException e) {
-                TraceLog.logE(e);
-                throw new RuntimeException("Storage daemon can't be reached. host=" + server + ", port=" + port);
-            }
+            return new SmtpSender(server, port);
         } else {
             return null;
         }
@@ -97,14 +91,15 @@ public class AntiSpamService {
         }
 
         @Override
-        protected void onDataReceived(String from, String to, byte[] data, int dataLen) {
-            AntiSpam.Result result = mmAntiSpam.processMail(new ByteArrayInputStream(data, 0, dataLen));
+        protected void onDataReceived(String from, String to, TransactionalInputStream tin) {
+            System.out.println("data = " + tin.getDataAsString());
+            AntiSpam.Result result = mmAntiSpam.processMail(tin);
 
             if (result == AntiSpam.Result.SPAM) {
-                mSpamSender.silentSendMail(from, to, data, dataLen);
+                mSpamSender.silentSendMail(from, to, tin.getData(), tin.getCount());
             }
 
-            mBackupSender.silentSendMail(from, to, data, dataLen);
+            mBackupSender.silentSendMail(from, to, tin.getData(), tin.getCount());
         }
 
     }

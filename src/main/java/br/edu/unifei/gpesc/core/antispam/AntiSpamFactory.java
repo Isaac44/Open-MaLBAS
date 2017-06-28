@@ -49,10 +49,10 @@ public class AntiSpamFactory {
         final String weightsFile = c.getProperty("MLP_WEIGHTS_FILE");
         String statisticsFile = c.getProperty("MLP_STATISTICS_FILE");
 
-        final Characteristics<String> characteristics = CharacteristicsHelper.fromFile(new File(statisticsFile), -1);
-
         Mlp mlp = Mlp.loadMlp(new File(weightsFile));
-        final AntiSpam emergencyAS = new SyncAntiSpam(new AntiSpamWithMlp(mlp, characteristics));
+        final Characteristics<String> characteristics = CharacteristicsHelper.fromFile(new File(statisticsFile), mlp.getInputLayerLength());
+
+        final AntiSpam lastOptionAS = new SyncAntiSpam(new AntiSpamWithMlp(mlp, characteristics));
 
         return new AntiSpamFactory(null, false) {
             @Override
@@ -62,7 +62,7 @@ public class AntiSpamFactory {
                     return new AntiSpamWithMlp(mlp, characteristics);
                 } catch (Exception e) {
                     TraceLog.logE(e);
-                    return emergencyAS;
+                    return lastOptionAS;
                 }
             }
         };

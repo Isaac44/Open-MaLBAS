@@ -18,8 +18,10 @@
 package br.edu.unifei.gpesc.core.antispam;
 
 import br.edu.unifei.gpesc.util.TraceLog;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import org.subethamail.smtp.client.SmartClient;
+import java.net.Socket;
 
 /**
  *
@@ -27,19 +29,26 @@ import org.subethamail.smtp.client.SmartClient;
  */
 public class SmtpSender {
 
-    private final SmartClient mClient;
+    private final String mServer;
+    private final int mPort;
 
-    public SmtpSender(String server, int port) throws IOException {
-        mClient = new SmartClient(server, port, "localhost");
+    public SmtpSender(String server, int port) {
+        mServer = server;
+        mPort = port;
     }
 
     public synchronized void sendMail(String from, String to, byte[] data, int dataLen) throws IOException {
-        mClient.from(from);
-        mClient.to(to);
+        Socket socket = new Socket(mServer, mPort);
 
-        mClient.dataStart();
-        mClient.dataWrite(data, dataLen);
-        mClient.dataEnd();
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        dout.writeUTF(createEmailFileName());
+        dout.writeUTF(from);
+        dout.writeUTF(to);
+        dout.writeInt(dataLen);
+        dout.write(data, 0, dataLen);
+        dout.flush();
+
+        socket.close();
     }
 
     public synchronized void silentSendMail(String from, String to, byte[] data, int dataLen) {
@@ -48,5 +57,14 @@ public class SmtpSender {
         } catch (IOException e) {
             TraceLog.logE(e);
         }
+    }
+
+     /**
+     * Creates a name for the email based on the current time.
+     *
+     * @return The hash of the current time in milliseconds.
+     */
+    private String createEmailFileName() {
+        return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX) + ".eml";
     }
 }
