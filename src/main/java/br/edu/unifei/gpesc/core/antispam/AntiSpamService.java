@@ -61,7 +61,7 @@ public class AntiSpamService {
         SmtpSender spamSender = createSender(c, "SPAM");
         SmtpSender backupSender = createSender(c, "BACKUP");
         int port = c.getIntegerProperty("POSTFIX_PORT");
-        return new AntiSpamService(AntiSpamFactory.from(c), port, backupSender, spamSender);
+        return new AntiSpamService(AntiSpamFactory.from(c), port, spamSender, backupSender);
     }
 
     public void startService() {
@@ -92,16 +92,24 @@ public class AntiSpamService {
 
         @Override
         protected void onDataReceived(String from, String to, TransactionalInputStream tin) {
-            System.out.println("data = " + tin.getDataAsString());
             AntiSpam.Result result = mmAntiSpam.processMail(tin);
 
+            String mailFile = createEmailFileName();
             if (result == AntiSpam.Result.SPAM) {
-                mSpamSender.silentSendMail(from, to, tin.getData(), tin.getCount());
+                mSpamSender.silentSendMail(mailFile, from, to, tin.getData(), tin.getCount());
             }
 
-            mBackupSender.silentSendMail(from, to, tin.getData(), tin.getCount());
+            mBackupSender.silentSendMail(mailFile, from, to, tin.getData(), tin.getCount());
         }
+    }
 
+    /**
+     * Creates a name for the email based on the current time.
+     *
+     * @return The hash of the current time in milliseconds.
+     */
+    private String createEmailFileName() {
+        return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX) + ".eml";
     }
 
 }

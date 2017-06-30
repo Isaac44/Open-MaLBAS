@@ -75,8 +75,6 @@ public class Storage {
      * @throws java.io.IOException
      */
     public void store(String fileName, String user, byte[] data, int dataOffset, int dataLen) throws IOException {
-        System.out.println("fileName = " + fileName);
-
         File folder = getStorageFolder(mFolder, user);
         folder.mkdirs();
 

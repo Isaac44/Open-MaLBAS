@@ -64,8 +64,13 @@ public abstract class RecyclerHandler implements MessageHandler {
 
     @Override
     public final void done() {
-        onDataReceived(mmFrom, mmTo, mTransitionInput);
-        mFactory.recycleHandler(this);
+//        try {
+//            System.out.println(Thread.currentThread().getName() + " | running...");
+            onDataReceived(mmFrom, mmTo, mTransitionInput);
+            mFactory.recycleHandler(this);
+//        } catch (Exception e) {
+//            System.out.println(Thread.currentThread().getName() + " | ERROR");
+//        }
     }
 
     protected abstract void onDataReceived(String from, String to, TransactionalInputStream in);

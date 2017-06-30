@@ -37,11 +37,11 @@ public class SmtpSender {
         mPort = port;
     }
 
-    public synchronized void sendMail(String from, String to, byte[] data, int dataLen) throws IOException {
+    public synchronized void sendMail(String mailFile, String from, String to, byte[] data, int dataLen) throws IOException {
         Socket socket = new Socket(mServer, mPort);
 
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        dout.writeUTF(createEmailFileName());
+        dout.writeUTF(mailFile);
         dout.writeUTF(from);
         dout.writeUTF(to);
         dout.writeInt(dataLen);
@@ -51,20 +51,11 @@ public class SmtpSender {
         socket.close();
     }
 
-    public synchronized void silentSendMail(String from, String to, byte[] data, int dataLen) {
+    public synchronized void silentSendMail(String mailFile, String from, String to, byte[] data, int dataLen) {
         try {
-            sendMail(from, to, data, dataLen);
+            sendMail(mailFile, from, to, data, dataLen);
         } catch (IOException e) {
             TraceLog.logE(e);
         }
-    }
-
-     /**
-     * Creates a name for the email based on the current time.
-     *
-     * @return The hash of the current time in milliseconds.
-     */
-    private String createEmailFileName() {
-        return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX) + ".eml";
     }
 }

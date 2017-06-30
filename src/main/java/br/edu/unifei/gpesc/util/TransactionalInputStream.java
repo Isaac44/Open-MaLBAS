@@ -51,12 +51,14 @@ public class TransactionalInputStream extends ByteArrayInputStream {
     }
 
     public void copyData(InputStream in) throws IOException {
-        reset();
+        pos = 0;
+        count = 0;
+        mark = 0;
 
         byte[] aux = mAuxiliar;
         int read;
 
-        count = 0;
+
         while ((read = in.read(aux)) != -1) {
             ensureDataLength(count + read);
             System.arraycopy(aux, 0, buf, count, read);

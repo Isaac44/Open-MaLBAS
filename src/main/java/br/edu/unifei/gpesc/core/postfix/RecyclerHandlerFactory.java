@@ -16,7 +16,6 @@
  */
 package br.edu.unifei.gpesc.core.postfix;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.subethamail.smtp.MessageContext;
@@ -37,7 +36,7 @@ public abstract class RecyclerHandlerFactory implements MessageHandlerFactory {
     /**
      * Recycler to minimize the use of memory.
      */
-    private final List<MessageHandler> mSyncReclycer = Collections.synchronizedList(new LinkedList<MessageHandler>());
+    private final List<MessageHandler> mSyncReclycer = new LinkedList<MessageHandler>();
 
     /**
      * Gets a recycled DataHandler or creates a new one.
@@ -45,23 +44,25 @@ public abstract class RecyclerHandlerFactory implements MessageHandlerFactory {
      * @return A ready to use DataHandler
      */
     private MessageHandler getHandler() {
-        synchronized (LOCK) {
-            if (mSyncReclycer.isEmpty()) {
-                return createHandler();
-            } else {
-                return mSyncReclycer.remove(0);
-            }
+        if (mSyncReclycer.isEmpty()) {
+            return createHandler();
+        } else {
+            return mSyncReclycer.remove(0);
         }
     }
 
     protected abstract MessageHandler createHandler();
 
     public void recycleHandler(MessageHandler handler) {
-        mSyncReclycer.add(handler);
+        synchronized (LOCK) {
+            mSyncReclycer.add(handler);
+        }
     }
 
     @Override
     public MessageHandler create(MessageContext mc) {
-        return getHandler();
+        synchronized (LOCK) {
+            return getHandler();
+        }
     }
 }

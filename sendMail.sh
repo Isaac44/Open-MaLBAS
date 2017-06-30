@@ -3,7 +3,7 @@
 (
 echo HELO darkness; sleep 0.1;
 echo MAIL FROM: superman@gmail.com; sleep 0.1;
-echo RCPT TO: batman@gmail.com; sleep 0.1;
+echo RCPT TO: isaac@inverse; sleep 0.1;
 echo DATA; sleep 0.1;
 echo " "
 echo Subject: Super Mail
