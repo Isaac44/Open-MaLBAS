@@ -16,6 +16,7 @@
  */
 package br.edu.unifei.gpesc.core.postfix;
 
+import br.edu.unifei.gpesc.evaluation.TimeMark;
 import java.util.LinkedList;
 import java.util.List;
 import org.subethamail.smtp.MessageContext;
@@ -44,6 +45,8 @@ public abstract class RecyclerHandlerFactory implements MessageHandlerFactory {
      * @return A ready to use DataHandler
      */
     private MessageHandler getHandler() {
+        TimeMark.start();
+
         if (mSyncReclycer.isEmpty()) {
             return createHandler();
         } else {

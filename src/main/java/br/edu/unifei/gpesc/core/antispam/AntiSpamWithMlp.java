@@ -21,6 +21,7 @@ import br.edu.unifei.gpesc.core.modules.Filter;
 import br.edu.unifei.gpesc.core.modules.Spam;
 import br.edu.unifei.gpesc.core.modules.Vector;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
+import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.mlp.Mlp;
 import java.io.File;
 import java.io.InputStream;
@@ -54,7 +55,11 @@ public class AntiSpamWithMlp implements AntiSpam {
 
     private Result process(String mail) {
         double[] vector = Vector.getVector(mCharacteristics, mail);
+        TimeMark.mark("5. Vetorização");
+
         double[] output = mMlp.runTestNonSup(vector);
+        TimeMark.mark("6. MLP");
+
         return getClassification(output[0], output[1]);
     }
 

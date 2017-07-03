@@ -1,4 +1,4 @@
-package br.edu.unifei.gpesc.debug;
+package br.edu.unifei.gpesc.evaluation;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -36,13 +36,18 @@ public class MailSender {
             throws AddressException, MessagingException {
 
         // sets SMTP server properties
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.user", userName);
-        properties.put("mail.password", password);
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.user", userName);
+        props.put("mail.password", password);
+
+
+//        props.put("mail.smtp.socketFactory.port", port); //SSL Port
+//        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL
+
 
         // creates a new session with an authenticator
         Authenticator auth = new Authenticator() {
@@ -51,7 +56,7 @@ public class MailSender {
                 return new PasswordAuthentication(userName, password);
             }
         };
-        Session session = Session.getInstance(properties, auth);
+        Session session = Session.getInstance(props, auth);
 
         // creates a new e-mail message
         Message msg = new MimeMessage(session);
@@ -108,10 +113,6 @@ public class MailSender {
         return t(days) + "d" + t(hours) + "h" + t(minutes) + "m" + t(seconds) + "s";
     }
 
-    public static void main(String[] args) {
-        System.out.println(getTime(System.currentTimeMillis()));
-    }
-
     public static synchronized void send(String tag, int h1Len, int h2Len, long startTime, float result, String... attachFiles) {
         String time = getTime(startTime);
 
@@ -142,4 +143,9 @@ public class MailSender {
             ex.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        send("TAG", 1, 2, 3, 4);
+    }
+
 }

@@ -31,8 +31,8 @@ import java.util.concurrent.Executors;
 public class TestBuilder {
 
     public static PatternLayer[] loadLayers(File folder) throws IOException {
-        PatternLayer[] spams = TrainBuilder.loadTrainMlp(new File(folder, "spam"), TrainBuilder.SPAM);
-        PatternLayer[] hams = TrainBuilder.loadTrainMlp(new File(folder, "ham"), TrainBuilder.HAM);
+        PatternLayer[] spams = TrainBuilder.createPatterns(new File(folder, "spam"), TrainBuilder.SPAM);
+        PatternLayer[] hams = TrainBuilder.createPatterns(new File(folder, "ham"), TrainBuilder.HAM);
 
         return TrainBuilder.merge(hams, spams);
     }
@@ -57,13 +57,4 @@ public class TestBuilder {
 
         executor.shutdown();
     }
-
-//    public static void main(String[] args) throws IOException {
-//        String path = "/home/isaac/Unifei/CodeStation/AntiSpamMestrado/neural/dat/";
-//        File mlpData = new File(path, "wfin");
-//        RunMlp mlp = RunMlp.loadMlp(mlpData);
-//        mlp.runTestSup(loadLayers(new File("/home/isaac/Unifei/Mestrado/SAS/Mail_Test/September/otavio-nn/otavio_test/")));
-//
-//    }
-
 }

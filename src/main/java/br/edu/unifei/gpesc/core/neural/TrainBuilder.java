@@ -37,21 +37,49 @@ public class TrainBuilder {
     public static final NeuronLayer HAM = new NeuronLayer(Spam.HAM);
     public static final NeuronLayer SPAM = new NeuronLayer(Spam.SPAM);
 
-    private PatternLayer[] mInputLayers;
-    private PatternLayer[] mValidationLayers;
+    private PatternLayer[] mTraining;
+    private PatternLayer[] mValidation;
+    private PatternLayer[] mTest;
 
-    public TrainBuilder(File hamVectors, File spamVectors, double percentToValidate) throws IOException {
-        createMlpLayers(hamVectors, spamVectors, percentToValidate);
+    /**
+     * Use this class to build the MLP.
+     *
+     * It receives the ham and spam vectors and the quantity of those that will be used for Training
+     * and for Validation.
+     *
+     * The remaining quantity, if any, will be used for Test. This means that if
+     * <b> trainP + validP < 1 </b> than the result of <b> 1 - trainP + validP</b> will be the
+     * percentual to be used for Test.
+     *
+     * @param hamVectors
+     * @param spamVectors
+     * @param trainP Training percentual.
+     * @param validP Validation percentual.
+     *
+     * @throws IOException If any IO error occurs.
+     */
+    public TrainBuilder(File hamVectors, File spamVectors, double trainP, double validP) throws IOException {
+        double testP = 1.0 - trainP - validP;
+
+        if (testP < 0) {
+            throw new IllegalArgumentException("Wrong percentage. trainP + validP must be <= 1");
+        }
+
+        createPatternLayers(hamVectors, spamVectors, trainP, validP);
     }
 
     public TrainMlp buildWith(int h1Len, int h2Len) {
-        TrainMlp trainMlp = new TrainMlp(mInputLayers[0].inputLayer.getLength(), h1Len, h2Len, 2);
-        trainMlp.setInputArray(mInputLayers);
-        trainMlp.setValidationArray(mValidationLayers);
+        TrainMlp trainMlp = new TrainMlp(mTraining[0].inputLayer.getLength(), h1Len, h2Len, 2);
+        trainMlp.setInputArray(mTraining);
+        trainMlp.setValidationArray(mValidation);
         return trainMlp;
     }
 
-    public static PatternLayer[] loadTrainMlp(File vectors, NeuronLayer output) throws IOException {
+    public PatternLayer[] getTestPatterns() {
+        return mTest;
+    }
+
+    public static PatternLayer[] createPatterns(File vectors, NeuronLayer output) throws IOException {
         // open file
         FileChannel fileIn = new FileInputStream(vectors).getChannel();
 
@@ -107,17 +135,19 @@ public class TrainBuilder {
         return newArray;
     }
 
-    private static PatternLayer[][] split(PatternLayer[] array, int length1) {
+    private static PatternLayer[][] split(PatternLayer[] array, int trainLen, int validLen) {
         // arrays
-        PatternLayer[] array1 = new PatternLayer[length1];
-        PatternLayer[] array2 = new PatternLayer[array.length - length1];
+        PatternLayer[] train = new PatternLayer[trainLen];
+        PatternLayer[] valid = new PatternLayer[validLen];
+        PatternLayer[] test  = new PatternLayer[array.length - trainLen - validLen];
 
         // copy
-        System.arraycopy(array, 0, array1, 0, array1.length);
-        System.arraycopy(array, array1.length, array2, 0, array2.length);
+        System.arraycopy(array, 0,        train, 0, trainLen);
+        System.arraycopy(array, trainLen, valid, 0, validLen);
+        System.arraycopy(array, validLen, test,  0, test.length);
 
         // return
-        return new PatternLayer[][] {array1, array2};
+        return new PatternLayer[][] {train, valid, test};
     }
 
     public static PatternLayer[] merge(PatternLayer[] array1, PatternLayer[] array2) {
@@ -132,12 +162,12 @@ public class TrainBuilder {
         return arrayMerged;
     }
 
-    private void createMlpLayers(File hamVectors, File spamVectors, double percentToValidate) throws IOException {
-        // open
+    private void createPatternLayers(File hamVectors, File spamVectors, double trainP, double validP) throws IOException {
+        /* Open Vectors and equalize the length between them */
         final int length;
 
-        PatternLayer[] hamLayers = loadTrainMlp(hamVectors, HAM);
-        PatternLayer[] spamLayers = loadTrainMlp(spamVectors, SPAM);
+        PatternLayer[] hamLayers = createPatterns(hamVectors, HAM);
+        PatternLayer[] spamLayers = createPatterns(spamVectors, SPAM);
 
         // replicate
         if (spamLayers.length < hamLayers.length) {
@@ -152,15 +182,17 @@ public class TrainBuilder {
             length = hamLayers.length; // equals
         }
 
-        // split
-        int inLength = (int) (length * (1 - percentToValidate));
+        /* Split the pattern on train, validation and test  */
+        int trainLen = (int) (length * trainP);
+        int validLen = (int) (length * validP);
 
-        PatternLayer[][] hamSplited = split(hamLayers, inLength);
-        PatternLayer[][] spamSplited = split(spamLayers, inLength);
+        PatternLayer[][] hamSplited = split(hamLayers, trainLen, validLen);
+        PatternLayer[][] spamSplited = split(spamLayers, trainLen, validLen);
 
         // merge
-        mInputLayers = merge(spamSplited[0], hamSplited[0]);
-        mValidationLayers = merge(spamSplited[1], hamSplited[1]);
+        mTraining   = merge(spamSplited[0], hamSplited[0]);
+        mValidation = merge(spamSplited[1], hamSplited[1]);
+        mTest       = merge(spamSplited[2], hamSplited[2]);
     }
 
     private static void write(File file, PatternLayer[] layers) throws IOException {
@@ -212,8 +244,8 @@ public class TrainBuilder {
     }
 
     public static void main(String[] args) throws IOException {
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/August/vectors/vector_chi2_500/";
-        TrainBuilder t = new TrainBuilder(new File(path, "ham"), new File(path, "spam"), 0.3f);
+        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/2015/August/vectors/vector_chi2_500/";
+        TrainBuilder t = new TrainBuilder(new File(path, "ham"), new File(path, "spam"), 0.4, 0.2);
         TrainMlp mlp = t.buildWith(10, 10);
         mlp.runTrainByEpoch();
         mlp.saveMlp(new File(path, "500_nn"));

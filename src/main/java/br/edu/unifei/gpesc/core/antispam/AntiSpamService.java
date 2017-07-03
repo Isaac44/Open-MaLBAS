@@ -19,8 +19,10 @@ package br.edu.unifei.gpesc.core.antispam;
 
 import br.edu.unifei.gpesc.core.postfix.RecyclerHandler;
 import br.edu.unifei.gpesc.core.postfix.RecyclerHandlerFactory;
+import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.util.Configuration;
 import br.edu.unifei.gpesc.util.TransactionalInputStream;
+import java.io.File;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.server.SMTPServer;
 
@@ -45,6 +47,8 @@ public class AntiSpamService {
         mBackupSender = backupSender;
         mPort = port;
         mAntiSpamFactory = asFactory;
+
+        TimeMark.init(new File("TimeMark.log"));
     }
 
     private static SmtpSender createSender(Configuration c, String sType) {
@@ -92,14 +96,19 @@ public class AntiSpamService {
 
         @Override
         protected void onDataReceived(String from, String to, TransactionalInputStream tin) {
+            TimeMark.mark("2. Leitura dos dados do e-mail via MTA");
+
             AntiSpam.Result result = mmAntiSpam.processMail(tin);
 
             String mailFile = createEmailFileName();
             if (result == AntiSpam.Result.SPAM) {
                 mSpamSender.silentSendMail(mailFile, from, to, tin.getData(), tin.getCount());
+                TimeMark.mark("7.1. Armazena Spam");
             }
 
             mBackupSender.silentSendMail(mailFile, from, to, tin.getData(), tin.getCount());
+            TimeMark.mark("7.2. Armazena Backup");
+            TimeMark.finish(tin.getCount());
         }
     }
 

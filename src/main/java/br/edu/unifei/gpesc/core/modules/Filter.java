@@ -20,6 +20,7 @@ import br.edu.unifei.gpesc.core.filter.FilterExecutor;
 import br.edu.unifei.gpesc.core.filter.FilterOutput;
 import br.edu.unifei.gpesc.core.filter.StringBuilderOutput;
 import br.edu.unifei.gpesc.core.filter.WriterOutput;
+import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
 import br.edu.unifei.gpesc.util.VectorCounter;
@@ -53,16 +54,22 @@ public class Filter {
 
         if (mMailProcessor.isText()) {
             mFilterExecutor.filterText(content, output);
+            TimeMark.mark("4.T. Filtragem de Texto");
         }
         else if (mMailProcessor.isHtml()) {
             Elements allElements = Jsoup.parse(content).getAllElements();
             mFilterExecutor.filterHtml(allElements, output);
+            TimeMark.mark("4.H. Filtragem de HTML");
+        } else {
+            TimeMark.mark("4.N. Filtragem não usada");
         }
 
     }
 
     public String filterMail(InputStream inputStream) {
         boolean processed = mMailProcessor.processMail(inputStream);
+        TimeMark.mark("3. JavaMail");
+
         return (processed) ? filter() : null;
     }
 

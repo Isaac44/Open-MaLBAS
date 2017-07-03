@@ -17,10 +17,8 @@
 package br.edu.unifei.gpesc.core.neural;
 
 import br.edu.unifei.gpesc.app.Messages;
-import br.edu.unifei.gpesc.debug.MailSender;
 import br.edu.unifei.gpesc.mlp.Mlp;
 import br.edu.unifei.gpesc.mlp.TrainMlp;
-import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
 import br.edu.unifei.gpesc.mlp.log.MlpLogger;
 import br.edu.unifei.gpesc.mlp.math.Function;
 import br.edu.unifei.gpesc.mlp.math.Linear;
@@ -66,12 +64,14 @@ public class NeuralModule {
     /**
      * The first hidden layer length
      */
-    private int mFirstHiddenLength;
+//    private int mFirstHiddenLength;
 
     /**
      * The second hidden layer length
      */
-    private int mSecondHiddenLength;
+//    private int mSecondHiddenLength;
+
+    private int[][] mHiddenLayerLenghts;
 
     /**
      * The number of epochs
@@ -119,12 +119,6 @@ public class NeuralModule {
     private String mOutputFunction;
 
     /**
-     * The test patterns. They will be tested after the train and the result
-     * will be stored in the log file.
-     */
-    private PatternLayer[] mTestPatterns;
-
-    /**
      * Initializes this, loading the configuration of the file.
      * @param configFile The configuration file path.
      * @throws IOException
@@ -150,14 +144,16 @@ public class NeuralModule {
      * @throws IllegalArgumentException if any argument not optional is missing.
      */
     public void setUp() throws IOException {
-        mQuantityOfTrains = mCfg.getIntegerProperty("NUMBER_OF_TRAINS");
-        if (mQuantityOfTrains <= 0) {
-            throw new IllegalArgumentException(Messages.i18n("NeuralModule.IllegalArgument.NumberOfTrainsInferior"));
-        }
+//        mQuantityOfTrains = mCfg.getIntegerProperty("NUMBER_OF_TRAINS");
+//        if (mQuantityOfTrains <= 0) {
+//            throw new IllegalArgumentException(Messages.i18n("NeuralModule.IllegalArgument.NumberOfTrainsInferior"));
+//        }
 
         mWeightsFolder = mCfg.getProperty("WEIGHTS_FOLDER");
-        mFirstHiddenLength = mCfg.getIntegerProperty("DEFAULT_FIRST_HIDDEN_LENGTH");
-        mSecondHiddenLength = mCfg.getIntegerProperty("DEFAULT_SECOND_HIDDEN_LENGTH");
+
+//        mFirstHiddenLength = mCfg.getIntegerProperty("DEFAULT_FIRST_HIDDEN_LENGTH");
+//        mSecondHiddenLength = mCfg.getIntegerProperty("DEFAULT_SECOND_HIDDEN_LENGTH");
+
         mFirstHiddenFunction = mCfg.getProperty("DEFAULT_FIRST_HIDDEN_FUNCTION");
         mSecondHiddenFunction = mCfg.getProperty("DEFAULT_SECOND_HIDDEN_FUNCTION");
         mOutputFunction = mCfg.getProperty("DEFAULT_OUTPUT_FUNCTION");
@@ -168,25 +164,18 @@ public class NeuralModule {
         mNumberOfActiveThreads = mCfg.getIntegerProperty("NUMBER_OF_ACTIVES_THREADS");
 
         String vectorFolder = mCfg.getProperty("VECTOR_FOLDER");
-        Double validationPercent = mCfg.getDoubleProperty("VALIDATION_PERCENT");
+        Integer trainQ = mCfg.getIntegerProperty("PATTERN_TRAINING");
+        Integer validQ = mCfg.getIntegerProperty("PATTERN_VALIDATION");
+        Integer testQ  = mCfg.getIntegerProperty("PATTERN_TEST");
+
+        double totalQ = trainQ + validQ + testQ;
 
         File hamFile = new File(vectorFolder, "ham");
         File spamFile = new File(vectorFolder, "spam");
-        mTrainBuilder = new TrainBuilder(hamFile, spamFile, validationPercent);
+        mTrainBuilder = new TrainBuilder(hamFile, spamFile, trainQ / totalQ, validQ / totalQ);
 
-        openTestPatterns(new File(vectorFolder));
-    }
-
-    /**
-     * Loads the test patterns
-     * @param folder The test patterns folder.
-     */
-    private void openTestPatterns(File folder) {
-        try {
-            mTestPatterns = TestBuilder.loadLayers(folder);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
+        mHiddenLayerLenghts = createHiddenLengths(mCfg.getProperty("TRAIN_FIRST_HIDDEN_LAYER_VALUES"), mCfg.getProperty("TRAIN_SECOND_HIDDEN_LAYER_VALUES"));
+        mQuantityOfTrains = mHiddenLayerLenghts.length;
     }
 
     /**
@@ -199,6 +188,38 @@ public class NeuralModule {
         for (int train=1; train <= mQuantityOfTrains; train++) {
             mTrainExecutor.execute(new TrainMlpRunnable(train));
         }
+    }
+
+    private static int[] parseIntArray(String array) {
+        if (array.indexOf(',') != -1) {
+            String[] splits = array.split(",");
+            int[] intArray = new int[splits.length];
+
+            for (int i=0; i<splits.length; i++) {
+                intArray[i] = Integer.parseInt(splits[i].trim());
+            }
+
+            return intArray;
+        }
+        else {
+            return new int[] {Integer.parseInt(array.trim())};
+        }
+    }
+
+    private int[][] createHiddenLengths(String hidden1, String hidden2) {
+        int[] h1 = parseIntArray(hidden1);
+        int[] h2 = parseIntArray(hidden2);
+
+        int[][] mix = new int[h1.length * h2.length][2];
+
+        int k = 0;
+        for (int i=0; i<h1.length; i++) {
+            for (int j=0; j<h2.length; j++) {
+                mix[k++] = new int[] {h1[i], h2[j]};
+            }
+        }
+
+        return mix;
     }
 
     /**
@@ -339,8 +360,9 @@ public class NeuralModule {
                 long startTime = System.currentTimeMillis();
 
                 // config
-                int h1Len = mCfg.getIntegerProperty(mTag + "FIRST_HIDDEN_LENGTH", mFirstHiddenLength);
-                int h2len = mCfg.getIntegerProperty(mTag + "SECOND_HIDDEN_LENGTH", mSecondHiddenLength);
+                int[] hLen = mHiddenLayerLenghts[mId - 1];
+                int h1Len = hLen[0];
+                int h2len = hLen[1];
 
                 // build mlp
                 TrainMlp mlp = mTrainBuilder.buildWith(h1Len, h2len);
@@ -362,7 +384,7 @@ public class NeuralModule {
                 setUp(mCfg, mlp, logger, h1Len, h2len);
 
                 // start training
-                Messages.printlnLog("TrainMode.Neural.Start", mId);
+                Messages.printlnLog("TrainMode.Neural.Start", mId, h1Len, h2len);
                 mlp.runTrainByEpoch();
 
                 // save results
@@ -371,14 +393,19 @@ public class NeuralModule {
 
                 // run test
                 logger.logSeparator();
-                float result = mlp.runTestSup(mTestPatterns);
+                float result = mlp.runTestSup(mTrainBuilder.getTestPatterns());
 
                 // log end
                 logger.close();
                 Messages.printlnLog("TrainMode.Neural.Finished", mId);
 
                 // send mail
-                MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
+                // TODO: debug only
+                if (result > 0.8f) {
+                    saveFile = new File(saveFile.getParentFile(), String.format("P_%.2f__", (result * 100f)) + saveFile.getName());
+                    mlp.saveMlp(saveFile);
+//                    MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
+                }
 
                 // notify
                 trainFinished();

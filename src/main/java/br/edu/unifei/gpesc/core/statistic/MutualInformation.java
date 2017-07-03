@@ -77,9 +77,4 @@ public class MutualInformation implements Distribution {
     private static double log2(double value) {
             return log10(value) / LOG10_2;
     }
-
-    public static void main(String[] args) {
-        System.out.println("args = " + log2(0));
-    }
-
 }

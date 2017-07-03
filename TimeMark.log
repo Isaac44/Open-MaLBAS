@@ -1,0 +1,299 @@
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 14 ms
+3. JavaMail = 37 ms
+4. Filtragem = 12 ms
+5. Vetorização = 5 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 4 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 72ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 5ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 5ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 2 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 5ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 5ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 5 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 8ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4. Filtragem = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:07
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4. Filtragem = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3ms
+------------------------------------------
+
+1. E-Mail chegou em 03/07/17 15:08
+2. Leitura dos dados do e-

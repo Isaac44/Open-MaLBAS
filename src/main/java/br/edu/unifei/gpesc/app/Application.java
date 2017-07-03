@@ -48,7 +48,6 @@ public class Application {
 
     private static Configuration sMainConfig;
     private static Configuration sSasConfig;
-    private static Configuration sNeuralConfig;
     private static TrainModule sTrainModule;
     private static NeuralModule sNeuralModule;
 
