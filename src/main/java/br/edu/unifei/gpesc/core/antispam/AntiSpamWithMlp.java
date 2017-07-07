@@ -19,7 +19,7 @@ package br.edu.unifei.gpesc.core.antispam;
 
 import br.edu.unifei.gpesc.core.modules.Filter;
 import br.edu.unifei.gpesc.core.modules.Spam;
-import br.edu.unifei.gpesc.core.modules.Vector;
+import br.edu.unifei.gpesc.core.modules.Vectorization;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
 import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.mlp.Mlp;
@@ -34,11 +34,11 @@ public class AntiSpamWithMlp implements AntiSpam {
 
     private final Mlp mMlp;
     private final Filter mFilter = new Filter();
-    private final Characteristics<String> mCharacteristics;
+    private final Vectorization mVectorization;
 
     public AntiSpamWithMlp(Mlp mlp, Characteristics<String> characteristics) {
         mMlp = mlp;
-        mCharacteristics = characteristics;
+        mVectorization = new Vectorization(characteristics);
     }
 
     private Result getClassification(double v1, double v2) {
@@ -53,8 +53,8 @@ public class AntiSpamWithMlp implements AntiSpam {
         }
     }
 
-    private Result process(String mail) {
-        double[] vector = Vector.getVector(mCharacteristics, mail);
+    private Result doProcess() {
+        double[] vector = mVectorization.createVector(mFilter.getOccurrencesMap());
         TimeMark.mark("5. Vetorização");
 
         double[] output = mMlp.runTestNonSup(vector);
@@ -65,14 +65,18 @@ public class AntiSpamWithMlp implements AntiSpam {
 
     @Override
     public Result processMail(InputStream mailStream) {
-        String filtered = mFilter.filterMail(mailStream);
-        return process(filtered);
+        if (mFilter.filterMail(mailStream)) {
+            return doProcess();
+        }
+        return Result.UNKNOWN;
     }
 
     @Override
     public Result processMail(File mailFile) {
-        String filtered = mFilter.filterMail(mailFile.getAbsolutePath());
-        return process(filtered);
+        if (mFilter.filterMail(mailFile)) {
+            return doProcess();
+        }
+        return Result.UNKNOWN;
     }
 
 }

@@ -18,6 +18,7 @@ package br.edu.unifei.gpesc.core.modules;
 
 import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,45 +58,37 @@ public class Mail {
     }
 
     /**
-     * The current openned mail type.
+     * The current opened mail type.
      */
     private int mMessageType;
 
     /**
-     * The current oppened mail Part.
+     * The current opened mail Part.
      */
     private String mContent;
 
     /**
      * Process the email file.
-     * @param mailpath The path to the email file.
-     * @return True if no errors ocurred.<br>False otherwise.
+     * @param file The email file.
+     * @return True if no errors occurred.<br>False otherwise.
      */
-    public boolean processMail(String mailpath) {
+    public boolean processMail(File file) {
         try {
-            Part mailPart = getProcessableMailContent(mailpath);
-
-            if (mailPart != null) {
-                if (isTextHtml(mailPart)) mMessageType = HTML;
-                else mMessageType = TEXT;
-                mContent = (String) mailPart.getContent();
-                return true;
-            }
+            InputStream in = new BufferedInputStream(new FileInputStream(file));
+            boolean result = processMail(in);
+            in.close();
+            return result;
         }
-        catch (IOException ex) {
-            TraceLog.logE("Processing \"" + mailpath + "\"", ex);
+        catch (IOException e) {
+            TraceLog.logE(e);
+            return false;
         }
-        catch (MessagingException ex) {
-            TraceLog.logE("Processing \"" + mailpath + "\"", ex);
-        }
-
-        return false;
     }
 
     /**
      * Process the email from the {@link InputStream}.
      * @param mailInputStream The stream of the email.
-     * @return True if no errors ocurred.<br>False otherwise.
+     * @return True if no errors occurred.<br>False otherwise.
      */
     public boolean processMail(InputStream mailInputStream) {
         try {
@@ -104,10 +97,15 @@ public class Mail {
             if (mailPart != null) {
                 if (isTextHtml(mailPart)) mMessageType = HTML;
                 else mMessageType = TEXT;
-                mContent = (String) mailPart.getContent();
-                return true;
-            }
 
+                // Check
+                Object content = mailPart.getContent();
+
+                if (content instanceof String) {
+                    mContent = (String) mailPart.getContent();
+                    return true;
+                }
+            }
         }
         catch (IOException ex) {
             TraceLog.logE(ex);
@@ -146,7 +144,7 @@ public class Mail {
     /**
      * This static method process a mail file and get the first valid content to
      * be processed by the anti-spam filter.
-     * <br> For more infomation of how this is done, see
+     * <br> For more information of how this is done, see
      * {@link MailProcessor#getProcessablePart(javax.mail.Part)}
      * @param mailpath The mail file path.
      * @return The first processable {@link Part} of the input mail.
@@ -219,9 +217,9 @@ public class Mail {
         else if (isMultipart(part)) {
             Multipart mp = (Multipart) part.getContent();
             int count = mp.getCount();
-            Part subPart;
+
             for (int i = 0; i < count; i++) {
-                subPart = getProcessablePart(mp.getBodyPart(i));
+                Part subPart = getProcessablePart(mp.getBodyPart(i));
                 if (subPart != null) return subPart;
             }
         }

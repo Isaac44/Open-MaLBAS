@@ -1,299 +1,1718 @@
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 14 ms
-3. JavaMail = 37 ms
-4. Filtragem = 12 ms
-5. Vetorização = 5 ms
-6. MLP = 0 ms
+1. Processamento iniciado = 1499369514789 ms
+2. Leitura dos dados do e-mail via MTA = 27 ms
+3. JavaMail = 38 ms
+4.T. Filtragem de Texto = 9 ms
+5. Vetorização = 1 ms
+6. MLP = 1 ms
 7.1. Armazena Spam = 4 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 72ms
+8. Fim. | E-mail com 479 bytes | Total = 80 ms
+9. Tempor percorrido (c/ benchmarks)  = 80 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369515285 ms
 2. Leitura dos dados do e-mail via MTA = 2 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 2 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 7 ms
+9. Tempor percorrido (c/ benchmarks)  = 7 ms
+------------------------------------------
+1. Processamento iniciado = 1499369515797 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 3 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 5ms
+8. Fim. | E-mail com 479 bytes | Total = 7 ms
+9. Tempor percorrido (c/ benchmarks)  = 7 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369516309 ms
 2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+4.T. Filtragem de Texto = 2 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 1 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 5ms
+8. Fim. | E-mail com 479 bytes | Total = 6 ms
+9. Tempor percorrido (c/ benchmarks)  = 6 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 2 ms
-3. JavaMail = 0 ms
-4. Filtragem = 2 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 5ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 2 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+1. Processamento iniciado = 1499369516825 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 2 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 5ms
+8. Fim. | E-mail com 479 bytes | Total = 6 ms
+9. Tempor percorrido (c/ benchmarks)  = 6 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369517337 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 1 ms
 6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 5 ms
+9. Tempor percorrido (c/ benchmarks)  = 5 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
+1. Processamento iniciado = 1499369517848 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 1 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 0 ms
 6. MLP = 1 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 6 ms
+9. Tempor percorrido (c/ benchmarks)  = 6 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369518361 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
-5. Vetorização = 1 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 5 ms
+9. Tempor percorrido (c/ benchmarks)  = 5 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369518396 ms
 2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 0 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 5 ms
+9. Tempor percorrido (c/ benchmarks)  = 5 ms
+------------------------------------------
+1. Processamento iniciado = 1499369518876 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 5 ms
+9. Tempor percorrido (c/ benchmarks)  = 5 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369518908 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369519384 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369519420 ms
+2. Leitura dos dados do e-mail via MTA = 11 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 14 ms
+9. Tempor percorrido (c/ benchmarks)  = 14 ms
+------------------------------------------
+1. Processamento iniciado = 1499369519897 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369519933 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369520408 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 5 ms
-4. Filtragem = 1 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 0 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 1 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 8ms
+8. Fim. | E-mail com 479 bytes | Total = 9 ms
+9. Tempor percorrido (c/ benchmarks)  = 9 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 1 ms
-4. Filtragem = 0 ms
-5. Vetorização = 1 ms
+1. Processamento iniciado = 1499369520440 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
 6. MLP = 0 ms
-7.1. Armazena Spam = 0 ms
-7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369520917 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 0 ms
 6. MLP = 1 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369520952 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 6 ms
+9. Tempor percorrido (c/ benchmarks)  = 6 ms
+------------------------------------------
+1. Processamento iniciado = 1499369521429 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 2 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 2 ms
-3. JavaMail = 0 ms
-4. Filtragem = 1 ms
-5. Vetorização = 0 ms
-6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
-7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
-------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369521469 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369521940 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369521980 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369522136 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 0 ms
 6. MLP = 1 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369522452 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369522488 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369522648 ms
 2. Leitura dos dados do e-mail via MTA = 2 ms
 3. JavaMail = 0 ms
-4. Filtragem = 1 ms
+4.T. Filtragem de Texto = 1 ms
 5. Vetorização = 0 ms
 6. MLP = 0 ms
-7.1. Armazena Spam = 1 ms
+7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
-2. Leitura dos dados do e-mail via MTA = 1 ms
-3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+1. Processamento iniciado = 1499369522960 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369523000 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369523164 ms
+2. Leitura dos dados do e-mail via MTA = 0 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 1 ms
+9. Tempor percorrido (c/ benchmarks)  = 1 ms
+------------------------------------------
+1. Processamento iniciado = 1499369523472 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369523512 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369523672 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369523984 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369524020 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369524180 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369524496 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369524532 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369524688 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 1 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 0 ms
 7.2. Armazena Backup = 1 ms
-8. Fim. | E-mail com 479 bytes | Total = 4ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369525004 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 0 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 1 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:07
+1. Processamento iniciado = 1499369525044 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525200 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525392 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525520 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525556 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525712 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369525900 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526028 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526068 ms
 2. Leitura dos dados do e-mail via MTA = 1 ms
 3. JavaMail = 1 ms
-4. Filtragem = 0 ms
+4.T. Filtragem de Texto = 0 ms
 5. Vetorização = 0 ms
 6. MLP = 0 ms
 7.1. Armazena Spam = 1 ms
 7.2. Armazena Backup = 0 ms
-8. Fim. | E-mail com 479 bytes | Total = 3ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
 ------------------------------------------
-
-1. E-Mail chegou em 03/07/17 15:08
-2. Leitura dos dados do e-
+1. Processamento iniciado = 1499369526224 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526416 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526536 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526580 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526736 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369526928 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527048 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527088 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527244 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527436 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527556 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527600 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527756 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369527952 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528068 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528116 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528264 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528464 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528576 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528628 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528776 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369528976 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529088 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529116 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529136 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529288 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529488 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529600 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529628 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529648 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529796 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369529996 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530108 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530140 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530160 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530308 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530512 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530620 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530652 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530668 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369530820 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531020 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531128 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531160 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531180 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531332 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531532 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531644 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531672 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531688 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369531840 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532044 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532148 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532184 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532200 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532352 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532556 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532660 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532696 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532712 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369532864 ms
+2. Leitura dos dados do e-mail via MTA = 0 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 1 ms
+9. Tempor percorrido (c/ benchmarks)  = 1 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533068 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533168 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533204 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533220 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533372 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533580 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 1 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533680 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533716 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533732 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369533884 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534092 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534192 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534228 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534240 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534396 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534604 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 1 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534704 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534740 ms
+2. Leitura dos dados do e-mail via MTA = 2 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 4 ms
+9. Tempor percorrido (c/ benchmarks)  = 4 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534752 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369534908 ms
+2. Leitura dos dados do e-mail via MTA = 8 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 10 ms
+9. Tempor percorrido (c/ benchmarks)  = 10 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535112 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535216 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535252 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535260 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535420 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535624 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535728 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535764 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535772 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369535932 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536140 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536240 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536276 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536284 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536444 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536648 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536752 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536784 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536800 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369536960 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537160 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537260 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 1 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537296 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537304 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 0 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 1 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537464 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 0 ms
+8. Fim. | E-mail com 479 bytes | Total = 2 ms
+9. Tempor percorrido (c/ benchmarks)  = 2 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537672 ms
+2. Leitura dos dados do e-mail via MTA = 1 ms
+3. JavaMail = 0 ms
+4.T. Filtragem de Texto = 1 ms
+5. Vetorização = 0 ms
+6. MLP = 0 ms
+7.1. Armazena Spam = 0 ms
+7.2. Armazena Backup = 1 ms
+8. Fim. | E-mail com 479 bytes | Total = 3 ms
+9. Tempor percorrido (c/ benchmarks)  = 3 ms
+------------------------------------------
+1. Processamento iniciado = 1499369537772 ms
+2. Leitura dos dados do e-mail via MTA

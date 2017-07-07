@@ -27,6 +27,7 @@ import br.edu.unifei.gpesc.mlp.math.TanSig;
 import br.edu.unifei.gpesc.util.Configuration;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -104,19 +105,23 @@ public class NeuralModule {
     private int mNumberOfActiveThreads;
 
     /**
-     * The first hidden layer funcion name.
+     * The first hidden layer function name.
      */
     private String mFirstHiddenFunction;
 
     /**
-     * The second hidden layer funcion name.
+     * The second hidden layer function name.
      */
     private String mSecondHiddenFunction;
 
     /**
-     * The outuput layer funcion name.
+     * The output layer function name.
      */
     private String mOutputFunction;
+
+    private boolean mResumable;
+
+    private String mTrainNameRegex;
 
     /**
      * Initializes this, loading the configuration of the file.
@@ -139,7 +144,7 @@ public class NeuralModule {
 
     /**
      * Setup this module. <br />
-     * All configuration are readed from the properties file.
+     * All configuration are read from the properties file.
      * @throws IOException
      * @throws IllegalArgumentException if any argument not optional is missing.
      */
@@ -163,6 +168,8 @@ public class NeuralModule {
         mSeed = getSeed(mCfg.getProperty("DEFAULT_RANDOMIZER_SEED"));
         mNumberOfActiveThreads = mCfg.getIntegerProperty("NUMBER_OF_ACTIVES_THREADS");
 
+        mResumable = mCfg.getBooleanProperty("RESUMABLE", false);
+
         String vectorFolder = mCfg.getProperty("VECTOR_FOLDER");
         Integer trainQ = mCfg.getIntegerProperty("PATTERN_TRAINING");
         Integer validQ = mCfg.getIntegerProperty("PATTERN_VALIDATION");
@@ -176,6 +183,9 @@ public class NeuralModule {
 
         mHiddenLayerLenghts = createHiddenLengths(mCfg.getProperty("TRAIN_FIRST_HIDDEN_LAYER_VALUES"), mCfg.getProperty("TRAIN_SECOND_HIDDEN_LAYER_VALUES"));
         mQuantityOfTrains = mHiddenLayerLenghts.length;
+
+        int zerosQuantity = (int) Math.log10(mQuantityOfTrains) + 1;
+        mTrainNameRegex = "%0" + zerosQuantity + "d";
     }
 
     /**
@@ -224,7 +234,7 @@ public class NeuralModule {
 
     /**
      * Converts the function name to the related implementation.
-     * @param name The funtion name.
+     * @param name The function name.
      * @return The function implementation.
      */
     private Function functionForName(String name) {
@@ -321,7 +331,7 @@ public class NeuralModule {
         /**
          * Set up the configurations of this train.
          * @param c The configuration properties.
-         * @param mlp The mlp
+         * @param mlp The MLP neural network.
          * @param logger The logger.
          * @param h1Len The first hidden layer length.
          * @param h2Len The second hidden layer length.
@@ -368,12 +378,16 @@ public class NeuralModule {
                 TrainMlp mlp = mTrainBuilder.buildWith(h1Len, h2len);
 
                 // save file
-                String file = mWeightsFolder + File.separator + mCfg.getProperty(mTag + "FILE", "train_" + mId + ".dat");
-
+                String file = mWeightsFolder + File.separator + mCfg.getProperty(mTag + "FILE", "train_" + String.format(Locale.US, mTrainNameRegex, mId) + ".dat");
                 File saveFile = new File(file);
-                if (!saveFile.isFile()) {
-                    saveFile.getParentFile().mkdirs();
+
+                if (mResumable && saveFile.exists()) {
+                    Messages.printlnLog("TrainMode.Neural.Exists.Ignoring", mId);
+                    return; // this train was already processed.
                 }
+
+                // build parent's directory tree (if don't exists)
+                saveFile.getParentFile().mkdirs();
 
                 // save log file
                 File logFile = new File(file.replace(".dat", ".log"));
@@ -401,8 +415,8 @@ public class NeuralModule {
 
                 // send mail
                 // TODO: debug only
-                if (result > 0.8f) {
-                    saveFile = new File(saveFile.getParentFile(), String.format("P_%.2f__", (result * 100f)) + saveFile.getName());
+                {
+                    saveFile = new File(saveFile.getParentFile(), String.format(Locale.US, "P_%.2f__", (result * 100f)) + saveFile.getName());
                     mlp.saveMlp(saveFile);
 //                    MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
                 }

@@ -40,9 +40,9 @@ public class AttributesTagFilter implements TagFilter {
      * @return The return will always be {@link Result#CONTINUE}.
      */
     @Override
-    public Result filter(Element element, FilterOutput output) {
+    public Result filter(Element element, OccurrencesMap output) {
         for (Attribute attribute : element.attributes()) {
-            output.append("!_in_").append(attribute.getKey()).append(" ");
+            output.add("!_in_" + attribute.getKey());
         }
 
         return Result.CONTINUE;

@@ -37,9 +37,9 @@ public class UrlTagFilter implements TagFilter {
      * @return Will always be {@link Result#CONTINUE}.
      */
     @Override
-    public Result filter(Element element, FilterOutput strBuilder) {
+    public Result filter(Element element, OccurrencesMap strBuilder) {
         if (!element.attr("href").isEmpty()) {
-            strBuilder.append(TextMark.URL.value()).append(" ");
+            strBuilder.add(TextMark.URL.value());
         }
         return Result.CONTINUE;
     }

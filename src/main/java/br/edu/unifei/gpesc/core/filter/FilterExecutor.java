@@ -23,7 +23,7 @@ import org.jsoup.select.Elements;
 /**
  * This class process all filters ({@link TextFilter} and {@link TagFilter}).
  * <br>
- * The execution of the filters is determinated by the order of it in the array.
+ * The execution of the filters is determined by the order of it in the array.
  * After a filter is processed its returns a {@link Result} that informs how
  * this executor should proceed.
  *
@@ -73,7 +73,7 @@ public class FilterExecutor {
      * @param elements The root element array.
      * @param output Where all the elements are appended after applied the filters.
      */
-    public void filterHtml(Elements elements, FilterOutput output) {
+    public void filterHtml(Elements elements, OccurrencesMap output) {
         // variables
         Result tagResult;
 
@@ -110,19 +110,18 @@ public class FilterExecutor {
      * @param text
      * @param output
      */
-    public void filterText(String text, FilterOutput output) {
+    public void filterText(String text, OccurrencesMap output) {
         Scanner scanner = new Scanner(text);
         String resultText;
 
         while (scanner.hasNext()) {
             resultText = filterText(scanner.next());
-            output.append(resultText).append(" ");
+            output.add(resultText);
         }
-        output.append("\n");
     }
 
     /**
-     * Filters the input text by all the setted {@link TextFilter}.
+     * Filters the input text by all the set {@link TextFilter}.
      * @param text The input text.
      * @return The filtered text.
      */

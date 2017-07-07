@@ -65,7 +65,7 @@ public class Statistic<T> implements Iterable<Data>{
     }
 
     /**
-     * Insert a data to the statisc array. If the data already exists, then its
+     * Insert a data to the statistic array. If the data already exists, then its
      * value is increased.
      * @param data The data.
      * @param set The set of the data.

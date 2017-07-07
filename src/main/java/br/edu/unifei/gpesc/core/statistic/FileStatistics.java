@@ -16,15 +16,19 @@
  */
 package br.edu.unifei.gpesc.core.statistic;
 
+import br.edu.unifei.gpesc.core.filter.OccurrencesMap;
+import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
 public class FileStatistics extends Statistic<String> {
+
+    private final OccurrencesMap mOccurrencesMap = new OccurrencesMap(1024 * 10);
 
     /**
      * Creates a File Statistic with a determined number of sets.
@@ -43,15 +47,21 @@ public class FileStatistics extends Statistic<String> {
      */
     public void processFile(File file, String charsetName, int set) {
         try {
-            Scanner scanner = new Scanner(file, charsetName);
-            incrementSetSize(set);
+            mOccurrencesMap.clear();
+            mOccurrencesMap.fromFile(file);
 
-            while (scanner.hasNext()) {
-                insertData(scanner.next(), set);
+            for (Map.Entry<String, Integer> entry : mOccurrencesMap) {
+                String key = entry.getKey();
+                int quantity = entry.getValue();
+
+                while (quantity-- > 0) {
+                    insertData(key, set);
+                }
             }
-            scanner.close();
         }
-        catch (FileNotFoundException e) {}
+        catch (IOException e) {
+            TraceLog.logE(e);
+        }
     }
 
     /**

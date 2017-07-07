@@ -20,13 +20,13 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import org.apache.commons.io.IOUtils;
+//import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author Isaac Caldas Ferreira
  */
-public class Client {
+public class old_Client {
 
 
 
@@ -55,7 +55,7 @@ public class Client {
             sendString(outStream, userAddress);
 
             // send mail
-            IOUtils.copy(System.in, outStream);
+//            IOUtils.copy(System.in, outStream);
 
             // flush
             outStream.flush();

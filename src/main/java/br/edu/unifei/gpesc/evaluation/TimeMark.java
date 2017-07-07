@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -31,10 +29,24 @@ import java.util.Date;
  */
 public class TimeMark {
 
-    private static Writer mWriter;
-    private static long mMarkedTime = 0;
+    private static Writer mWriter = new Writer() {
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+        }
 
+        @Override
+        public void flush() throws IOException {
+        }
+
+        @Override
+        public void close() throws IOException {
+        }
+    };
+
+    private static long mMarkedTime;
     private static long mTotalTime;
+
+    private static long mStartTime;
 
     public static void init(File file) {
         try {
@@ -42,6 +54,10 @@ public class TimeMark {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void init(String path) {
+        init(new File(path));
     }
 
     private static void write(String str1, String str2) {
@@ -57,16 +73,16 @@ public class TimeMark {
     // Mark
     // ---------------------------------------------------------------------------------------------
 
-    private static final SimpleDateFormat SDF = new SimpleDateFormat();
-
     public static void start() {
-        write("1. E-Mail chegou em ", SDF.format(new Date(System.currentTimeMillis())));
+        write("1. Processamento iniciado em ", String.valueOf(System.currentTimeMillis()));
         mMarkedTime = System.currentTimeMillis();
         mTotalTime = 0;
+        mStartTime = 0;
     }
 
     public static void finish(int mailLength) {
-        write("8. Fim. | E-mail com ", mailLength + " bytes | Total = " + mTotalTime + "ms\n------------------------------------------\n");
+        write("8. Fim. | E-mail com ", mailLength + " bytes | Total = " + mTotalTime + "ms");
+        write("9. Tempor percorrido (c/ benchmarks): ", (System.currentTimeMillis() - mStartTime) + "ms\n------------------------------------------");
     }
 
     public static void mark(String label) {

@@ -15,34 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.edu.unifei.gpesc.core.filter;
+package br.edu.unifei.gpesc.core.statistic;
 
 /**
  *
  * @author Isaac C. Ferreira
  */
-public class StringBuilderOutput implements FilterOutput {
-
-    private final StringBuilder mStrBuilder;
-
-    public StringBuilderOutput() {
-        mStrBuilder = new StringBuilder();
-    }
-
-
-    public StringBuilderOutput(int capacity) {
-        mStrBuilder = new StringBuilder(capacity);
-    }
+public class BiggestNormalization implements Normalization {
 
     @Override
-    public FilterOutput append(String str) {
-        mStrBuilder.append(str);
-        return this;
-    }
+    public void normalize(int[] dataIn, double[] dataOut) {
+        int bigger = dataIn[0];
 
-    @Override
-    public String toString() {
-        return mStrBuilder.toString();
+        for (int value : dataIn) {
+            if (value > bigger) bigger = value;
+        }
+
+        double divider = (double) bigger;
+        for (int i=0; i<dataIn.length; i++) {
+            dataOut[i] = dataIn[i] / divider;
+        }
     }
 
 }

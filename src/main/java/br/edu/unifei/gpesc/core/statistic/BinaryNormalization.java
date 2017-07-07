@@ -14,15 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package br.edu.unifei.gpesc.core.filter;
+package br.edu.unifei.gpesc.core.statistic;
 
 /**
  *
  * @author Isaac C. Ferreira
  */
-public interface FilterOutput {
+public class BinaryNormalization implements Normalization {
 
-    FilterOutput append(String str);
-
+    /**
+     * This method computes the binary normalization.
+     *
+     * <p> Method: for each value in dataIn array is applied the follow rule:
+     * <br> 1) value != 0, results in 1
+     * <br> 2) value == 0, results in 0.
+     *
+     * <p> If the dataOut is null, then the result is put in dataIn array.
+     * This mean that dataOut could be the same as dataIn.
+     *
+     * @param dataIn The input array.
+     * @param dataOut The result array.
+     */
+    @Override
+    public void normalize(int[] dataIn, double[] dataOut) {
+        for (int i=0; i<dataIn.length; i++) {
+            dataOut[i] = (dataIn[i] != 0) ? 1 : 0;
+        }
+    }
 }

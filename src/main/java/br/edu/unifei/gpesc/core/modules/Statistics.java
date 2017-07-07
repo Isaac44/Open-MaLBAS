@@ -17,6 +17,7 @@
 package br.edu.unifei.gpesc.core.modules;
 
 import br.edu.unifei.gpesc.core.statistic.FileStatistics;
+import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
 import java.io.File;
@@ -49,15 +50,21 @@ public class Statistics {
      * @param set The set. Use {@link SASStatistics#HAM_SET} or {@link SASStatistics#SPAM_SET}
      */
     public void processFolder(File folder, int set) {
+        TimeMark.init("TimeMark_statistics.log");
+
         File[] fileArray = folder.listFiles(new FileUtils.IsFileFilter());
         if (fileArray != null) {
             ConsoleProgress progress = ConsoleProgress.getGlobalInstance(fileArray.length);
             int k = 0;
 
+            long time = System.currentTimeMillis();
             for (File file : fileArray) {
                 progress.setValue(k++);
+                TimeMark.start();
                 mFileStatistic.processFile(file, set);
+                TimeMark.finish((int) file.length());
             }
+            System.out.println("time = " + (System.currentTimeMillis() - time));
 
             progress.end();
         }
@@ -75,7 +82,7 @@ public class Statistics {
     }
 
     /**
-     * Gets the statistiscs for spam and ham.
+     * Gets the statistics for spam and ham.
      * @return The statistics.
      */
     public FileStatistics getStatistics() {

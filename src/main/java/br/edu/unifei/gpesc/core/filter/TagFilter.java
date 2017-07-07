@@ -35,5 +35,5 @@ public interface TagFilter {
      * @param output Where the processed data goes.
      * @return The Result information for the FilterExecutor.
      */
-    public Result filter(Element element, FilterOutput output);
+    public Result filter(Element element, OccurrencesMap output);
 }

@@ -28,9 +28,9 @@ public class ImageTagFilter implements TagFilter {
     private static final Tag IMAGE_TAG = Tag.valueOf("img");
 
     @Override
-    public Result filter(Element element, FilterOutput output) {
+    public Result filter(Element element, OccurrencesMap output) {
         if (IMAGE_TAG.equals(element.tag())) {
-            output.append(TextMark.IMAGE.value()).append("\n");
+            output.add(TextMark.IMAGE.value());
         }
         return Result.CONTINUE;
     }

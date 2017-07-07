@@ -20,7 +20,7 @@ package br.edu.unifei.gpesc.core.statistic;
 import java.util.Arrays;
 
 /**
- * This is used to find  what elements are used to create the caracterization
+ * This is used to find  what elements are used to create the characterization
  * of this Statistics.
  * @author Isaac Caldas Ferreira
  * @param <T>
@@ -28,12 +28,12 @@ import java.util.Arrays;
 public class Characterization<T> {
 
     /**
-     * The caracteristic of the statistical element.
+     * The characteristic of the statistical element.
      */
     private final Characteristics<T> mCharacteristics;
 
     /**
-     * The resulted caracteristical array.
+     * The result array.
      */
     private final int[] mCharacterizationArray;
 
@@ -50,7 +50,7 @@ public class Characterization<T> {
     }
 
     /**
-     * This method informes the data which pertences to the statistics.
+     * This method informs the data which belongs to the statistics.
      * <br> If the data is part of the set {@link Characteristics}
      * associated to this class, the position, of data, in the array is
      * incremented.
@@ -61,6 +61,13 @@ public class Characterization<T> {
         Integer dataIndex = mCharacteristics.getDataIndex(data);
         if (dataIndex != null) {
             mCharacterizationArray[dataIndex]++;
+        }
+    }
+
+    public void insertData(T data, int quantity) {
+        Integer dataIndex = mCharacteristics.getDataIndex(data);
+        if (dataIndex != null) {
+            mCharacterizationArray[dataIndex] = quantity;
         }
     }
 
@@ -78,7 +85,7 @@ public class Characterization<T> {
      * This method cleans the statistical characterization array. Use this for
      * recycling process (and avoid unnecessary data allocation).
      */
-    public void cleanCharacterizationArray() {
+    public void cleanArray() {
         Arrays.fill(mCharacterizationArray, 0);
     }
 }

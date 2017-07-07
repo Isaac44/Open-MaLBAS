@@ -36,7 +36,7 @@ import java.util.Scanner;
  * Beta class.
  * @author isaac
  */
-public class Vector {
+public class VectorHelper {
 
     public static final String HAM = NeuralCharacteristic.HAM.STR_VALUE;
     public static final String SPAM = NeuralCharacteristic.SPAM.STR_VALUE;
@@ -51,7 +51,7 @@ public class Vector {
             characterization.insertData(scanner.next());
         }
 
-        Normalization.featureScaling(dataVector, dataNormalized);
+        NormalizationHelper.featureScaling(dataVector, dataNormalized);
 
         for (int i=0; i<dataVector.length; i++) {
             dataVector[i] = (int) (dataNormalized[i] * 10E12);
@@ -79,7 +79,7 @@ public class Vector {
                     continue;
                 }
 
-                Normalization.featureScaling(dataVector, dataNormalized);
+                NormalizationHelper.featureScaling(dataVector, dataNormalized);
 
                 for (double value : dataNormalized) {
                     writer.append(Integer.toString((int) (value * 10E12)));
@@ -97,7 +97,7 @@ public class Vector {
                     System.out.println("vetor zerado");
                 }
 
-                Normalization.featureScaling(dataVector, dataNormalized);
+                NormalizationHelper.featureScaling(dataVector, dataNormalized);
 
                 for (double value : dataNormalized) {
                     writer.append(Integer.toString((int) (value * 10E12)));
@@ -138,11 +138,11 @@ public class Vector {
         for (File file : fileArray) {
             progress.setValue(k++);
 
-            characterization.cleanCharacterizationArray();
+            characterization.cleanArray();
             characterization.processFile(file);
 
             if (!hasOnlyZeros(dataVector)) {
-                Normalization.featureScaling(dataVector, dataNormalized);
+                NormalizationHelper.featureScaling(dataVector, dataNormalized);
 
                 for (double value : dataNormalized) {
                     dout.writeDouble(value);
@@ -178,7 +178,7 @@ public class Vector {
             characterization.insertData(scanner.next());
         }
 
-        Normalization.featureScaling(dataVector, dataNormalized);
+        NormalizationHelper.featureScaling(dataVector, dataNormalized);
 
         return dataNormalized;
     }
@@ -207,11 +207,11 @@ public class Vector {
             for (File file : fileArray) {
                 progress.setValue(k++);
 
-                characterization.cleanCharacterizationArray();
+                characterization.cleanArray();
                 characterization.processFile(file);
 
                 if (!hasOnlyZeros(rawVector)) {
-                    Normalization.featureScaling(rawVector, normVector);
+                    NormalizationHelper.featureScaling(rawVector, normVector);
 
                     for (double value : normVector) {
                         outBuffer.putDouble(value);

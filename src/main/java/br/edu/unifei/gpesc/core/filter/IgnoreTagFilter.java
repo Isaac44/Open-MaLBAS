@@ -53,12 +53,12 @@ public class IgnoreTagFilter implements TagFilter {
      * {@link Result#CONTINUE} otherwise.
      */
     @Override
-    public Result filter(Element element, FilterOutput output) {
+    public Result filter(Element element, OccurrencesMap output) {
         Tag tag = element.tag();
 
         for (Tag ignoreTag : mIgnoreTagArray) {
             if (ignoreTag.equals(tag)) {
-                output.append("!_ignore_").append(ignoreTag.getName());
+                output.add("!_ignore_" + ignoreTag.getName());
                 return Result.SKIP_TAG;
             }
         }

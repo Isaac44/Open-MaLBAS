@@ -16,7 +16,7 @@
  */
 package test.app;
 
-import br.edu.unifei.gpesc.core.modules.Vector;
+import br.edu.unifei.gpesc.core.modules.VectorHelper;
 import br.edu.unifei.gpesc.core.statistic.Characteristics;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,8 +41,8 @@ public class VectorApp {
 
         System.out.println("count="+characteristic.getObjectCount());
 
-        Vector.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), Vector.HAM, false);
-        Vector.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), Vector.SPAM, false);
+        VectorHelper.folderVectorization(characteristic, new File(path, "clean/ham"), new File(path, "vector/ham"), VectorHelper.HAM, false);
+        VectorHelper.folderVectorization(characteristic, new File(path, "clean/spam"), new File(path, "vector/spam"), VectorHelper.SPAM, false);
 
     }
 

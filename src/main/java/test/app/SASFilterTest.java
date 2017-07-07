@@ -33,8 +33,8 @@ public class SASFilterTest {
         String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/TREC-2005-2006-2007/01_raw_data/ham/";
         String file = "trec_2005_183_203.eml";
 
-        String out = filter.filterMail(path + file);
-        System.out.println("out = " + out);
+//        String out = filter.filterMail(path + file);
+//        System.out.println("out = " + out);
 
 //        FileOutputStream fileStream = new FileOutputStream(path + "cleanned/" + file);
 //        fileStream.write(out.getBytes("ASCII"));

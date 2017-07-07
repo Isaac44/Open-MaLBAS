@@ -17,12 +17,11 @@
 package br.edu.unifei.gpesc.core.modules;
 
 import br.edu.unifei.gpesc.core.filter.FilterExecutor;
-import br.edu.unifei.gpesc.core.filter.FilterOutput;
-import br.edu.unifei.gpesc.core.filter.StringBuilderOutput;
-import br.edu.unifei.gpesc.core.filter.WriterOutput;
+import br.edu.unifei.gpesc.core.filter.OccurrencesMap;
 import br.edu.unifei.gpesc.evaluation.TimeMark;
 import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
+import br.edu.unifei.gpesc.util.TraceLog;
 import br.edu.unifei.gpesc.util.VectorCounter;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,48 +37,70 @@ import org.jsoup.select.Elements;
  */
 public class Filter {
 
+    /**
+     * The JavaMail interface which is responsible for extracting the content of the e-mail to be
+     * processed by the filters.
+     */
     private final Mail mMailProcessor = new Mail();
+
+    /**
+     * All the filters to be applied on the e-mail.
+     */
     private final FilterExecutor mFilterExecutor = new FilterExecutor();
 
+    private final OccurrencesMap mOccurrencesMap = new OccurrencesMap(1024 * 10);
+
+    /**
+     * A statistics log.
+     */
     private final VectorCounter mFolderProcessLog = new VectorCounter();
 
-    private String filter() {
-        StringBuilderOutput output = new StringBuilderOutput();
-        filter(output);
-        return output.toString();
+    public OccurrencesMap getOccurrencesMap() {
+        return mOccurrencesMap;
     }
 
-    private void filter(FilterOutput output) {
+    private void doFilter() {
+        mOccurrencesMap.clear(); // keep the structure for optimization
+
         String content = mMailProcessor.getContent();
 
         if (mMailProcessor.isText()) {
-            mFilterExecutor.filterText(content, output);
+            mFilterExecutor.filterText(content, mOccurrencesMap);
             TimeMark.mark("4.T. Filtragem de Texto");
         }
         else if (mMailProcessor.isHtml()) {
             Elements allElements = Jsoup.parse(content).getAllElements();
-            mFilterExecutor.filterHtml(allElements, output);
+            mFilterExecutor.filterHtml(allElements, mOccurrencesMap);
             TimeMark.mark("4.H. Filtragem de HTML");
         } else {
             TimeMark.mark("4.N. Filtragem não usada");
         }
-
     }
 
-    public String filterMail(InputStream inputStream) {
+    public boolean filterMail(InputStream inputStream) {
         boolean processed = mMailProcessor.processMail(inputStream);
         TimeMark.mark("3. JavaMail");
 
-        return (processed) ? filter() : null;
+        if (processed) {
+            doFilter();
+        }
+
+        return processed;
     }
 
-    public String filterMail(String inputPath) {
-        boolean processed = mMailProcessor.processMail(inputPath);
-        return (processed) ? filter() : null;
+    public boolean filterMail(File file) {
+        boolean processed = mMailProcessor.processMail(file);
+
+        if (processed) {
+            doFilter();
+        }
+
+        return processed;
     }
 
     public void filterFolder(File folderIn, File folderOut) {
-        System.out.println("USANDO O FILTRO DIRETO");
+        TimeMark.init("TimeMark_filter.log");
+
         mFolderProcessLog.resetCounters();
 
         File[] files = folderIn.listFiles(new FileUtils.IsFileFilter());
@@ -89,25 +110,26 @@ public class Filter {
             int k = 0;
 
             for (File file : files) {
+                TimeMark.start();
                 progress.setValue(k++);
 
-                // Process and save at the same time
                 try {
                     File fileOut = new File(folderOut, file.getName());
 
-                    if (mMailProcessor.processMail(file.getAbsolutePath())) {
-                        WriterOutput output = new WriterOutput(new BufferedWriter(new FileWriter(fileOut)));
-                        filter(output);
-                        output.close();
+                    if (filterMail(file)) {
+                        mOccurrencesMap.toFile(fileOut);
                         mFolderProcessLog.incGoodVectorsCount();
                     }
                     else {
                         mFolderProcessLog.incZeroedVectorsCount();
                     }
                 }
-                catch (IOException e) {
-                    System.out.println("IOException (write): " + file.getName());
+                catch (Exception e) {
+                    TraceLog.logE(e);
+                    System.out.println("Exception: " + file.getName());
                 }
+                
+                TimeMark.finish((int) file.length());
             }
 
             progress.end();
