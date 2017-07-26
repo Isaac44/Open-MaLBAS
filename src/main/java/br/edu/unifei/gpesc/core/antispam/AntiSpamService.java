@@ -33,16 +33,16 @@ import org.subethamail.smtp.server.SMTPServer;
 public class AntiSpamService {
 
     // classificar os e-mails e enviar para a storage correta
-    private final SmtpSender mBackupSender, mSpamSender;
+    private final Sender mBackupSender, mSpamSender;
 
     private final int mPort;
 
     /**
-     * The SAS classficator.
+     * The SAS classificator .
      */
     private final AntiSpamFactory mAntiSpamFactory;
 
-    public AntiSpamService(AntiSpamFactory asFactory, int port, SmtpSender spamSender, SmtpSender backupSender) {
+    public AntiSpamService(AntiSpamFactory asFactory, int port, Sender spamSender, Sender backupSender) {
         mSpamSender = spamSender;
         mBackupSender = backupSender;
         mPort = port;
@@ -51,19 +51,19 @@ public class AntiSpamService {
         TimeMark.init(new File("TimeMark.log"));
     }
 
-    private static SmtpSender createSender(Configuration c, String sType) {
+    private static Sender createSender(Configuration c, String sType) {
         String server = c.getProperty("STORAGE_" + sType + "_SERVER", null);
         if (server != null) {
             int port = c.getIntegerProperty("STORAGE_" + sType + "_PORT");
-            return new SmtpSender(server, port);
+            return new DirectSender(server, port);
         } else {
             return null;
         }
     }
 
     public static AntiSpamService from(Configuration c) {
-        SmtpSender spamSender = createSender(c, "SPAM");
-        SmtpSender backupSender = createSender(c, "BACKUP");
+        Sender spamSender = createSender(c, "SPAM");
+        Sender backupSender = createSender(c, "BACKUP");
         int port = c.getIntegerProperty("POSTFIX_PORT");
         return new AntiSpamService(AntiSpamFactory.from(c), port, spamSender, backupSender);
     }
@@ -73,6 +73,10 @@ public class AntiSpamService {
         server.setSoftwareName("SAS Anti-Spam");
         server.setHostName("SAS Anti-Spam");
         server.setPort(mPort);
+
+        // TODO: for Benchmarks
+//        server.setMaxConnections(1);
+
         server.start();
     }
 

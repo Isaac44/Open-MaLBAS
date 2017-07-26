@@ -31,7 +31,7 @@ public class Storage {
     private final File mFolder;
 
     /**
-     * Initizalizes the backup and spam folder for storage. <br>
+     * Initializes the backup and spam folder for storage. <br>
      * The folders may be null, in this case when .store() is called, nothing will happen.
      *
      * @param folder The root folder to store all e-mails received.

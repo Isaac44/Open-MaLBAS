@@ -12,4 +12,4 @@ echo Enfim eu decidi escrever este e-mail.
 echo ""
 echo "."; sleep 0.1;
 echo QUIT
-) | telnet localhost $1
+) | telnet $1 $2

@@ -143,7 +143,7 @@ public class NeuralModule {
     }
 
     /**
-     * Setup this module. <br />
+     * Setup this module. <br>
      * All configuration are read from the properties file.
      * @throws IOException
      * @throws IllegalArgumentException if any argument not optional is missing.
@@ -198,6 +198,8 @@ public class NeuralModule {
         for (int train=1; train <= mQuantityOfTrains; train++) {
             mTrainExecutor.execute(new TrainMlpRunnable(train));
         }
+
+        mTrainExecutor.shutdown(); // close when all tests are finished
     }
 
     private static int[] parseIntArray(String array) {
@@ -416,7 +418,7 @@ public class NeuralModule {
                 // send mail
                 // TODO: debug only
                 {
-                    saveFile = new File(saveFile.getParentFile(), String.format(Locale.US, "P_%.2f__", (result * 100f)) + saveFile.getName());
+                    saveFile = new File(saveFile.getParentFile(), String.format(Locale.US, "P_%05.2f__", (result * 100f)) + saveFile.getName());
                     mlp.saveMlp(saveFile);
 //                    MailSender.send(mTag, h1Len, h2len, startTime, result * 100f, saveFile.getAbsolutePath(), logFile.getAbsolutePath());
                 }

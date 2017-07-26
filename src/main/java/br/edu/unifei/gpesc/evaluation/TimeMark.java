@@ -74,26 +74,26 @@ public class TimeMark {
     // ---------------------------------------------------------------------------------------------
 
     public static void start() {
-        write("1. Processamento iniciado em ", String.valueOf(System.currentTimeMillis()));
-        mMarkedTime = System.currentTimeMillis();
-        mTotalTime = 0;
-        mStartTime = 0;
+//        write("1. Processamento iniciado em ", String.valueOf(System.currentTimeMillis()));
+//        mMarkedTime = System.currentTimeMillis();
+//        mTotalTime = 0;
+//        mStartTime = 0;
     }
 
     public static void finish(int mailLength) {
-        write("8. Fim. | E-mail com ", mailLength + " bytes | Total = " + mTotalTime + "ms");
-        write("9. Tempor percorrido (c/ benchmarks): ", (System.currentTimeMillis() - mStartTime) + "ms\n------------------------------------------");
+//        write("8. Fim. | E-mail com ", mailLength + " bytes | Total = " + mTotalTime + "ms");
+//        write("9. Tempor percorrido (c/ benchmarks): ", (System.currentTimeMillis() - mStartTime) + "ms\n------------------------------------------");
     }
 
     public static void mark(String label) {
-        long time = System.currentTimeMillis();
-        long dt = (time - mMarkedTime);
-
-        String sTime =  " = " + dt + " ms";
-        write(label, sTime);
-
-        mMarkedTime = System.currentTimeMillis();
-        mTotalTime += dt;
+//        long time = System.currentTimeMillis();
+//        long dt = (time - mMarkedTime);
+//
+//        String sTime =  " = " + dt + " ms";
+//        write(label, sTime);
+//
+//        mMarkedTime = System.currentTimeMillis();
+//        mTotalTime += dt;
     }
 
 }

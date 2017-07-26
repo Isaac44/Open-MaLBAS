@@ -17,7 +17,6 @@
 
 package br.edu.unifei.gpesc.core.antispam;
 
-import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,16 +26,17 @@ import java.net.Socket;
  *
  * @author Isaac C. Ferreira
  */
-public class SmtpSender {
+public class DirectSender extends Sender {
 
     private final String mServer;
     private final int mPort;
 
-    public SmtpSender(String server, int port) {
+    public DirectSender(String server, int port) {
         mServer = server;
         mPort = port;
     }
 
+    @Override
     public synchronized void sendMail(String mailFile, String from, String to, byte[] data, int dataLen) throws IOException {
         Socket socket = new Socket(mServer, mPort);
 
@@ -49,13 +49,5 @@ public class SmtpSender {
         dout.flush();
 
         socket.close();
-    }
-
-    public synchronized void silentSendMail(String mailFile, String from, String to, byte[] data, int dataLen) {
-        try {
-            sendMail(mailFile, from, to, data, dataLen);
-        } catch (IOException e) {
-            TraceLog.logE(e);
-        }
     }
 }

@@ -67,7 +67,15 @@ public final class Messages {
      * @return The internationalization string message.
      */
     public static String i18n(String key, Object... args) {
-        return String.format(i18n(key), args);
+        String i18n = i18n(key);
+        if (i18n != null) {
+            return String.format(i18n, args);
+        } else {
+            for (int i=0; i<args.length; i++) {
+                key += " | arg" +i + "=" + args[i];
+            }
+            return key;
+        }
     }
 
     /**
