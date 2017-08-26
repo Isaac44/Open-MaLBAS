@@ -242,14 +242,14 @@ public class VectorHelper {
     /**
      * SPAM: 1 0
      * HAM: 0 1
-     * @param patternFile
+     * @param vectorFile
      * @param outNeuron1
      * @param outNeuron2
      * @return
      * @throws IOException
      */
-    public static PatternLayer[] loadNeurons(File patternFile, double outNeuron1, double outNeuron2) throws IOException {
-        FileChannel fileIn = new FileInputStream(patternFile).getChannel();
+    public static PatternLayer[] loadNeurons(File vectorFile, double outNeuron1, double outNeuron2) throws IOException {
+        FileChannel fileIn = new FileInputStream(vectorFile).getChannel();
         ByteBuffer inBuffer = ByteBuffer.allocate((int) fileIn.size());
         fileIn.read(inBuffer);
 

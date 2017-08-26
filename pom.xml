@@ -12,11 +12,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>PrimeShared</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>1.5.6</version>
@@ -40,6 +35,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>PrimeShared</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     
@@ -113,7 +113,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>br.edu.unifei.gpesc.app.Application</mainClass>
-                                    <!--<mainClass>test.mlp.Test3</mainClass>-->
+                                    <!--<mainClass>test.mlp.Benchmark</mainClass>-->
                                 </transformer>
                             </transformers>
                         </configuration>

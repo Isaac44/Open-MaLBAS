@@ -17,9 +17,7 @@
 
 package br.edu.unifei.gpesc.evaluation;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -49,15 +47,15 @@ public class TimeMark {
     private static long mStartTime;
 
     public static void init(File file) {
-        try {
-            mWriter = new BufferedWriter(new FileWriter(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            mWriter = new BufferedWriter(new FileWriter(file));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void init(String path) {
-        init(new File(path));
+//        init(new File(path));
     }
 
     private static void write(String str1, String str2) {

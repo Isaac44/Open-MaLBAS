@@ -21,8 +21,6 @@ import br.edu.unifei.gpesc.mlp.layer.PatternLayer;
 import br.edu.unifei.gpesc.mlp.log.MlpLogger;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -44,8 +42,7 @@ public class TestBuilder {
         Mlp runMlp = Mlp.loadMlp(new File(path2, "train_2.dat"));
 
 
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        MlpLogger logger = new MlpLogger(executor, new File(path2, "result.log"));
+        MlpLogger logger = new MlpLogger(new File(path2, "result.log"));
 
         System.out.println("> Started");
 
@@ -55,6 +52,5 @@ public class TestBuilder {
         logger.close();
 
 
-        executor.shutdown();
     }
 }

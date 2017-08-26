@@ -25,6 +25,14 @@ import java.io.IOException;
  */
 public abstract class Sender {
 
+    protected final String mServer;
+    protected final int mPort;
+
+    public Sender(String server, int port) {
+        mServer = server;
+        mPort = port;
+    }
+
     public abstract void sendMail(String mailFile, String from, String to, byte[] data, int dataLen) throws IOException;
 
     public synchronized void silentSendMail(String mailFile, String from, String to, byte[] data, int dataLen) {

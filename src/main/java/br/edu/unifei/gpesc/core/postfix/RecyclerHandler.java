@@ -60,12 +60,13 @@ public abstract class RecyclerHandler implements MessageHandler {
     @Override
     public void data(InputStream in) throws RejectException, TooMuchDataException, IOException {
         mTransitionInput.copyData(in);
-
         onDataReceived(mmFrom, mmTo, mTransitionInput);
     }
 
     @Override
     public final void done() {
+
+
 //        try {
 //            System.out.println(Thread.currentThread().getName() + " | running...");
 //            onDataReceived(mmFrom, mmTo, mTransitionInput);

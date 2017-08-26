@@ -17,33 +17,28 @@
 
 package br.edu.unifei.gpesc.core.antispam;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
+import org.subethamail.smtp.client.SmartClient;
 
 /**
  *
  * @author Isaac C. Ferreira
  */
-public class DirectSender extends Sender {
+public class SmtpSender extends Sender {
 
-    public DirectSender(String server, int port) {
+    public SmtpSender(String server, int port) {
         super(server, port);
     }
 
     @Override
     public synchronized void sendMail(String mailFile, String from, String to, byte[] data, int dataLen) throws IOException {
-        Socket socket = new Socket(mServer, mPort);
-
-        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        dout.writeUTF(mailFile);
-        dout.writeUTF(from);
-        dout.writeUTF(to);
-        dout.writeInt(dataLen);
-        dout.write(data, 0, dataLen);
-        dout.flush();
-
-        socket.close();
+        SmartClient client = new SmartClient(mServer, mPort, "GPESC SAS");
+        client.from(from);
+        client.to(to);
+        client.dataStart();
+        client.dataWrite(data, dataLen);
+        client.dataEnd();
+        client.quit();
+        client.close();
     }
 }

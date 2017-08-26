@@ -51,11 +51,20 @@ public class AntiSpamService {
         TimeMark.init(new File("TimeMark.log"));
     }
 
+    private static boolean isDirect(String type) {
+        if (type != null) {
+            return type.toUpperCase().equals("DIRECT");
+        }
+        return false;
+    }
+
     private static Sender createSender(Configuration c, String sType) {
         String server = c.getProperty("STORAGE_" + sType + "_SERVER", null);
+        boolean direct = isDirect(c.getProperty("STORAGE_" + sType + "_SERVER", null));
+
         if (server != null) {
             int port = c.getIntegerProperty("STORAGE_" + sType + "_PORT");
-            return new DirectSender(server, port);
+            return direct ? new DirectSender(server, port) : new SmtpSender(server, port);
         } else {
             return null;
         }
@@ -73,20 +82,15 @@ public class AntiSpamService {
         server.setSoftwareName("SAS Anti-Spam");
         server.setHostName("SAS Anti-Spam");
         server.setPort(mPort);
-
-        // TODO: for Benchmarks
-//        server.setMaxConnections(1);
-
+        server.setMaxConnections(1000);
         server.start();
     }
 
     private class HandlerFactory extends RecyclerHandlerFactory {
-
         @Override
         protected MessageHandler createHandler() {
             return new Handler(this);
         }
-
     }
 
     private class Handler extends RecyclerHandler {
@@ -124,5 +128,4 @@ public class AntiSpamService {
     private String createEmailFileName() {
         return Long.toUnsignedString(System.currentTimeMillis(), Character.MAX_RADIX) + ".eml";
     }
-
 }

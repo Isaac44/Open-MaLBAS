@@ -45,7 +45,7 @@ public class NeuralModule {
     /**
      * Thread to save the train log.
      */
-    private final ExecutorService mSaveLogExecutor = Executors.newFixedThreadPool(1);
+    private final ExecutorService mSaveLogExecutor = null; //Executors.newFixedThreadPool(1);
 
     /**
      * Train builder.
@@ -90,6 +90,11 @@ public class NeuralModule {
     private double mLearnRate;
 
     /**
+     * The initial absolute maximum initial weights.
+     */
+    private double mAbsMaxInitialWeight;
+
+    /**
      * The default seed.
      */
     private long mSeed;
@@ -132,6 +137,10 @@ public class NeuralModule {
         mCfg = new Configuration(configFile);
     }
 
+    public NeuralModule(Configuration c) {
+        mCfg = c;
+    }
+
     /**
      * Force the trains to finish.
      */
@@ -163,6 +172,7 @@ public class NeuralModule {
         mSecondHiddenFunction = mCfg.getProperty("DEFAULT_SECOND_HIDDEN_FUNCTION");
         mOutputFunction = mCfg.getProperty("DEFAULT_OUTPUT_FUNCTION");
         mEpochs = mCfg.getIntegerProperty("DEFAULT_EPOCHS");
+        mAbsMaxInitialWeight = mCfg.getDoubleProperty("DEFAULT_ABS_MAX_INITIAL_WEIGHTS");
         mMomentum = mCfg.getDoubleProperty("DEFAULT_MOMENTUM");
         mLearnRate = mCfg.getDoubleProperty("DEFAULT_LEARN_RATE");
         mSeed = getSeed(mCfg.getProperty("DEFAULT_RANDOMIZER_SEED"));
@@ -199,7 +209,19 @@ public class NeuralModule {
             mTrainExecutor.execute(new TrainMlpRunnable(train));
         }
 
-        mTrainExecutor.shutdown(); // close when all tests are finished
+//        mTrainExecutor.shutdown(); // close when all tests are finished
+    }
+
+    /**
+     * Start the trains execution.
+     */
+    public void start2() {
+        stopProcess();
+
+        for (int train=1; train <= mQuantityOfTrains; train++) {
+            new TrainMlpRunnable(train).run();
+        }
+
     }
 
     private static int[] parseIntArray(String array) {
@@ -293,15 +315,15 @@ public class NeuralModule {
     private final Object TRAIN_FINISH_LOCK = new Object();
 
     /**
-     * When a train finishes, this is called. When all trains are finisheds,
+     * When a train finishes, this is called. When all trains are finished,
      * the train executor is shutdown.
      */
     private void trainFinished() {
         synchronized (TRAIN_FINISH_LOCK) {
             mQuantityOfTrains--;
             if (mQuantityOfTrains <= 0) {
-                mTrainExecutor.shutdown();
-                mSaveLogExecutor.shutdown();
+                if (mTrainExecutor != null) mTrainExecutor.shutdown();
+                if (mSaveLogExecutor != null) mSaveLogExecutor.shutdown();
             }
         }
     }
@@ -356,6 +378,7 @@ public class NeuralModule {
             mlp.setEpochs(epochs);
             mlp.setMomentum(momentum);
             mlp.setLearnRate(learnRate);
+            mlp.setAbsMaxInitialWeight(mAbsMaxInitialWeight);
 
             // seed
             long seed = getSeed(c.getProperty(mTag + "RANDOMIZER_SEED", null), mSeed);
@@ -393,7 +416,7 @@ public class NeuralModule {
 
                 // save log file
                 File logFile = new File(file.replace(".dat", ".log"));
-                MlpLogger logger = new MlpLogger(mSaveLogExecutor, logFile);
+                MlpLogger logger = new MlpLogger(logFile);
                 mlp.setLogger(logger);
 
                 // setUp
