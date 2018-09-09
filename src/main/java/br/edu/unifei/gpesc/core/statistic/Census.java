@@ -83,7 +83,7 @@ public class Census<T> {
      * This interface is used to sort the data of this census. It is used
      * with {@link Census#sortData(DataComparator)}.
      * <br> This interface is convenient if is wanted to sort the data by its
-     * element ({@link StatisticalData#getElement()}).
+     * element ({@link Data#getElement()}).
      * <p> Important note: The generic type (E) must be the same of the
      * {@link Census}, errors can occur if not.
      *
@@ -95,7 +95,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by its
      * {@link Distribution}.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getDistribution()
+     * @see Data#getDistribution()
      */
     public static class CrescentDistributionSort implements DataComparator<Object> {
         @Override
@@ -108,7 +108,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by its
      * {@link Distribution}.
      * <br> Also sorts by decrescent order: The first element is the biggest
-     * @see StatisticalData#getDistribution()
+     * @see Data#getDistribution()
      */
     public static class DecrescentDistributionSort implements DataComparator<Object> {
         @Override
@@ -121,7 +121,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by a
      * set.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getDistribution()
+     * @see Data#getDistribution()
      */
     public static class CrescentStatisticSetSort implements DataComparator<Object> {
 
@@ -140,7 +140,7 @@ public class Census<T> {
 
         @Override
         public int compare(Data<Object> o1, Data<Object> o2) {
-            return Integer.compare(o1.getStatistic(mmSet), o2.getStatistic(mmSet));
+            return compareInt(o1.getStatistic(mmSet), o2.getStatistic(mmSet));
         }
     }
 
@@ -148,7 +148,7 @@ public class Census<T> {
      * This class implementation of {@link DataComparator} sorts the data by a
      * set.
      * <br> Also sorts by crescent order: The first element is the lowest
-     * @see StatisticalData#getDistribution()
+     * @see Data#getDistribution()
      */
     public static class DecrescentStatisticSetSort implements DataComparator<Object> {
 
@@ -167,14 +167,14 @@ public class Census<T> {
 
         @Override
         public int compare(Data<Object> o1, Data<Object> o2) {
-            return Integer.compare(o2.getStatistic(mmSet), o1.getStatistic(mmSet));
+            return compareInt(o2.getStatistic(mmSet), o1.getStatistic(mmSet));
         }
     }
 
     /**
      * Computes the {@link Distribution} for all {@link Data}
      * of the {@link Statistic}. The result values can be getted using
-     * {@link StatisticalData#getDistribution()}.
+     * {@link Data#getDistribution()}.
      * @param statistics The statiscs.
      * @param distribution The statistics distribution model to be used.
      */
@@ -184,5 +184,9 @@ public class Census<T> {
             result = distribution.compute(data, statistics);
             data.setStatisticalDistribution(result);
         }
+    }
+
+    public static int compareInt(int x, int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 }

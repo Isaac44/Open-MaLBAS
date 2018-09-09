@@ -29,7 +29,7 @@ public class MonetaryTextFilter extends TextFilter {
 
     /**
      * Checks if the input text contains any monetary symbols. See
-     * {@link MonetaryWordTextFilter#MONETARY_SYMBOLS}.
+     * {@link MonetaryTextFilter#MONETARY_SYMBOLS}.
      * @param word The word to analysed.
      * @return The value of {@link TextMark#MONETARY}, if the word contains any
      * monetary symbol.<br>

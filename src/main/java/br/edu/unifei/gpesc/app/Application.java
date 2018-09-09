@@ -16,16 +16,18 @@
  */
 package br.edu.unifei.gpesc.app;
 
-import br.edu.unifei.gpesc.core.neural.NeuralModule;
-import br.edu.unifei.gpesc.core.neural.TestBuilder;
-import static br.edu.unifei.gpesc.app.Messages.*;
-import br.edu.unifei.gpesc.core.antispam.AntiSpamService;
-import br.edu.unifei.gpesc.core.postfix.StorageService;
-import br.edu.unifei.gpesc.util.Configuration;
-import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+
+import br.edu.unifei.gpesc.core.antispam.AntiSpamService;
+import br.edu.unifei.gpesc.core.neural.NeuralModule;
+import br.edu.unifei.gpesc.core.neural.TestBuilder;
+import br.edu.unifei.gpesc.core.postfix.StorageService;
+import br.edu.unifei.gpesc.util.Configuration;
+import br.edu.unifei.gpesc.util.TraceLog;
+
+import static br.edu.unifei.gpesc.app.Messages.printlnLog;
 
 
 /**

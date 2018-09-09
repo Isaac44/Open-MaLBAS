@@ -31,7 +31,7 @@ public class PunctuationTextFilter extends TextFilter {
     private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("[\\p{Punct}]");
 
     /**
-     * Constructs this class setting the {@link TextFilter#mFilterResult} to
+     * Constructs this class setting the {@link TextFilter#mResult} to
      * {@link Result#CONTINUE}. This mean that all filter classes, in the executor,
      * can be processed after this one.
      */

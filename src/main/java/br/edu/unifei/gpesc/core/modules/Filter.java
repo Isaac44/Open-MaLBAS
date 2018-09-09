@@ -16,6 +16,15 @@
  */
 package br.edu.unifei.gpesc.core.modules;
 
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
 import br.edu.unifei.gpesc.core.filter.FilterExecutor;
 import br.edu.unifei.gpesc.core.filter.OccurrencesMap;
 import br.edu.unifei.gpesc.evaluation.TimeMark;
@@ -23,13 +32,6 @@ import br.edu.unifei.gpesc.util.ConsoleProgress;
 import br.edu.unifei.gpesc.util.FileUtils;
 import br.edu.unifei.gpesc.util.TraceLog;
 import br.edu.unifei.gpesc.util.VectorCounter;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
 
 /**
  *

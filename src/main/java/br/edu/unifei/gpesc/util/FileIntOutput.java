@@ -33,7 +33,7 @@ public class FileIntOutput {
     private final FileChannel mFileChannel;
 
     public FileIntOutput(File file, int arrayLength) throws FileNotFoundException {
-        mByteBuffer = ByteBuffer.allocate(Integer.BYTES * arrayLength);
+        mByteBuffer = ByteBuffer.allocate(4 * arrayLength); // int32 => 4 bytes
         mFileChannel = new FileOutputStream(file).getChannel();
     }
 

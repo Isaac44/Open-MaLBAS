@@ -72,7 +72,7 @@ public class TrainModule {
     }
 
     /**
-     * Creats all folders. This mean that the folder denoted by the argument
+     * Creates all folders. This mean that the folder denoted by the argument
      * folder is created and all its parents.
      * @param folder The folder to be created (and all its parents if they don't
      * exists).
@@ -114,6 +114,11 @@ public class TrainModule {
         VectorCounter log = mFilter.getFolderProcessLog();
         printlnLog("TrainMode.Filter.ProcessResult", log.getTotalVectorsCount(), log.getGoodVectorsCount(), log.getZeroedVectorsCount());
 
+    }
+
+    public static void main(String[] args) {
+        TrainModule tm = new TrainModule();
+        tm.doFilter("/home/isaac/Unifei/Mestrado/Dissertacao/Slides/Mestrado/Slides/mail/files", "/home/isaac/Unifei/Mestrado/Dissertacao/Slides/Mestrado/Slides/mail/");
     }
 
     /**
@@ -422,16 +427,13 @@ public class TrainModule {
     }
 
 
-    public static void main(String[] args) throws IOException {
-        TrainModule module = new TrainModule();
-
-        String out = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/09_TEST";
-        String stat = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/03_statistics/statistics_MI.dat";
-        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/02_filtered_data/";
-        module.createVectorsByPercent(path + "ham", path + "spam", stat, 1, out);
-
-
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        TrainModule module = new TrainModule();
+//
+//        String out = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/09_TEST";
+//        String stat = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/03_statistics/statistics_MI.dat";
+//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/02_filtered_data/";
+//        module.createVectorsByPercent(path + "ham", path + "spam", stat, 1, out);
+//    }
 
 }

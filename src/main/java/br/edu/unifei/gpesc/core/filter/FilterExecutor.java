@@ -16,9 +16,10 @@
  */
 package br.edu.unifei.gpesc.core.filter;
 
-import java.util.Scanner;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.util.Scanner;
 
 /**
  * This class process all filters ({@link TextFilter} and {@link TagFilter}).

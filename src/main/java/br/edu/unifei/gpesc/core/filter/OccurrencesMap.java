@@ -18,13 +18,13 @@
 package br.edu.unifei.gpesc.core.filter;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,15 +55,25 @@ public class OccurrencesMap implements Iterable<Map.Entry<String, Integer>> {
     }
 
     public void toFile(File file) throws IOException {
-        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+        Writer writer = new BufferedWriter(new FileWriter(file));
 
         for (Map.Entry<String, Integer> entry : mOccurrencesMap.entrySet()) {
-            dout.writeUTF(entry.getKey());
-            dout.writeInt(entry.getValue());
+            writer.append(String.valueOf(entry.getValue())).append("_").append(entry.getKey()).append("\t");
         }
 
-        dout.close();
+        writer.close();
     }
+
+//    public void toFile(File file) throws IOException {
+//        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+//
+//        for (Map.Entry<String, Integer> entry : mOccurrencesMap.entrySet()) {
+//            dout.writeUTF(entry.getKey());
+//            dout.writeInt(entry.getValue());
+//        }
+//
+//        dout.close();
+//    }
 
     public void fromFile(File file) throws IOException {
         clear();

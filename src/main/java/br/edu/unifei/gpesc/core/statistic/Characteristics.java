@@ -20,7 +20,7 @@ package br.edu.unifei.gpesc.core.statistic;
 import java.util.HashMap;
 
 /**
- * This class will be used by the class {@link StatisticalCharacterization}.
+ * This class will be used by the class {@link Characterization}.
  *
  * @author Isaac Caldas Ferreira
  * @param <T>

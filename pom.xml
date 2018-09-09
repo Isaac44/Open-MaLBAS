@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.edu.unifei.gpesc</groupId>
     <artifactId>PrimeSAS</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -123,5 +123,5 @@
         </plugins>
     </build>
     
-    <description>Sistem Anti-Spam v0.4 - D</description>
+    <description>Sistem Anti-Spam v0.5</description>
 </project>

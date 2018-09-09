@@ -23,6 +23,7 @@ import br.edu.unifei.gpesc.mlp.log.MlpLogger;
 import br.edu.unifei.gpesc.mlp.math.Function;
 import br.edu.unifei.gpesc.mlp.math.Linear;
 import br.edu.unifei.gpesc.mlp.math.LogSig;
+import br.edu.unifei.gpesc.mlp.math.PrimeNumber;
 import br.edu.unifei.gpesc.mlp.math.TanSig;
 import br.edu.unifei.gpesc.util.Configuration;
 import java.io.File;
@@ -191,7 +192,8 @@ public class NeuralModule {
         File spamFile = new File(vectorFolder, "spam");
         mTrainBuilder = new TrainBuilder(hamFile, spamFile, trainQ / totalQ, validQ / totalQ);
 
-        mHiddenLayerLenghts = createHiddenLengths(mCfg.getProperty("TRAIN_FIRST_HIDDEN_LAYER_VALUES"), mCfg.getProperty("TRAIN_SECOND_HIDDEN_LAYER_VALUES"));
+        int trainQuantity = mCfg.getIntegerProperty("NUMBER_OF_TRAINS", 1);
+        mHiddenLayerLenghts = createHiddenLengths(trainQuantity, mCfg.getProperty("TRAIN_FIRST_HIDDEN_LAYER_VALUES"), mCfg.getProperty("TRAIN_SECOND_HIDDEN_LAYER_VALUES"));
         mQuantityOfTrains = mHiddenLayerLenghts.length;
 
         int zerosQuantity = (int) Math.log10(mQuantityOfTrains) + 1;
@@ -240,16 +242,18 @@ public class NeuralModule {
         }
     }
 
-    private int[][] createHiddenLengths(String hidden1, String hidden2) {
+    private int[][] createHiddenLengths(int trainQuantity, String hidden1, String hidden2) {
         int[] h1 = parseIntArray(hidden1);
         int[] h2 = parseIntArray(hidden2);
 
-        int[][] mix = new int[h1.length * h2.length][2];
+        int[][] mix = new int[h1.length * h2.length * trainQuantity][2];
 
         int k = 0;
-        for (int i=0; i<h1.length; i++) {
-            for (int j=0; j<h2.length; j++) {
-                mix[k++] = new int[] {h1[i], h2[j]};
+        while (trainQuantity-- > 0) {
+            for (int i=0; i<h1.length; i++) {
+                for (int j=0; j<h2.length; j++) {
+                    mix[k++] = new int[] {h1[i], h2[j]};
+                }
             }
         }
 
@@ -276,8 +280,25 @@ public class NeuralModule {
     }
 
     private int mSeedArray = 0;
+    private int mNextSeed = 1;
 
     private long getSeed(String key, long defaultValue) {
+        if (mNextSeed < PrimeNumber.PRIMES_0_5999.length) {
+            return PrimeNumber.PRIMES_0_5999[mNextSeed++];
+        }
+        mNextSeed -= PrimeNumber.PRIMES_0_5999.length;
+
+        if (mNextSeed < PrimeNumber.PRIMES_6000_12999.length) {
+            return PrimeNumber.PRIMES_6000_12999[mNextSeed++];
+        }
+        mNextSeed -= PrimeNumber.PRIMES_6000_12999.length;
+
+        if (mNextSeed < PrimeNumber.PRIMES_13000_19999.length) {
+            return PrimeNumber.PRIMES_13000_19999[mNextSeed++];
+        }
+
+        //return 0;
+
 //        if (key == null) {
 //            return defaultValue;
 //        }

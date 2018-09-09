@@ -52,9 +52,9 @@ public class FileCharacterization extends Characterization<String> {
 
     /**
      * Process a text file considering each word as a statistical data.
-     * Equivalent to call {@link FileStatisticalCharacterization#processFile(File, "ASCII")}.
+     * Equivalent to call {@link FileCharacterization#processFile(File, "ASCII")}.
      * @param file The file to process.
-     * @see FileStatisticalCharacterization#processFile(File, String).
+     * @see FileCharacterization#processFile(File, String).
      */
     public void processFile(File file) {
         processFile(file, "ASCII");
