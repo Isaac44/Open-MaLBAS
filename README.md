@@ -5,11 +5,7 @@ the core of the anti-spam Open-MaLBAS
 
 Licence: GPL v3 (it's free, and should always be free. And ways open, never closed.)
 
-# Dependencies (see the installation guide before)
+# Dependencies
 1. https://github.com/Isaac44/PrimeShared
 2. https://github.com/Isaac44/PrimeMlp
 3. https://github.com/marcelovca90/anti-spam-weka-cli
-
-
-# Installation Guide (TODO)
-- to be updated -
