@@ -1,9 +1,14 @@
-# Open-MaLBAS
-Project of my master's degree in Computer Science ("Study and Development of an Anti-Spam"). At Universidade Federal de Itajubá
+# Open-MaLBAS (before known as SASCA)
+Project of my master's degree in Computer Science "Desenvolvimento de um sistema anti-spam de código aberto" ("Study and Development of an Open-Source Anti-Spam"). 
+At Universidade Federal de Itajubá.
 
-the core of the anti-spam Open-MaLBAS
+This is the core of the anti-spam Open-MaLBAS.
 
-Licence: GPL v3 (it's free, and should always be free. And ways open, never closed.)
+#Licence
+GPL v3 (it's free, and should always be free. And ways open, never closed.)
+
+# Thesis
+https://repositorio.unifei.edu.br/xmlui/handle/123456789/1485
 
 # Dependencies
 1. https://github.com/Isaac44/PrimeShared
