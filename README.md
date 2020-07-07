@@ -4,6 +4,9 @@ At Universidade Federal de Itajubá.
 
 This is the core of the anti-spam Open-MaLBAS.
 
+Open-MaLBAS: Open Machine-Learning Based Anti-Spam
+SASCA: Sistema Anti-Spam de Código Aberto
+
 # Licence
 GPL v3 (it's free, and should always be free. And ways open, never closed.)
 
