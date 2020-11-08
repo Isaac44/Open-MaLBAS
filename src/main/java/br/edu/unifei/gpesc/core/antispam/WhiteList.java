@@ -35,7 +35,6 @@ public class WhiteList {
 
     public WhiteList(String folder) {
         mFolder = folder;
-        mAllowed = loadData(file);
     }
 
     private HashSet<String> getUserWhiteList(String userMail) {
