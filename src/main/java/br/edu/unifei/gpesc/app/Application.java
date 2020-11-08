@@ -44,6 +44,8 @@ public class Application {
     private static final String ARG_MLP_VECTOR = "vector";
     private static final String ARG_MLP_NEURAL = "mlp";
 
+    private static final String ARG_TRAIN_WITH_WEKA = "run-trainer";
+
     private static final String ARG_ANTISPAM = "antispam";
     private static final String ARG_STORAGE_BACKUP = "storage-backup";
     private static final String ARG_STORAGE_SPAM = "storage-spam";
@@ -176,6 +178,14 @@ public class Application {
         StorageService.createFrom(c, spam ? StorageService.Type.SPAM : StorageService.Type.BACKUP).startService();
     }
 
+    private static void runWekaTrainer() {
+        try {
+            new io.github.marcelovca90.execution.Runner().run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void process(String module) throws IOException {
         if (module.equals(ARG_FILTER))
         {
@@ -209,9 +219,12 @@ public class Application {
         else if (module.equals(ARG_STORAGE_BACKUP)) {
             runStorage(false);
         }
+        else if (module.equals(ARG_TRAIN_WITH_WEKA)) {
+            runWekaTrainer();
+        }
         else {
             System.out.println("SAS - Incorrect Use");
-                printUsage();
+            printUsage();
         }
     }
 
@@ -224,6 +237,7 @@ public class Application {
         System.out.println("antispam\n\tStarts the AntiSpam module.");
         System.out.println("storage-spam\n\tStarts the Spam Storage service.");
         System.out.println("storage-backup\n\tStarts the Backup Storage service.");
+        System.out.println("run-trainer\n\tStarts the Classifier Module in training mode.");
     }
 
     public static void main(String... args) throws IOException {

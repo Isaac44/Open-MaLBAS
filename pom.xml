@@ -41,6 +41,14 @@
             <artifactId>PrimeShared</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- Marcelo's WEKA -->
+        <dependency>
+            <groupId>io.github.marcelovca90</groupId>
+            <artifactId>AntiSpamWekaCLI</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
     
     <properties>

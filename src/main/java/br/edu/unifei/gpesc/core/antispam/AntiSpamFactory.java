@@ -24,6 +24,7 @@ import br.edu.unifei.gpesc.util.TraceLog;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import weka.classifiers.Classifier;
 
 /**
  *
@@ -51,7 +52,6 @@ public class AntiSpamFactory {
 
         Mlp mlp = Mlp.loadMlp(new File(weightsFile));
         final Characteristics<String> characteristics = CharacteristicsHelper.fromFile(new File(statisticsFile), mlp.getInputLayerLength());
-
         final AntiSpam lastOptionAS = new SyncAntiSpam(new AntiSpamWithMlp(mlp, characteristics));
 
         return new AntiSpamFactory(null, false) {
@@ -67,12 +67,42 @@ public class AntiSpamFactory {
             }
         };
     }
+    
+    private static AntiSpamFactory createAntiSpamWithWeka(Configuration c) throws Exception {
+        final String wekaModel = c.getProperty("WEKA_MODEL");
+        String statisticsFile = c.getProperty("MLP_STATISTICS_FILE");
+        int numberOfFeatures = c.getIntegerProperty("WEKA_NUMBER_OF_FEATURES");
+
+        // TODO: check if is "ARFF"
+        Classifier classificator = (Classifier) weka.core.SerializationHelper.read(wekaModel);
+        TraceLog.logD("WEKA Classifier: " + classificator.getClass());
+                
+        final Characteristics<String> characteristics = CharacteristicsHelper.fromFile(new File(statisticsFile), numberOfFeatures);
+        final AntiSpam lastOptionAS = new SyncAntiSpam(new AntiSpamWithWeka(classificator, characteristics));
+        
+        return new AntiSpamFactory(null, false) {
+            @Override
+            public AntiSpam newAntiSpam() {
+                try {
+                    Classifier classificator = (Classifier) weka.core.SerializationHelper.read(wekaModel);
+                    return new AntiSpamWithWeka(classificator, characteristics);
+                } catch (Exception e) {
+                    TraceLog.logE(e);
+                    return lastOptionAS;
+                }
+            }            
+        };
+    }
 
     private static AntiSpamFactory createFrom(Configuration c) throws Exception {
         String classificator = c.getProperty("CLASSIFICATOR");
 
         if (classificator.contains("MLP")) {
             return createAntiSpamWithMlp(c);
+        }
+        
+        if (classificator.contains("WEKA")) {
+            return createAntiSpamWithWeka(c);
         }
 
         return null;

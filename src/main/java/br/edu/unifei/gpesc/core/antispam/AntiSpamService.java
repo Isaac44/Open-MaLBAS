@@ -36,6 +36,8 @@ public class AntiSpamService {
     private final Sender mBackupSender, mSpamSender;
 
     private final int mPort;
+	
+	public WhiteList whiteList = null; // optional
 
     /**
      * The SAS classificator .
@@ -106,7 +108,13 @@ public class AntiSpamService {
         protected void onDataReceived(String from, String to, TransactionalInputStream tin) {
             TimeMark.mark("2. Leitura dos dados do e-mail via MTA");
 
-            AntiSpam.Result result = mmAntiSpam.processMail(tin);
+			AntiSpam.Result result;
+
+			if (whiteList != null && whiteList.isWhiteListed(from)) {
+				result = AntiSpam.Result.HAM;
+			} else {
+				result = mmAntiSpam.processMail(tin);
+			}
 
             String mailFile = createEmailFileName();
             if (result == AntiSpam.Result.SPAM) {

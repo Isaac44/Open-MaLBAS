@@ -425,15 +425,4 @@ public class TrainModule {
         float avg = simulateAverage(hamPath, spamPath, statisticsPath, (int) average);
         System.out.println("for " + average + " the average is " + avg);
     }
-
-
-//    public static void main(String[] args) throws IOException {
-//        TrainModule module = new TrainModule();
-//
-//        String out = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/09_TEST";
-//        String stat = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/03_statistics/statistics_MI.dat";
-//        String path = "/home/isaac/Unifei/Mestrado/SAS/Mail_Test/TESTES/Unifei/02_filtered_data/";
-//        module.createVectorsByPercent(path + "ham", path + "spam", stat, 1, out);
-//    }
-
 }
